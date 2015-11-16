@@ -1,0 +1,7 @@
+name: copilot_R
+account: copilot-report-dash
+server: shinyapps.io
+appId: 67175
+bundleId: 303799
+url: https://copilot-report-dash.shinyapps.io/copilot_R
+when: 1446585864.12908
