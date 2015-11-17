@@ -38,6 +38,9 @@
 ...
 ## ----------------------------{Dataset Spliting Methods}
 ## [1]Validationset (Hold-out)
+#     <0> Shuffle the dataset before sampling
+          set.seed(1234)
+          data = data[sample(nrow(data)),]
 ##    <1> Sample from population set
           rate = round((nrow(Data[Data$Y == 1,]) / nrow(Data)),1) ## Keep population Y dist
           index1 = sample(1:(rate*5000),(rate*5000)) ## -- Ex.5000 sample size
