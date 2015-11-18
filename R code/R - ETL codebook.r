@@ -121,6 +121,49 @@
 ##     <9> Other subset extraction
        view2 = subset(view1, var1 %in% c("xxx", "xxxx", "xxx") & var2 >= 10 & var3 == "") ## Get subset of data 
 #
+## [2]Create subset
+#     url - "https://s3.amazonaws.com/assets.datacamp.com/img/blog/data+table+cheat+sheet.pdf"
+#     <1> data.table packages faster processing big table, treat data as table, as functioned as data.frame
+          install.packages("data.table") 
+          library(data.table) 
+#     <2> Read data local / create data.table / convert data.table
+          data <- fread("xxx.csv", header = TRUE, stringsAsFactors = FALSE) # read -> data/table
+          data <- data.table(var1=c(2,3,4,5),
+                             var2=c(3,4,5,6)) # create / if not in same length -> recyling
+          data <- as.data.table(data) # convert - may be slow when big
+          setDT(data) # convert - fast
+#     <3> subsetting rows
+          data[3:5,]; data[var3 == "x"] #all rows has x in column var3
+          data[var4 %in% c("s", "x")] #all rows has x, s in column var4
+#     <4> Manipulating on cloumns
+          data[,var3] # a vector
+          data[,.(var1, var2)] # return var1, var2 as data.table -> add "."
+          data[, sum(var1)] # summarize / a vector (new)
+          data[,.(sum(var1), sd(var3))] # summarize multiple vars / in data.table (new)
+          data[,.(xx1=sum(var1), xx2=sd(var3))] # same above / rename
+          data[,.(var1, xx2=sd(var3))] # recyling xx2 to all elements on var1 / data.table
+          data[,{print(var1) plot(var2) NULL}] #?? multiple expressions can be warpped in curly braces
+#     <5> Group fun by columns
+          data[,.(xx1=sum(var4)), by=var1]; data[,.(xx1=sum(var4)), by=.(var1, var2)] # every group of var1 and var2, do sum(var3)
+          data[,.(xx1=sum(var4)), by=sign(var1 - 1)] # call fun in "by"
+          data[,.(xx1=sum(var4)), by=.(group1=sign(var1 - 1))] # same above + rename "by"
+          data[1:15,.(xx1=sum(var4)), by=var1] #only apply this by certain rows
+          data[,.N, by=var1] # like "table" / get row numbers for each level in var1
+#     <6> Adding / updating columns by fun
+          data[, var1 := round(exp(var2),2)] # update var1 with fun
+          data[, c("var4", "var1") := list(round(exp(var2),2), var1*20)] # update multiple vars
+          ...[] # after formula, result print on screen
+          data[, var1 := NULL]; data[, c("var1", "var2") := NULL] # remove a var / many
+          Cols.chosen <- c("var1", "var3", "var4")
+          data[, (Cols.chosen) := NULL] # another way to do above
+#     <7> Indexing / Keys
+          setkey(data, var1); setkey(data, var1, var3) # set keys on data (must)
+          data["A"]; data[c("A", "B")] # Return all rows match key-var1 -> "A" and "B"
+          data["A", nomatch = 0] # no NOT-match (key1, key2 -> key2 = NA) rows will be returned / default = NA, return "NA"
+          data[c("A", "B"), sum(var4)] => data[c("A", "B"), sum(var4), by=.EACHI] # group fun by "A", "B"
+          data[.(c("A", "B"), c(2, 4))] # if two keys -> key1, key2 / how to match key values
+
+#
 ...
 ## [3]Combine / Create / Modify variables
 ##    <1> General
