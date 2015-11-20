@@ -316,14 +316,79 @@ $vi file1 file2 file3 file4 #open multiple files
 
 
 
+# [3] Customizing Prompt
+# p140 - 146
 
 
 
+## ---------------------------- Common Tasks and Essential Tools ----------------------------- ##
+
+# [1] Package Management - installing / maintaining software (package maintainer created package from the source code created by
+#                                                             upstream provider, stored in central repo)
+# <package system>        <Distribution>
+# Debian style (.deb)     Debian, Ubuntu, Xandros, Linspire
+# Red Hat style (.rpm)    Fedora, CentOS, Red Hat Linux, OpenSUSE, Mandriva, PCLinuxOS
+#
+# Packaging system tools - High level tool (Installing, removing, creating), low level tool (searching metadata, dependencies resolution)
+# <Distributions>        <Low level Tool>         <High level Tool>
+  Debian style           dpkg                     apt-get, aptitude
+  Fedora,                rpm                      yum
+  Red Hat Enterprise, 
+  Linux, CentOS
+# Find a packages in Repo
+apt-get update
+apt-cache search search_string # Debian
+yum search search_string # Red Hat
+# Install a package from a Repo
+apt-get update
+apt-get install package_name # Debian
+yum install package_name # Red Hat
+# Install a package from a package file (If the package file has been downloaded)
+#                                        low level tool, if dependencies lack, error)
+dpkg --install package_file # Debian
+rmp -i package_file # Red Hat
+# Removing a package
+apt-get remove package_name # Debian
+yum erase package_name # Red Hat
+# Update a package from Repo
+apt-get update
+apt-get upgrade # Debian
+yum update # red Hat
+# Update a package from a package file
+dpkg --install package_file
+rpm -u package_file
+# LIST all installed packages
+dpkg --list # Debian
+rpm -qa # Red Hat
+# Determining whether a package is installed
+dpkg --status package_name # Debian
+rpm -q package_name # Red Hat
+# Display information of a installed package
+apt-cache show package_name # Debian
+yum info package_name # Red Hat
+# Finding which package installed a file
+dpkg --search file_name # Debian
+rpm -qf file_name # Red Hat
 
 
 
+# [2] Storage media - manipulate data at devices level - manage storage devices
+#                     (Not file level), physical storage, network storage, virtual storage
+# P160 - P174
+mount # Mount a filesystem
+umount # unmount a filesystem
+fdisk # Partition table manipulator
+fsck # Check and repair a filesystem
+fdformat # Format a floppy disk
+mkfs # Create a filesystem
+dd # Write block-oriented data directly to a device
+genisoimage # Create an ISO 9660 image file
+wodim # Write data to optical storage media
+md5sum # Calculate an MD5 checksum
 
 
+
+# [3] Networking 
 
 
 

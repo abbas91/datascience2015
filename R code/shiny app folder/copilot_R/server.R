@@ -4,7 +4,7 @@
          library(DBI)
          #install.packages("RMySQL")
          library(RMySQL)
-         install.packages("dplyr")
+         #install.packages("dplyr")
          library(dplyr)
 
 percent <- function(x, digits = 2, format = "f", ...) {
