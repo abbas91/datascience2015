@@ -389,10 +389,76 @@ md5sum # Calculate an MD5 checksum
 
 
 # [3] Networking 
+# Check network information --
+ping host_name # test whether its connected (IMCP ECHO_REQUEST)
+#                "host_name" can be names or url, any host / CTRL-C to quit
+traceroute xxxx.com # track and display all routers in order to get to specific local server system
+netstat -ie # network interface of our network
+        -r  # network's kernal / cofig information (Security)
+# Move files across network --
+# ftp (option 1)
+ftp fileserver
+# - ask for name:
+# - ask for pass:
+# log in promt of "ftp>" 
+ls; cd # like unix file system to locate your file 
+#      / move consol to the folder the file located
+lcd /HOME/ubuntu # change local conslo to local dir -"local cd"
+get xxxxxx.txt # transfer file on the remote folder to the local dir
+bye # log off
+# lftp (option 2) - more convient, popular option
+lftp # ? Check more on internet
+# wget (Option 3) - download file from both web and ftp sites
+#        single file, multiple files, even whole site
+wget http://xxxxxxx.com/xxxx.php # download first page
+# check more detail in man page of wget
+# scp (secure copy) / sftp (secure ftp) (option 4) - from "OpenSSh" package - leverage encrepty words
+scp remote_system:xxxx.txt . # download a file from remote sys to the local dir
+scp user@remote_system:xxxx.txt . # same but as "user" on remote sys
+# pass:
+sftp fileserver # same as "ftp", more secure
+# - ask for name:
+# - ask for pass:
+# log in promt of "ftp>" 
+ls; cd # like unix file system to locate your file 
+#      / move consol to the folder the file located
+lcd /HOME/ubuntu # change local conslo to local dir -"local cd"
+get xxxxxx.txt # transfer file on the remote folder to the local dir
+bye # log off
+# Secure communication with remote hosts --
+ssh # securely log in to a remote computer / in "OpenSSH" package / on port 22 on local
+ssh remote_system # type "yes" to continue
+ssh user@remote_system # login with different user on remote sys / type "yes" to continue
+# password:
+# login remote system$
+exit # to log out
 
 
 
+# [4] Searching for files
+locate bin/zip # display all files match the strings (all sys)
+find # search a given dir by the attributes of files to display
+find ~ -type f -name "*.JPG" -size +1M | wc -l # define dir, attributes
+find ~ \( -type f -not -perm 0600 \) -or \( -type d -not -perm 0700 \)
+# dir, attributes, operator (-and, -or, -not, ()) logic operators
+find ~ -type f -name "*.JPG" -size +1M -print # action
+                                       -delete
+                                       -ls
+                                       -quit
+find ~ -type f -and -name '*.BAK' -and -print # add "-and", easy to see logic
+# user defined actions
+-exec rm '{}' ';'
+-ok rm '{}' ';' # ask yes? while exec
+# -exec command current_path_name delimeter_of_end_command
+find ~ -type f -name 'foo*' -ok rm '{}' ';'
+# option - control the scope of "find"
+-depth; -maxdepth levels; -mindepth levels; -mount; -noleaf
+touch file # change times of file modification to current time
+stat file # detail stat of a file
 
+
+# [5] Archiving / backup - timely backup system files; move large blocks of data
+#                          file compression          ; place to plcae, devices to devices
 
 
 
