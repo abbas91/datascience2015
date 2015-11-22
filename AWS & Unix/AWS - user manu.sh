@@ -5,7 +5,7 @@
 # CTRL f -> "method 1" >>> Single local machine - R-studio launch
 # CTRL f -> "method 2" >>> Hadoop cluster
 # CTRL f -> "method 3" >>> Build API connection + Connect to RDS + automate update
-
+# CTRL f -> "method 4" >>> Host Shiny app on a EC2 instance
 
 
 ## <<<< Setup instance >>>>> ##
@@ -282,6 +282,17 @@ $ls -l; $mkdir dir; $> file; $cd /path/
 # Create r / python script for API
 $sudo Rscript xxxx.r > ~/path/xxx.txt # execute r file and save "process" to a log file
 $python xxxxx.py # execute python file
+# [Optional - using shh]
+cat auth
+curl -b cookies -c cookies -X POST -d @auth 'https://api.appnexus.com/auth'
+$url -b cookies -c cookies 'https://api.appnexus.com/member'
+cat report_request
+curl -b cookies -c cookies -X POST -d @report_request 'https://api.appnexus.com/report'
+# back report ID
+curl -b cookies -c cookies 'https://api.appnexus.com/report?id=1da13d6a1392d02d73f289dccc296010'
+# check if status ok
+curl -i -b cookies -c cookies 'https://api.appnexus.com/report-download?id=1da13d6a1392d02d73f289dccc296010' > /tmp/network_analytics.csv
+# [--------------------]
 # execute a shell command until it success (until loop)
 n=0
 until [ $n -ge 20 ] # try 20 times
@@ -364,6 +375,15 @@ profit float(6,6),
 cpm float(6,6)
 )
 
+# Update Database table
+ALTER TABLE copilot_dash_log
+   DROP COLUMN var1,
+   DROP COLUMN var2,
+   ADD COLUMN var.new varchar(255) AFTER var0,
+   CHANGE COLUMN var4.old var4.new timestamp
+
+
+
 # Load local file into the created table
 LOAD DATA LOCAL INFILE '~/data/data.output/1837.processed.csv' 
 INTO TABLE copilot_dash_log
@@ -378,14 +398,28 @@ $> sql_script.sql
 $vi sql_script.sql # loading script above; :wq
 # auto-login -> execute the script in file
 $mysql --defaults-file="~/path/mysql_login.txt" --local-infile=1 < ~/mysql_server_login/sql_script.sql
+# Create file.sh - Add first script + second script
+$> file.sh
+# -------------------- file.sh ---------------------- #
+python ~/report_request.file/time_update_hour.py
+n=0
+until [ $n -ge 20 ]
+do
+   sudo Rscript API_script_loop_hour.r > ~/data/data.log/log.txt && break 
+   n=$[$n+1]
+   sleep 5
+done
+mysql --defaults-file="~/mysql_server_login/host1.txt" --local-infile=1 < ~/mysql_server_login/sql_script.sql
+# -------------------------------------------------- #
 
+
+#Method 1 - Start when initiate ssh
 # Last - combine all function into one file.sh -> execute it or execute it when instance start
 $sudo vi /etc/bashrc
-# Add into the file
+# Add "file.sh" content into the file
 . ~/.bashrc
 #:wq
-# Create file.sh / edit premission
-$> file.sh
+# change premission
 $chmod 755 ~/file.sh
 # add scripts need to be execute
 $vi ~/file.sh
@@ -393,18 +427,56 @@ $bash ~/file.sh # one command for all functionalities
 # add this file to root to execute when log in
 $vi ~/.bashrc
 
+#Method 2 - Sceduhler with Cron on a freqency
+crontab -l # Check whether is Cron file
+# cehck time on machine
+date
+export VISUAL=vim # use vi to edit
+crontab -e -u ubuntu #Create cron file / edit
+# edit and add scedhule - vi
+* * * * /home/ubuntu/file.sh # full path required
+#wq
 
 
 
 
-
-
-
-
-
-
-
-
+## <<<< Host Shiny app on a EC2 instance >>>> ## >>>>> Method 4
+# Request instance with AMI on EC2 *Use AMI has R-base downloaded
+putty >>>>
+# [Optional - R download]
+sudo apt-get update
+sudo apt-get install r-base
+sudo apt-get install r-base-dev
+# install "shiny" package / Install any packages needed in app in here
+sudo su –root
+R -e 'install.packages("shiny", repos="http://cran.rstudio.com/")'
+sudo su - -c "R -e \"install.packages('shiny', repos='http://cran.rstudio.com/')\"" #Other option
+# or
+R
+install.packages("shiny")
+library(shiny)
+# install shiny server
+sudo apt-get install gdebi-core
+sudo wget http://download3.rstudio.org/ubuntu-12.04/x86_64/shiny-server-1.3.0.403-amd64.deb
+sudo gdebi shiny-server-1.3.0.403-amd64.deb
+sudo stop shiny-server # Stop
+sudo start shiny-server # reboot
+# create dir for app
+cd /srv
+mkdir shiny-server
+cd shiny-server # Drop app folders into this dir
+# server.R / ui.R / www
+curl http://asdf.com/what/ever/image/img[00-99].gif # download pics
+# change premission
+sudo chown -R ubuntu /srv/*
+# access app
+ec2-54-164-84-196.compute-1.amazonaws.com:3838/test_app
+[public DNS]:3838[new_directory]
+# Security group 
+ALL TCP         TCP     0 - 65535    0.0.0.0/0 # add custom IP to limit
+SSH             TCP     22           0.0.0.0/0
+# check IP go the url below:
+http://checkip.amazonaws.com/
 
 
 
