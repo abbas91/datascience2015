@@ -459,14 +459,104 @@ stat file # detail stat of a file
 
 # [5] Archiving / backup - timely backup system files; move large blocks of data
 #                          file compression          ; place to plcae, devices to devices
-
-
-
-
-
-
-
-
+# .gz = gzip / .bz2 = bzip2 / .tar = tar / .tgz = tar > gzip / .tbz = tar > bzip2 / .zip = zip
+# compress file - gzip => xxx.gz
+gzip file # compress to xxx.gz
+gzip -c # write output to stdout, keep original
+     -d # decompress, like gunzip
+     -f # force compression, even on a compressed file
+     -h # help manue
+     -l # list compression stats for each file
+     -r # recursively compress files
+     -t # test intergity of a file
+     -v # display long message while compressing
+     -number # 1 - 9, fast - best compression, default - 6
+gunzip file # restore back to xxx.txt
+# compress file - bzip2 (differen arlgo as 'gzip', deep compress - 'demage', slow) => xxx.bz2
+bzip2 file # compress to xxx.bz2
+bzip2 -c # write output to stdout, keep original
+      -d # decompress, like gunzip
+      -f # force compression, even on a compressed file
+      -h # help manue
+      -l # list compression stats for each file
+      -t # test intergity of a file
+      -v # display long message while compressing
+      -number # different as above
+bunzip2 file # restore back to xxx.txt
+bzip2recover file # recover demaged file
+# *** DON'T compress compressed file - only becomes larger
+# archiving files - gathering up multiple files, bundling them as backup (Copy dir)
+#                 - also, move old data to somewhere as long-term storage
+# tar [option 1] - archive
+tar # Tape archiving utility
+tar cf dir.tar dir # create an archive specifying name.tar, the dir should be just 'dir', 
+#                                                           if ~/dir, all will be archived
+    c # create an archive
+    x # extract an archive
+    r # Append / update an archive
+    t # list content of an archive
+tar tf dir.tar # list content of an archive
+tar tvf dir.tar # List more detail of an archive
+cd new.dir 
+tar xf ../dir.tar # extract archive to the new location
+# *** ownership will changed to performers
+# tar [option 2] - create copy archive from local to USB and then extract to other machine
+# check the device (mount automatically should) - usually, '/media/USB_name' = dir (can be sys, like '/home')
+sudo tar cf /media/USB_name/dir.tar dir
+umount # unmount a device ** check storage media
+# plug in new machine ...
+cd dir_master
+sudo tar xf /media/USB_name/dir.tar # extract whole dir.tar
+ls # check
+# tar [option 3] - only use tar c/x/r/t on subset of a dir or files
+sudo tar xf dir.tar '/.../...' # only extract specific dir or files
+sudo tar xf dir.tar --wildcards '/.../.../*.txt' # Apply wildcard * in search
+find dir -name 'file-A' -exec tar rf dir_sub.tar '{}' '+' # use find to match file, then update 'dir_sub' archive 
+# tar [option 4] - find a subset dir or files, create an archive, compress the archive to .tgz or .tbz
+find dir -name 'xxxx' | tar cf - --files-from=- | gzip > dir.tgz # use compress fun separately
+find dir -name 'xxxx' | tar czf dir.tgz -T - # compress with gzip = czf
+find dir -name 'xxxx' | tar cjf dir.tbz -T - # compress with bzip2 = cjf
+# tar [option 5] - copy dir from a remote sys to local
+mkdir remote_stuff_dir
+cd remote-stuff_dir
+ssh remote_sys 'tar cf - dir' | tar xf - # login in remote sys, create archive and show to stdout,
+#                                          Extract archive in local from the stdout * '- stdout'
+# pass:
+ls # check
+# zip - package and compress files *Linux user dont use much, only when exchange files with windows
+# zip options zipfile file...
+zip -r dir.zip dir # Create zip archive
+#                    if -r 'recursive' not specify, only dir_name
+#                    zip will automatically display loading message for each file
+#                    2 OPTION: 'store' - no compression / 'deflate' - compress
+cd new.dir 
+unzip ../dir.zip # extract archive / if archive existed - only update new, promt ask replaced file
+unzip -l ../dir.zip /.../... # Display files strcuture, not extract yet
+      -v                     # Display more lists
+# As 'tar', zip use stdin, stdout
+find dir -name 'xxxx' | zip -@ xxxx.zip # use find to select, then create archive of subset files
+#                                         -@ pipe a list of file names to zip
+ls -l /dir/ | zip dir.zip - # zip takes stdin from other command, - stdinput
+unzip -p dir.zip | less # unzip can pipe stdout to other command, -p pipe
+# Synchronizing files and directories
+rsync # synchronization | only update what is different | fast, economic
+# rsync options source destination
+# source & destination > (local file or dir, 
+#                         remote file or dir in form '[user@]host:path',
+#                         remote rsync server in form 'rsync://[user@]host[:port]/path')
+rsync -av source.dir destination.dir # -a allow recursive archive, -v display infor
+# [option 1 - sync the devices with local files]
+mkdir /media/USB_name/backup # create backup file on devices
+sudo rsync -av --delete dir1 dir2 dir3 /media/USB_name/backup # sync local to devices, 
+#                                                               --delete remove any different files in devices
+alias backup='sudo rsync -av --delete dir1 dir2 dir3 /media/USB_name/backup' # create an alias
+# attach it to .bashrc file to initate backup when reboot, start
+# [option 2 - sync the remote files with local files]
+mkdir remote_sys_backup
+sudo rsync -av --delete --rsh=ssh /remote_sys_backup remote-sys:/backup
+# [option 3 - sync the local file with remote sync server]
+mkdir remote_server
+rsync -av -delete rsync://....edu/xxx/xxx/i386/os remote_server # URI - ex. resync.gtlib.gatech.edu
 
 
 
