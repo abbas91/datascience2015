@@ -88,7 +88,7 @@ output$mytable1 <- renderDataTable({
                                  COST=sum(COST),
                                  REV=sum(REV),
                                  PRFT=sum(PRFT),
-                                 CPM=ifelse(is.na(sum(COST) / sum(IMPs)),0,sum(COST) / sum(IMPs)),
+                                 CPM=ifelse(is.na(sum(COST) / sum(IMPs)*1000),0,sum(COST) / sum(IMPs)*1000),
                                  CPC=ifelse(is.nan(sum(COST) / sum(CLICKs)),0,sum(COST) / sum(CLICKs)),
                                  CPA=ifelse(is.na(sum(COST) / sum(TOT_CONVs)),0,sum(COST) / sum(TOT_CONVs))) %>%
                        transform(IMPs=pretty.number(IMPs),
@@ -121,7 +121,7 @@ output$mytable2 <- renderDataTable({
                                  COST=sum(COST),
                                  REV=sum(REV),
                                  PRFT=sum(PRFT),
-                                 CPM=ifelse(is.na(sum(COST) / sum(IMPs)),0,sum(COST) / sum(IMPs)),
+                                 CPM=ifelse(is.na(sum(COST) / sum(IMPs)*1000),0,sum(COST) / sum(IMPs)*1000),
                                  CPC=ifelse(is.nan(sum(COST) / sum(CLICKs)),0,sum(COST) / sum(CLICKs)),
                                  CPA=ifelse(is.na(sum(COST) / sum(TOT_CONVs)),0,sum(COST) / sum(TOT_CONVs))) %>%
                        transform(IMPs=pretty.number(IMPs),
@@ -156,7 +156,7 @@ output$mytable3 <- renderDataTable({
                                  COST=sum(COST),
                                  REV=sum(REV),
                                  PRFT=sum(PRFT),
-                                 CPM=ifelse(is.na(sum(COST) / sum(IMPs)),0,sum(COST) / sum(IMPs)),
+                                 CPM=ifelse(is.na(sum(COST) / sum(IMPs)*1000),0,sum(COST) / sum(IMPs)*1000),
                                  CPC=ifelse(is.nan(sum(COST) / sum(CLICKs)),0,sum(COST) / sum(CLICKs)),
                                  CPA=ifelse(is.na(sum(COST) / sum(TOT_CONVs)),0,sum(COST) / sum(TOT_CONVs))) %>%
                        transform(IMPs=pretty.number(IMPs),
