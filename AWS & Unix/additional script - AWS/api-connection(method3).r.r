@@ -109,11 +109,13 @@ for (i in 1:11) {
 
   print.default("Creating Seat_ID, IO_Type, Lineitem_Type...")
   Seat_ID <- rep(seat_id,nrow(data.raw.i))
-  IO_Type <- as.matrix(unique(ifelse(grepl('-cp$',data.raw.i$line_item_name, ignore.case = T),data.raw.i$insertion_order_name, "Manual_IO")))
+  IO_Type <- as.matrix(unique(ifelse(grepl('-cp$',data.raw.i$line_item_name, ignore.case = T),data.raw.i$insertion_order_name,
+                                     ifelse(grepl('-manual$',data.raw.i$line_item_name, ignore.case = T), data.raw.i$insertion_order_name, "Manual_IO"))))
   filter <- IO_Type[IO_Type != "Manual_IO"]
   IO_Type <- ifelse(data.raw.i$insertion_order_name %in% filter, "Copilot_IO", "Manual_IO")
-  lineitem_Type <-ifelse(!grepl('-cp$',data.raw.i$line_item_name, ignore.case = T),"Manual",
-              ifelse(grepl('DEV',data.raw.i$line_item_name, ignore.case = F),"Dev-cp", "Pro-cp"))
+  lineitem_Type <-ifelse(!grepl('(-cp$)|(manual$)',data.raw.i$line_item_name, ignore.case = T),"Manual",
+                           ifelse(grepl('manual$',data.raw.i$line_item_name, ignore.case = F),"Man-cp",
+                             ifelse(grepl('DEV',data.raw.i$line_item_name, ignore.case = F),"Dev-cp", "Pro-cp")))
   print.default("Adding those features...")
   data.raw.i <- cbind(Seat_ID, IO_Type, lineitem_Type, data.raw.i)
   print.default("Done...")
