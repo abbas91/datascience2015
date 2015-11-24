@@ -455,6 +455,11 @@ find ~ -type f -name 'foo*' -ok rm '{}' ';'
 -depth; -maxdepth levels; -mindepth levels; -mount; -noleaf
 touch file # change times of file modification to current time
 stat file # detail stat of a file
+# Search REGEX
+find dir -regex 'pattern' # match pathname
+locate --regex 'pattern' # match pathname
+
+
 
 
 # [5] Archiving / backup - timely backup system files; move large blocks of data
@@ -557,6 +562,59 @@ sudo rsync -av --delete --rsh=ssh /remote_sys_backup remote-sys:/backup
 # [option 3 - sync the local file with remote sync server]
 mkdir remote_server
 rsync -av -delete rsync://....edu/xxx/xxx/i386/os remote_server # URI - ex. resync.gtlib.gatech.edu
+
+
+# [6] Regular Expressions - REGEX
+grep # REGEX search through text --
+# gerp [option] pattern [file...]
+ls /../.. | grep zip # return lines that contain this string 'zip'
+                 -i zip # ignore cases
+                 -v zip # Return NOT match cases
+                 -c zip # print count of matches, not actual lines
+                 -l zip # print name of the files, not lines
+                 -L zip # print name of the NOT match files, not lines
+                 -n zip # Prefic each  matching line with the number of line
+                 -h zip # for multifile search, suppress the output of filenames
+grep -l bzip xxxx*.txt
+# REGEX match pattern used --
+^ $ . [] * {} - ?  + () | \
+# basic #   # extend #
+. <- grep '.zip' xxx*.txt # match any characters 
+^ <- grep '^zip' xxx*.txt # match start with 'zip'
+$ <- grep 'zip$' xxx*.txt # match end with 'zip'
+[] <- grep '[bg]zip' xxx*.txt # match bzip or gzip - A set / select from it
+           '[^bg]zip' xxx*.txt # match any string but bzip and gzip - in A set, ^ negation
+           '[A-Z]zip' xxx*.txt # match Azip ... Zzip - in A set, range
+           '[A-Za-z0-9]' xxx*.txt # match any characters, case, numbers
+() <- grep '^([:upper:][:digit:])*' xxx*.txt # group strings into group and apply other meta
+| <- grep 'AAA|^(BBB)|CCC' xxx*txt # 'or' to combine statement
+? <- grep '\(?AAA\)?' xxx*.txt # match AAA or (AAA), string ? => string can show or not show, optional
+\ <- grep '\(AAA\)' xxx*.txt # match (AAA), escape ()
+* <- grep [[:upper:]] [[:upper:][:lower:]]*\. xxx*.txt # match a sentence, start with big case, 
+                                                       # a lot words in between, end with'.', any number of times - 0 or more
+                                                       # match - "This is a sentence."
++ <- grep [[:upper:]] [[:upper:][:lower:]]+\. xxx*.txt # Almost same as above, any number of times - at least 1 or more
+{} <- grep -E '^\(?[0-9][0-9][0-9]\)? [0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]$' xxx*.txt # match '(555) 432-2345'
+{} <- grep -E '^\(?[0-9]{3}\)? [0-9]{3}-[0-9]{4}$' xxx*.txt # match '(555) 432-2345'
+              '{n}' # occur exact n times
+              '{n.m}' # at least n times, no more than m times
+              '{n,}' # at least n times or more
+              '{,M}' # no more than m times
+# POSIX character classes
+          [[:alnum:]] # any alphanumeric character
+          [[:alpha:]] # any alphabetic character
+          [[:digit:]] # any numeral
+          [[:lower:]] # any lower case letter
+          [[:upper:]] # any uppercase letter
+# Search REGEX
+find dir -regex 'pattern' # match pathname
+locate --regex 'pattern' # match pathname
+vim; less # type'/' then type pattern to search by regex (vim only support -basic regex-*)
+
+
+
+# [7] Text Processing
+
 
 
 
