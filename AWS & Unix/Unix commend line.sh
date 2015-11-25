@@ -613,7 +613,78 @@ vim; less # type'/' then type pattern to search by regex (vim only support -basi
 
 
 
-# [7] Text Processing
+# [7] Text Processing 
+# concatenate file and print it on stdout
+cat
+cat file # print it
+cat > file # type stdinput '>' as file content / CTRL-D to end
+cat -ns file # print with blank line delimited & line numbers
+# sort line by line of texts
+sort 
+sort > file # type stdinput '>' as file content (sort) / CTRL-D to end
+sort file1 file2 file3 > file.all # meger all file sorted and into one file
+sort -b file # ignore the leading space in each line
+     -f # ignore case
+     -u # remove duplicate cases from sorted result (GNU version only)
+     -n # numeric sort
+     -r # sort in reverse order
+     -k # sort on a key field from field1 to field2 rather than entire line
+     -m # treat each argument as a presorted file, merge multiple file into a single sorted result
+     -o # send sorted output to a file rather than stdout
+     -t # define field separater, default - tab, spaces
+ls -l /usr/bin | sort -nr -k 5 | head # -nr -> sort by numeric, reverse, in filed 5 -> size
+sort -k 1,1 -k 2n file # sort field1 only by character, for field2 use numeric sort
+sort -k 3.7nbr -k 3.1nbr -k 3.4nbr # sort field3 7th character
+                                   # sort filed3 1st character
+                                   # sort filed3 4th character
+sort -t ':' -k 7 file # sort file delimted by ':' by the field7
+# Report or Omit Repeated lines
+uniq # usually use with 'sort'
+sort file1 | uniq > file2 # since uniq only deduplicate adjacent like aabbcc
+                          # abcabc doesn't work
+uniq -c file # a list of duplicated lines with number of freqency 
+     -d file # output only repeated lines
+     -f n file # ignore n leading fields in each line, by white space
+     -i file # ignore case
+     -s n file # skip the leading n characters of each line
+     -u file # output only unique lines
+# Remove sections from each line of files
+cut 
+cut -c n-m file # extract n or n-m characters 
+    -f n file # extract nth filed
+       n,m,h file
+    -d ':' # set delemlieter :
+    --complement # extract entire line of text, except portions specified by -c / -f
+cut -f 3 file # extract 3rd field
+cut -f 3 file | cut -c 7-10 # extract 3rd filed and 7-10 characters
+cut -d ':' -f 1 file | head # set delimeter as :, 1st field, list top 10
+# Merge lines of files (By columns)
+paste file1 file2 > file.all # combine columns in file1 with columns in file2
+# Join lines of files (Like SQL)
+join file1 file2 > file.all # need proimary key in all file to join, sorted. Find more on 'man' page
+# Compare two sorted files line by line
+comm 
+comm file1 file2 # 'only file1, only file2, overlap'
+comm -12 file1 file2 # -n suppress columns
+# compare files line by line
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
