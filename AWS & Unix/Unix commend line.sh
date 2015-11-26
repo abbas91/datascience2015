@@ -698,14 +698,69 @@ diff -Naur old_file new_file > diff_file # Create diff file -> files
 diff -Naur old_dir new_dir > diff_file # Create diff file -> dirs
 patch < diff_file # patching file1 with file2 version
 # file1 => file2
+# Transliterate or Delete characters
+tr # convert a set of characters to a corresponding set of characters
+echo "lower cases letter" | tr a-z A-Z # transliterate a-z to A-Z
+"LOWER CASES LETTER"
+echo "lower cases letter" | tr [:lower:] A # transliterate a lower class to 'A'
+"AAAAA AAAAA AAAAAA"
+# a set of values can be:
+ABCDEFGHIJKLMNOPQRST # a list
+A-Z # a range
+[:upper:] # a POSIX class
+# decoding - ROT13
+echo "secrt text" | tr a-zA-Z n-za-mN-ZA-M # encoding
+"frperg grkg"
+echo "frperg grkg" | tr a-zA-Z n-za-mN-ZA-M # decoding
+"secrt text"
+# squezzing text
+echo "aaaabbbbccc" | tr -s ab # -s -> eliminate repeated and adjacent letters
+"abccc"
+# Stream Editor for filtering and transforming text by line---------***
+sed # perform text editing on a stream of text - through a command or 
+    # a script file of multiple commands to perform editing
+# s/search/replacement/ - 'search can be regex'
+echo "front" | sed 's/front/back/' # search everyline to find 'front' and replace with 'back'
+"back"
+echo "front" | sed '2s/front/back/' # only perform on line 2, yet, no line 2, no editing
+"front"
+sed -n '1,5p' file # print file from line 1 to line 5
+sed -n '$p' file # print last line
+sed -n '/regex/p' file # print match regex
+sed -n '/regex/!p' file # DON'T print match regex
+sed -n '1~2' file # start at line 1 take 2 step (lines) (including 1 - ex. 1,2) as interval to the line 3, every odd line
+sed -n '4,+5' file # strat at line 4 and then 5 lines down included, total 6 lines
+sed 's/\([0-9]\{2\}\)\/\([0-9]\{2\}\)\/\([0-9]\{4\}\)$/\3-\1-\2/' file
+# to replace '11/25/2008' with '2008-11-25'
+sed 's/regexp/replacement/' file
+'regexp' -> [0-9]{2}/[0-9]{2}/[0-9]{4}$ # 11/25/2008, Q position is different from 2008-11-25
+([0-9]{2})/([0-9]{2})/([0-9]{4})$ # use () to create sub-expression
+'replacement' -> \3-\1-\2 # 1,2,3 represent the position of each sub-expression, rearrange the orders, use '-', use '\' to escape 1,2,3
+ # add to 's/regexp/replacement/', then use '\' to escape all () {} which may confuse 'sed'
+ echo "aaabbbccc" | sed 's/b/B/' # only replace one letter (leading) per line
+ "aaaBbbccc"
+ echo "aaabbbccc" | sed 's/b/B/g' # global replacement
+ "aaaBBBccc"
+ sed -i 's/xxx/ddd/' file # directly edit file, not print 
+ sed 's/xxx/ddd/; s/fff/ddd/' file # with multiple editing 
+ # take a sed file to perform editing
+ sed -f script.sed file 
+ script.sed
+ # ----script.sed----- #
+ # sed script to produce Linux distributions report
+ 1 i\
+ \
+ Linux Distributions Report\
+
+ s/\([0-9]\{2\}\)\/\([0-9]\{2\}\)\/\([0-9]\{4\}\)$/\3-\1-\2/
+ y/abcdefghijklmnopqrst/ABCDEFGHIJKLMNOPQRST/
+ # --------end-------- #
+ # Check text spelling
+ aspell check file # will display option, choose to replace wrong spelling
+ aspell -H check file # HTML file, make it ignore tag text
 
 
-
-
-
-
-
-
+# [8] Formatting output
 
 
 
