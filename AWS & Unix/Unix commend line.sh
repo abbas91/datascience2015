@@ -667,8 +667,37 @@ comm
 comm file1 file2 # 'only file1, only file2, overlap'
 comm -12 file1 file2 # -n suppress columns
 # compare files line by line
-
-
+diff 
+diff -c file1 file2 # (none)-no diff, - first file, + seconf file, ! a line chnaged
+# *** file1 2011-22-23 00:00:00.00000000000 -05000
+# --- file2 2011-22-23 00:00:00.00000000000 -05000
+# **************
+# *** 1,4 ***
+# - a
+#   b
+#   c
+#   d
+# --- 1,4 ---
+#   b
+#   c
+#   d
+# + e
+diff -u file1 file2 # (none)-no diff, - first file, + second file
+# --- file1 2011-22-23 00:00:00.00000000000 -05000
+# +++ file2 2011-22-23 00:00:00.00000000000 -05000
+# @@ -1,4 +1,4 @@
+# -a
+#  b
+#  c
+#  d
+# +e
+# Apply diff 'updates' to the original file (Previous version)
+patch # it accept output from 'diff' to convert older file to newer file
+# find more options on 'man' page
+diff -Naur old_file new_file > diff_file # Create diff file -> files
+diff -Naur old_dir new_dir > diff_file # Create diff file -> dirs
+patch < diff_file # patching file1 with file2 version
+# file1 => file2
 
 
 
