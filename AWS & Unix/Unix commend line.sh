@@ -759,12 +759,15 @@ sed 's/regexp/replacement/' file
  aspell check file # will display option, choose to replace wrong spelling
  aspell -H check file # HTML file, make it ignore tag text
 
-
 # [8] Formatting output
 
+# [9] Printing 
+
+# [10] Compiling Programs
 
 
-
+## ---------------------------- Writing Shell Scripts ----------------------------- ##
+# [1] Writing first scripts
 
 
 
