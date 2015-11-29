@@ -768,12 +768,50 @@ sed 's/regexp/replacement/' file
 
 ## ---------------------------- Writing Shell Scripts ----------------------------- ##
 # [1] Writing first scripts
+# step1-Write a script / 
+> mark.sh
+vi mark.sh
+# ----- mark.sh ----- #
+#!/bin/bash                     -> shebang, indicating 'bash' interpreter location
+
+# this is our script            -> Description of the script can do
+
+echo "Hello World!"           # -> Scripts / try to use long option --all --directory (readability)
+
+find dir \
+   \( \
+   	    -type f \
+   	    -not -perm 0600 \
+   	    -exec chmod 0600 '{}' ';' \   # Indention / Line continuation for readability
+   \) \
+   -or \
+   \( \
+   	    -type d \
+   	    -not -perm 0700 \
+   	    -exec chmod 0700 '{}' ';' \
+   \)
+# ----- end ---------- #
+# step2-Make the script executable / 
+ls -l mark.sh # check execuation premission -rw-r--r--
+chmod 775 mark.sh # change execution premission to executable for everyone, 700 only executable for owner
+ls -l mark.sh # check again
+# step3-Put the script somewhere the shell can find it
+/home/ubuntu/mark.sh # specify full path, otherwise ssh can't find it
+bash mark.sh # or use 'bash' to directly specify interpreter 'bash'
+# in order to directly execute program
+echo $PATH # display 'PATH' var which is a ':' separated search directories
+# cause most 'PATH' var contains '/home/me/bin' to allow user execute their own command
+# if NOT contain -
+export PATH=~/bin:"$PATH" # add this command to .bashrc file
+source .bashrc # reload the source file, reload
+# create local 'bin'
+cd
+mkdir bin
+mv mark.sh bin
+mark.sh # directly execute this sommand
 
 
-
-
-
-
+# [2] starting a project
 
 
 
