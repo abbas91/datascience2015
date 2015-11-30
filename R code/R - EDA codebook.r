@@ -185,6 +185,7 @@
            plot(view1.lm$residuals~x) 
 #
 ...
+
 ## --------------------------{Visualization Techiques}
 ## [1] ggplot package
 ##   <1> Multiplot FUN 
