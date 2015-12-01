@@ -812,6 +812,158 @@ mark.sh # directly execute this sommand
 
 
 # [2] starting a project
+# create variable in script
+TITLE="This is a title." # a string
+TITLE2=TITLE # another variable
+TITLE3="we have $TITLE2" # a string contains variable
+TITLE4=(ls -l xxx.txt) # a command
+TITLE5=$((7*8/90)) # an arithmetic expansion
+TITLE6="\t\ta string\n" # escape sequence such as tabs, newlines 
+$(command) # directly use the stdout of a command
+echo $TITLE # if 'TITLE' not exists, system will create a 'blank' one
+echo "<HTML>
+          <HEAD>
+                 <TITLE>$TITLE2</TITLE>
+          </HEAD>
+      <HTML>" # use echo to output text
+# ----- end ------ #
+# Here document / Here script
+command <<- token # --------------------- #
+            text  # as input line by line #
+            token # --------------------- #
+                  # any comand takes 'stdinput' can be used
+# ------ script example <1> -------- #
+#!/bin/bash
+
+# Script to extract ftp file
+
+FTP_SERVER=ftp.nl.debian.org # define variables
+FTP_PATH=/debian/dist/...../.../
+REMOTE_FILE=xxxx.txt
+
+ftp -n <<- _EOF_ # token starts
+       open $FTP_SERVER
+       user anonymous me@linuxbox
+       cd $FTP_PATH
+       hash
+       get $REMOTE_FILE
+       bye
+       _EOF_ # token ends
+
+ls -l $REMOTE_FILE # check result
+# ------------ end ---------------#
+# ------ script example <2> -------- #
+#!/bin/bash
+
+# Script to display sys infor
+
+TITLE="system Information Report For $HOSTNAME"
+CURRENT_TIME=$(date +"%x %r %z")
+TIME_STAMP="Generated $CURRENT_TIME, by $USER"
+
+cat <<- _EOF_
+<HTML>
+          <HEAD>
+                 <TITLE>$TITLE</TITLE>
+          </HEAD>
+          <BODY> 
+                 <H1>$TITLE</H1>
+                 <p>$TIME_STAMP</p>
+          </BODY>
+<HTML>
+_EOF_
+# ------------ end ---------------#
+
+
+
+# [3] Top Down Design
+# design top level tasks first, then define subtasks for each
+# <1>main task
+#    (1)suntask
+#    (2)subtask
+# <2>main task
+#    (1)suntask
+#    (2)subtask
+# shell function
+function_name () {
+  local.variable # local var which only exists during fun session
+                 # can share name with global var, no impact
+  command
+  command
+  return # terminate fun session
+}
+# Debugging with 'stub'
+function_name () {
+  echo "this fun executed." # Return information regrading execution of each part
+  return
+}
+script.file.sh # run scrpit to see if everypart executable (Debugging)
+# ------ script example -------- #
+#!/bin/bash
+
+# Script to display sys infor
+
+TITLE="system Information Report For $HOSTNAME" # create global bariables
+CURRENT_TIME=$(date +"%x %r %z")
+TIME_STAMP="Generated $CURRENT_TIME, by $USER"
+
+function_name1 () { # define shell functions 
+  cat <<- _EOF_
+          <H2>xxxx</H2>
+          <PRE>$(command1)</PRE>
+          _EOF_
+  return
+}
+function_name2 () {
+  cat <<- _EOF_
+          <H2>xxxx</H2>
+          <PRE>$(command2)</PRE>
+          _EOF_
+  return
+}
+function_name3 () {
+  cat <<- _EOF_
+          <H2>xxxx</H2>
+          <PRE>$(command3)</PRE>
+          _EOF_
+  return
+}
+
+cat <<- _EOF_ # actuall commands start to execute in this script
+<HTML>
+          <HEAD>
+                 <TITLE>$TITLE</TITLE> # lookup global variables
+          </HEAD>
+          <BODY> 
+                 <H1>$TITLE</H1>
+                 <p>$TIME_STAMP</p>
+                 $(function_name1) # lookup shell functions
+                 $(function_name2)
+                 $(function_name3)
+          </BODY>
+<HTML>
+_EOF_
+# ------------ end ---------------#
+
+
+
+# [4] Flow control - IF statements
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
