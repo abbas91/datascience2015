@@ -80,13 +80,17 @@ rm(Model.cost.test, Model.cost.train, predict.train, predict.test, i)
 # >>> melt plot format
 mdf <- melt(Model.cost.table, id.vars="Cost_Type", 
             value.name="Error_rate", 
-            variable.name="Percet")
+            variable.name="Percet_of_Trainset")
 # >>> Plot Learning Curve
-ggplot(data=mdf, aes(x=Percet, y=Error_rate, group = Cost_Type, colour = Cost_Type)) +
+ggplot(data=mdf, aes(x=Percet_of_Trainset, y=Error_rate, group = Cost_Type, colour = Cost_Type)) +
   geom_line() +
-  geom_point( size=4, shape=21, fill="white")
+  geom_point( size=4, shape=21, fill="white") +
+  ggtitle("Learning Curve Plot")
 
 
+
+
+# Step 7 - 
 
 
 
