@@ -948,15 +948,209 @@ _EOF_
 
 
 # [4] Flow control - IF statements
+[] # old test, can't escape (),...
+[[]] # new test, no worry escape
+# pseudocode (use 'if' 'else' to translate computer language)
+if [[command]]; then
+	  do_this # can be another if-else loop
+elif [[command]]; then
+	  do_that # can be another if-else loop
+else 
+	  do_it # can be another if-else loop
+fi
+# test statement
+[[statement]] # perform a test, returns 'true' or 'false'
+# basic if-else example
+x=5
+
+if [[ "$x" = 5 ]]; then # "$x" - warp by "" defend the error caused by missing value x, "" always returns a string
+	   echo "x equals 5."
+elif [[ "$x" = 7 ]]; then
+	   echo "x equals 7."
+elif [[ "$x" = 8 ]]; then
+	   echo "x equals 8."
+else
+	   echo "x does not equal to any."
+fi
+# exit status
+if [[]] # returns 1 or 0, if 0 execute
+0 - 255
+0 # success
+1 - 255 # others - unsuccess
+#ex.
+ls -d /usr/bin
+echo $?
+0 # command executed successfully
+true # default returns 0
+false # default returns 1
+#
+# USING Testing - file, strings, integer
+[['test']]
+# FILE testing
+fil1 -ef file2 # two file names refers to the same file by hard linking
+file1 -nt file2 # file1 is newer than file2
+file1 -ot file2 # file1 is older than file2
+-b file # file exists, a block-special (devices) file
+-c file # file exists, a character-special (devices) file
+-d file # file exists, is a directory
+-e file # file exists
+-f file # file exists, is a regular file
+-g file # file exists, is set-group-ID
+-G file # file exists, is owned by the effective group ID
+-k file # file exists, has its "sticky bit" set
+-L file # file exists, is a symbolic link
+-O file # file exists, is owned by the effective user ID
+-p file # file exists, is a named pipe
+-r file # file exists, is readable
+-s file # file exists, has a length greater than zero
+-S file # file exists, is a network socket
+-t file_descripter # whether standrad in/out/error is being redirected 
+-u file # file exists, is setuid
+-w file # file exists, is writable
+-x file # file exists, is executable
+# -------------example------------------ #
+test_file () {
+
+	# test file: xxxxxxxxxxxxxxxxxxxxx
+
+	FILE=~/.bashrc
+
+	if [ -e "$FILE" ]; then
+		    if [ -f "$FILE" ]; then
+		    	    echo "xxxxxxxxxxxxxx1"
+		    fi
+		    if [ -d "$FILE" ]; then
+		    	    echo "xxxxxxxxxxxxxx2"
+		    fi
+		    if [ -r "$FILE" ]; then
+		    	    echo "xxxxxxxxxxxxxx3"
+		    fi
+	else 
+		    echo "xxxxxxxxxxxany"
+    fi
+  return
+}
+# --------------- end ------------------- #
+#
+# STRINGS testing
+string # string is not NULL
+-n string # the length of the string is greater than zero
+-z string # the length of the string is zero
+string1 == string2 # two strings are equal
+string1 != string2 # ........... are not equal
+string1 > string2 # string1 sorts after string2
+string1 < string2 # string1 sorts before string2
+# -------------example------------------ #
+#!/bin/bash
+
+# test-string: evaluate the vale of a string
+
+ANSWER=maybe
+
+if [ -z "$ANSWER" ]; then
+	     echo "xxxxxxxxxxx1"
+	     exit 1
+fi
+if [ "ANSWER" == "yes" ]; then
+	     echo "xxxxxxxxxxx2"
+elif [ "$ANSWER" == "no" ]; then
+	     echo "xxxxxxxxxxx3"
+elif [ "$ANSWER" == "maybe" ]; then
+	     echo "xxxxxxxxxxx4"
+else
+	     echo "xxxxxxxxxxxother"
+fi
+# --------------- end ------------------- #
+#
+# Integer testing
+integer1 -eq integer2 # equal
+integer1 -ne integer2 # not equal
+integer1 -le integer2 # leess or equal
+integer1 -lt integer2 # less
+integer1 -ge integer2 # greater or equal
+integer1 -gt integer2 # greater
+# -------------example------------------ #
+#!/bin/bash
+
+# test-integer: evaluate the vale of a integer
+
+INT=-5
+
+if [ -z "$INT" ]; then
+	    echo "INT is empty."
+	    exit 1
+fi
+
+if [ "$INT" -eq 0 ]; then
+	 echo "INT is Zero."
+else
+	 if [ "$INT" -lt 0 ]; then
+	 	   echo "xxxxxxxxxxxnegative"
+	 else
+	 	   echo "xxxxxxxxxxxpositive"
+	 fi
+     if [ "$((INT % 2))" -eq 0 ]; then
+	 	   echo "xxxxxxxxxxxeven"
+	 else
+	 	   echo "xxxxxxxxxxxodd"
+	 fi
+fi
+# --------------- end ------------------- #
+#
+# Match regex
+[["$strings" =~ regex]]
+#ex.
+if [[ "$INT" =~ ^-?[0-9]+$ ]]; then # if it is an integer
+if [[ "$FILE" == foo.* ]]; then # match all file 'foo.*', enable expansion
+#
+# Arithmetic truth test
+((100 * 8 / 50)) # supports full arithmetic evaulation
+(( INT == 0))
+(( INT < 0))
+# also, test
+if ((1)); then echo "true"; fi # return true if integer is non-zero
+if ((0)); then echo "true"; fi
+#
+# Combining Expression
+Operation     test     [[]] and (())
+AND           -a       &&
+OR            -o       ||
+NOT           !        !
+# example
+if [[ INT -ge MIN_VAL && INT -le MAX_VAL ]]; then # and
+if [ "$INT" -ge MIN_VAL -a "$INT" -le MAX_VAL ]; then # and
+if [[ !(INT -ge MIN_VAL && INT -le MAX_VAL) ]]; then # NOT ( AND )
+if [ ! \("$INT" -ge MIN_VAL -a "$INT" -le MAX_VAL\) ]; then # NOT ( AND ) *need escape []
+#
+# Control Operators
+&& ||
+command1 && command2 # execute command2, only if command1 executed successfully
+command1 || command2 # execute command2, only if command1 executed unsuccessfully
+#ex.
+mkdir temp && cd temp # if successfully make a dir 'temp', then cd to that dir
+[ -d temp] || mkdir temp # if dir 'temp' not exists (False test), make a dir called 'temp'
+#
+# More examples - recode previous function
+# ------------- example ------------------ #
+report_home_space () {
+	if [[ $(id -u) -eq 0 ]]; then
+		   cat <<- _EOF_
+		           .......
+		           .......
+		           _EOF_
+    else
+    	   cat <<- _EOF_
+		           .......
+		           .......
+		           _EOF_
+    fi
+    return
+}
+# --------------- end -------------------- #
 
 
 
-
-
-
-
-
-
+# [5] Reading keybroad input into the program (User interactive)
 
 
 
