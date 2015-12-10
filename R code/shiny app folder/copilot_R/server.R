@@ -54,6 +54,61 @@ data_sql.all <- fetch(data_sql.all, n=-1)
 data_sql.all$Seat_ID <- as.character(data_sql.all$Seat_ID)
 data_sql.all$line_item_id <- as.character(data_sql.all$line_item_id)
 
+# Building benchmark table
+# Gloabl -
+global <- data_sql.all %>%
+          summarize(CTR=ifelse(is.nan(sum(CLICKs) / sum(IMPs)),0,sum(CLICKs) / sum(IMPs)),
+                    MARGIN=sum(PRFT) / sum(REV), # new
+                    CPM=ifelse(is.na(sum(COST) / sum(IMPs)*1000),0,sum(COST) / sum(IMPs)*1000),
+                    CPC=ifelse(is.nan(sum(COST) / sum(CLICKs)),0,sum(COST) / sum(CLICKs)),
+                    CPA=ifelse(is.na(sum(COST) / sum(TOT_CONVs)),0,sum(COST) / sum(TOT_CONVs))) %>%
+          transform(CTR=percent(CTR),
+                    MARGIN=percent(MARGIN), # new
+                    CPM=format.money(CPM),
+                    CPC=format.money(CPC),
+                    CPA=format.money(CPA))
+# Seat -
+Seat <- data_sql.all %>%
+        group_by(Seat_ID) %>%
+        summarize(CTR=ifelse(is.nan(sum(CLICKs) / sum(IMPs)),0,sum(CLICKs) / sum(IMPs)),
+                  MARGIN=sum(PRFT) / sum(REV), # new
+                  CPM=ifelse(is.na(sum(COST) / sum(IMPs)*1000),0,sum(COST) / sum(IMPs)*1000),
+                  CPC=ifelse(is.nan(sum(COST) / sum(CLICKs)),0,sum(COST) / sum(CLICKs)),
+                  CPA=ifelse(is.na(sum(COST) / sum(TOT_CONVs)),0,sum(COST) / sum(TOT_CONVs))) %>%
+        summarize(CTR=mean(CTR[is.finite(CTR)]),
+                  MARGIN=mean(MARGIN[is.finite(MARGIN)]), # new
+                  CPM=mean(CPM[is.finite(CPM)]),
+                  CPC=mean(CPC[is.finite(CPC)]),
+                  CPA=mean(CPA[is.finite(CPA)])) %>%
+        transform(CTR=percent(CTR),
+                  MARGIN=percent(MARGIN), # new
+                  CPM=format.money(CPM),
+                  CPC=format.money(CPC),
+                  CPA=format.money(CPA))
+# Lineitem
+Lineitem <- data_sql.all %>%
+            group_by(line_item_id) %>%
+            summarize(CTR=ifelse(is.nan(sum(CLICKs) / sum(IMPs)),0,sum(CLICKs) / sum(IMPs)),
+                      MARGIN=sum(PRFT) / sum(REV), # new
+                      CPM=ifelse(is.na(sum(COST) / sum(IMPs)*1000),0,sum(COST) / sum(IMPs)*1000),
+                      CPC=ifelse(is.nan(sum(COST) / sum(CLICKs)),0,sum(COST) / sum(CLICKs)),
+                      CPA=ifelse(is.na(sum(COST) / sum(TOT_CONVs)),0,sum(COST) / sum(TOT_CONVs))) %>%
+            summarize(CTR=mean(CTR[is.finite(CTR)]),
+                      MARGIN=mean(MARGIN[is.finite(MARGIN)]), # new
+                      CPM=mean(CPM[is.finite(CPM)]),
+                      CPC=mean(CPC[is.finite(CPC)]),
+                      CPA=mean(CPA[is.finite(CPA)])) %>%
+            transform(CTR=percent(CTR),
+                      MARGIN=percent(MARGIN), # new
+                      CPM=format.money(CPM),
+                      CPC=format.money(CPC),
+                      CPA=format.money(CPA))
+# combine
+Benchmark_Scale <- c("Global_AVG", "Seat_AVG", "Lineitem_AVG")
+benchmark <- data.frame(rbind(global, Seat, Lineitem))
+benchmark <- data.frame(cbind(Benchmark_Scale, benchmark))
+rm(Benchmark_Scale, global, Seat, Lineitem)
+
 
 
 # Create Selection vars / formating in memory
@@ -88,6 +143,7 @@ output$mytable1 <- renderDataTable({
                                  COST=sum(COST),
                                  REV=sum(REV),
                                  PRFT=sum(PRFT),
+                                 MARGIN=sum(PRFT) / sum(REV), # new
                                  CPM=ifelse(is.na(sum(COST) / sum(IMPs)*1000),0,sum(COST) / sum(IMPs)*1000),
                                  CPC=ifelse(is.nan(sum(COST) / sum(CLICKs)),0,sum(COST) / sum(CLICKs)),
                                  CPA=ifelse(is.na(sum(COST) / sum(TOT_CONVs)),0,sum(COST) / sum(TOT_CONVs))) %>%
@@ -98,6 +154,7 @@ output$mytable1 <- renderDataTable({
                                  COST=format.money(COST),
                                  REV=format.money(REV),
                                  PRFT=format.money(PRFT),
+                                 MARGIN=percent(MARGIN), # new
                                  CPM=format.money(CPM),
                                  CPC=format.money(CPC),
                                  CPA=format.money(CPA))
@@ -121,6 +178,7 @@ output$mytable2 <- renderDataTable({
                                  COST=sum(COST),
                                  REV=sum(REV),
                                  PRFT=sum(PRFT),
+                                 MARGIN=sum(PRFT) / sum(REV), # new
                                  CPM=ifelse(is.na(sum(COST) / sum(IMPs)*1000),0,sum(COST) / sum(IMPs)*1000),
                                  CPC=ifelse(is.nan(sum(COST) / sum(CLICKs)),0,sum(COST) / sum(CLICKs)),
                                  CPA=ifelse(is.na(sum(COST) / sum(TOT_CONVs)),0,sum(COST) / sum(TOT_CONVs))) %>%
@@ -131,6 +189,7 @@ output$mytable2 <- renderDataTable({
                                  COST=format.money(COST),
                                  REV=format.money(REV),
                                  PRFT=format.money(PRFT),
+                                 MARGIN=percent(MARGIN), # new
                                  CPM=format.money(CPM),
                                  CPC=format.money(CPC),
                                  CPA=format.money(CPA))
@@ -156,6 +215,7 @@ output$mytable3 <- renderDataTable({
                                  COST=sum(COST),
                                  REV=sum(REV),
                                  PRFT=sum(PRFT),
+                                 MARGIN=sum(PRFT) / sum(REV), # new
                                  CPM=ifelse(is.na(sum(COST) / sum(IMPs)*1000),0,sum(COST) / sum(IMPs)*1000),
                                  CPC=ifelse(is.nan(sum(COST) / sum(CLICKs)),0,sum(COST) / sum(CLICKs)),
                                  CPA=ifelse(is.na(sum(COST) / sum(TOT_CONVs)),0,sum(COST) / sum(TOT_CONVs))) %>%
@@ -166,6 +226,7 @@ output$mytable3 <- renderDataTable({
                                  COST=format.money(COST),
                                  REV=format.money(REV),
                                  PRFT=format.money(PRFT),
+                                 MARGIN=percent(MARGIN), # new
                                  CPM=format.money(CPM),
                                  CPC=format.money(CPC),
                                  CPA=format.money(CPA))
@@ -173,4 +234,12 @@ output$mytable3 <- renderDataTable({
 
 
    })
+
+
+# Summary benchmark by global, seat, and lineitem
+output$mytable4 <- renderDataTable({
+    subset(benchmark)
+
+   })
+
 })

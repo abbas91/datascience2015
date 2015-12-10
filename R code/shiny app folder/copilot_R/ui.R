@@ -14,7 +14,6 @@ shinyUI(fluidPage(
                                  start = Sys.Date() - 8, end = Sys.Date()),
          helpText("NOTE: a valid date range should be within last 8 days (Only apply to first 2 tabs)", style = "color:green"),
 
-         img(src = "logo-copilot1.png", heigh = 300, width = 300),
          p("Please find more project information at: ", a("Co-pilot Conference Page - JIRA", href = "https://confluence.xaxis.com/display/XENG/Co-Pilot"))
         ),
      mainPanel(
@@ -26,7 +25,9 @@ shinyUI(fluidPage(
              tabPanel("Line-item View - By Lineitem",
                       dataTableOutput("mytable3")),
              tabPanel("Line-item View - By Date",
-                      dataTableOutput("mytable2"))
+                      dataTableOutput("mytable2")),
+             tabPanel("Benchmark View - All period",
+                      dataTableOutput("mytable4"))
         )
     )
  )
