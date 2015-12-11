@@ -452,36 +452,84 @@
 # #Hold CTRL-c to abort process if go crazy
 
 
-# Access elements of lists
-animals = ["k", "d", "l", "o", "r", "p"]
-print animals[0], animals[2], animals[3]
-print [animals[i] for i in (0,3,2)]
-for i in (0,3,2):
-	print animals[i]
+# # Access elements of lists
+# animals = ["k", "d", "l", "o", "r", "p"]
+# print animals[0], animals[2], animals[3]
+# print [animals[i] for i in (0,3,2)]
+# for i in (0,3,2):
+# 	print animals[i]
 
 # # Connect multiple functions
 # from sys import exit, argv
 
 # script, username = argv
 
-# def choose1_B1_B2():
-# 	print "Choose Boy1 or Boy2? %d" % username
-# 	choose = raw_input("> ")
-# 	if choose == "Boy1":
-# 		print "How much you would like to spend?"
-# 		spend = raw_input("> ")
-# 		if spend > 100:
-# 			print "Great! You made him stay."
-# 		else:
-# 			print "Oh oh no he ran off.."
-# 			print "Ok, do you want to go back to Boy2 or find Boy3, %s" % username
-# 			choose2 = raw_input("> ")
-# 			if choose2 == "Boy2"
-# 			print "Ok lets see.."
+def choose1_B1_B2():
+	print "Choose Boy1 or Boy2? %d" % username
+	choose = raw_input("> ")
+	if choose == "Boy1":
+		print "How much you would like to spend?"
+		spend = raw_input("> ")
+		if spend > 100:
+			print "Great! You made him stay."
+		else:
+			print "Oh oh no he ran off.."
+			print "Ok, do you want to go back to Boy2 or find Boy3, %s" % username
+			choose2 = raw_input("> ")
+			if choose2 == "Boy2": 
+				print "Ok lets see.."
+                print "How much you would like to spend?"
+                spend2 = raw_input("> ")
+                if spend2 > 100
 
-# 			elif choose2 == "Boy3"
-# 			exit(0)
-# 	if choose == 
+			elif choose2 == "Boy3"
+			exit(0)
+	if choose == 
+
+
+
+
+
+
+# ----------------------------- PYTHON -------------------------------------- #
+# [1] Set up 
+# anaconda python
+Google: anaconda python
+-> Download "anaconda"
+-> 2.7 version
+-> choose installer
+# IPython notebook
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
