@@ -462,29 +462,29 @@
 # # Connect multiple functions
 # from sys import exit, argv
 
-# script, username = argv
+# # script, username = argv
 
-def choose1_B1_B2():
-	print "Choose Boy1 or Boy2? %d" % username
-	choose = raw_input("> ")
-	if choose == "Boy1":
-		print "How much you would like to spend?"
-		spend = raw_input("> ")
-		if spend > 100:
-			print "Great! You made him stay."
-		else:
-			print "Oh oh no he ran off.."
-			print "Ok, do you want to go back to Boy2 or find Boy3, %s" % username
-			choose2 = raw_input("> ")
-			if choose2 == "Boy2": 
-				print "Ok lets see.."
-                print "How much you would like to spend?"
-                spend2 = raw_input("> ")
-                if spend2 > 100
+# def choose1_B1_B2():
+# 	print "Choose Boy1 or Boy2? %d" % username
+# 	choose = raw_input("> ")
+# 	if choose == "Boy1":
+# 		print "How much you would like to spend?"
+# 		spend = raw_input("> ")
+# 		if spend > 100:
+# 			print "Great! You made him stay."
+# 		else:
+# 			print "Oh oh no he ran off.."
+# 			print "Ok, do you want to go back to Boy2 or find Boy3, %s" % username
+# 			choose2 = raw_input("> ")
+# 			if choose2 == "Boy2": 
+# 				print "Ok lets see.."
+#                 print "How much you would like to spend?"
+#                 spend2 = raw_input("> ")
+#                 if spend2 > 100
 
-			elif choose2 == "Boy3"
-			exit(0)
-	if choose == 
+# 			elif choose2 == "Boy3"
+# 			exit(0)
+# 	if choose == 
 
 
 
@@ -499,6 +499,13 @@ Google: anaconda python
 -> 2.7 version
 -> choose installer
 # IPython notebook
+anaconda promte
+-> conda update conda # update conda
+-> conda update ipython ipython-notebook ipython-qtconsole # update ipython
+-> ipython notebook # open notebook
+# install packages in python
+anaconda promte
+-> conda install *packages # will take care all dependencies
 
 
 

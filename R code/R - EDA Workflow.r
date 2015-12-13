@@ -186,6 +186,39 @@
 #
 ...
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## --------------------------{Visualization Techiques}
 ## [1] ggplot package
 ##   <1> Multiplot FUN 
