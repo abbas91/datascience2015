@@ -12,7 +12,7 @@ shinyUI(fluidPage(
          uiOutput("IO_List"),
          dateRangeInput("dates", label = h4("Please Choose the Date Range"),
                                  start = Sys.Date() - 8, end = Sys.Date()),
-         helpText("NOTE: a valid date range should be within last 8 days (Only apply to first 2 tabs)", style = "color:green"),
+         helpText("NOTE: a valid date range should be within last 8 days (Apply to tab 1, 2 & 4)", style = "color:green"),
 
          p("Please find more project information at: ", a("Co-pilot Conference Page - JIRA", href = "https://confluence.xaxis.com/display/XENG/Co-Pilot"))
         ),
@@ -27,7 +27,10 @@ shinyUI(fluidPage(
              tabPanel("Line-item View - By Date",
                       dataTableOutput("mytable2")),
              tabPanel("Benchmark View - All period",
-                      dataTableOutput("mytable4"))
+                      dataTableOutput("mytable4"),
+                      helpText("**NOTE: 'Seat_AVG' and 'Lineitem_AVG' are based on the Seat in which the Co-pilot IO is chosen", style = "color:green"),
+                      dataTableOutput("mytable5"),
+                      helpText("**NOTE: Markets grouped from current 11 seats", style = "color:green"))
         )
     )
  )

@@ -1150,13 +1150,107 @@ report_home_space () {
 
 
 
+
+
+
 # [5] Reading keybroad input into the program (User interactive)
+read [-option] [variable...] # read a single line of standrd input
+read -a array # assign input to array with index zero
+     -d delimiter # the first charater in 'delimiter' is to indicate end of input
+     -e # use readline to handle input, one line one var
+     -n num # read a number of characters in input rather than all
+     -p prompt # Display aprompt for input
+     -r # rawmodw, not inperpret backlash characters as escape
+     -s # Don't echo characters as they are typed (For password)
+     -t seconds # time out, if a non-zero exit return
+     -u fd # use input from a file descriptor fd, rather than standard input
+# single var
+echo -n "Please enter a number -> " # n, no new line
+read INT
+echo "var = '$INT'"
+# multiple vars
+echo -n "Please enter multiple numbers -> "
+read INT1 INT2 INT3 INT4 INT5 INT6 # if less - empty, if more, all extra for the last var
+echo "var1 = '$INT1'"
+echo "var2 = '$INT2'"
+echo "var3 = '$INT3'"
+echo "var4 = '$INT4'"
+echo "var5 = '$INT5'"
+echo "var6 = '$INT6'"
+# if no var assign
+echo -n "Please enter multiple numbers -> "
+read
+echo "var = '$REPLY'" # if input "a c d f c", REPLY = "a c d f c"
+                      # REPLY, shell var for store 'read' input if no var assign
+# use IFS to separate input
+IFS = ":" read var1 var2 var3 var4 <<< "$FILE" # use ":" as separators to read the value of a file into 
+                                               # different vars
+                                               # use a variable assignment right in front of a command
+                                               # IFS = ":" in front of read, IFS old value restore after 
+                                               # end of this 'read' command
+                                               # <<< redirect value of FILE as standard input for 'read'
+# use 'menu' for user to choose
+echo "
+Please select:
+
+1. xxxxxxxxxxxxxx
+2. xxxxxxxxxxxxxx
+3. xxxxxxxxxxxxxx
+0. quit
+"
+read -p "Enter selection [0-3] > "
+
+# Validating input
+# -- define error fun
+invalid_input() {
+	echo "Invalid input '$REPLY'" >&2
+	exit 1
+}
+# -- set up test
+[[ -z $REPLY ]] && invalid_input # Is it empty? && -> if 1 success, ex 2
+(( $(echo $REPLY | wc -w) > 1 )) && invalid_input # is it multiple items? && -> if 1 success, ex 2
+# example.ex
+# ------------- example ------------------ #
+#!/bin/bash
+
+# test-integer: evaluate the vale of a integer
+
+echo -n "Please enter a number -> " # -> ask for single input
+read INT
+
+invalid_input() {
+	echo "Invalid input '$INT'" >&2 # -- define error fun
+	exit 1
+}
+
+[[ -z $INT ]] && invalid_input # Is it empty? 
+(( $(echo $INT | wc -w) > 1 )) && invalid_input # is it multiple items? 
+
+
+if [ -z "$INT" ]; then # start function
+	    echo "INT is empty."
+	    exit 1
+fi
+
+if [ "$INT" -eq 0 ]; then
+	 echo "INT is Zero."
+else
+	 if [ "$INT" -lt 0 ]; then
+	 	   echo "xxxxxxxxxxxnegative"
+	 else
+	 	   echo "xxxxxxxxxxxpositive"
+	 fi
+     if [ "$((INT % 2))" -eq 0 ]; then
+	 	   echo "xxxxxxxxxxxeven"
+	 else
+	 	   echo "xxxxxxxxxxxodd"
+	 fi
+fi
+# --------------- end -------------------- #
 
 
 
-
-
-
+# [6] Flow control: Looping with 'WHILE' and 'UNTIL'
 
 
 
