@@ -3,9 +3,14 @@
 # Content
 # CTRL f -> "Setup instance" >>> lanugh instances EC2
 # CTRL f -> "method 1" >>> Single local machine - R-studio launch
-# CTRL f -> "method 2" >>> Hadoop cluster
+# CTRL f -> "method 2" >>> Hadoop cluster (Manual EC2)
 # CTRL f -> "method 3" >>> Build API connection + Connect to RDS + automate update
 # CTRL f -> "method 4" >>> Host Shiny app on a EC2 instance
+# CTRL f -> "method 5" >>> Create EMR Cluster
+
+
+
+
 
 
 ## <<<< Setup instance >>>>> ##
@@ -483,10 +488,17 @@ http://checkip.amazonaws.com/
 
 
 
-
-
-
-
+## <<<< Create EMR Cluster >>>>> ##
+# [1] EMR cluster (EC2) + S3 Bucket
+# -- Create Amazon S3 Bucket (For store input, output, log data)
+S3 console -> "Create Bucket" -> Name; Region -> "Create" -> 
+"Create Folder" -> s3://myemrbucket/output
+                   s3://myemrbucket/logs
+# -- Launch EMR Cluster
+EMR Console
+# Step1
+"Create Cluster"
+-> Choose Cluster Name
 
 
 

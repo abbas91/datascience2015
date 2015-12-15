@@ -1251,10 +1251,126 @@ fi
 
 
 # [6] Flow control: Looping with 'WHILE' and 'UNTIL'
+# WHILE - if not meet stoping requirement, repeat process
+while [commands]; do # if meet [] returns exit status 1
+       commands 
+done
+# -- define WHILE Loop
+# ------------- example ------------------ #
+#!/bin/bash
+
+# Define stoping function
+
+DELAY=3 # define times to delay for showing result
+
+while [[ $REPLY != 0 ]]; do # define the 0 as quit, test on it
+    clear
+	cat "xxxxxxxxxx, 0 quit"
+	read -p "Please select > "
+   if [[ $REPLY = ...0123 ]]; then
+	       if [[ $REPLY = ...1 ]]; then
+		      command
+		      sleep $DELAY # delay showing
+	       fi
+	       if [[ $REPLY = ...2 ]]; then
+		      command
+		      sleep $DELAY
+	       fi
+           if [[ $REPLY = ...3 ]]; then
+		      command
+		      sleep $DELAY
+	       fi
+	else 
+	   echo "Invalid input"
+	   sleep $DELAY
+	fi
+done
+echo "Program terminated." # if user type 0, other wise repeat the loop
+# --------------- end -------------------- #
+
+# -- endless loop while, break with "break"
+# ------------- example ------------------ #
+#!/bin/bash
+
+# Define 'break' in the loop
+
+DELAY=3 # define times to delay for showing result
+
+while true; do # true always return exit 0, loop run endlessly
+    clear
+	cat "xxxxxxxxxx, 0 quit"
+	read -p "Please select > "
+   if [[ $REPLY = ...0123 ]]; then
+	       if [[ $REPLY = ...1 ]]; then
+		      command
+		      sleep $DELAY # delay showing
+		      continue # more efficient execution, continue will skip over other, no reason to test other
+	       fi
+	       if [[ $REPLY = ...2 ]]; then
+		      command
+		      sleep $DELAY
+		      continue
+	       fi
+           if [[ $REPLY = ...3 ]]; then
+		      command
+		      sleep $DELAY
+		      continue
+	       fi
+	       if [[ $REPLY = ...0 ]]; then
+		      break # define 'break' in loop, other wise endless loop
+	       fi
+	else 
+	   echo "Invalid input"
+	   sleep $DELAY
+	fi
+done
+echo "Program terminated." # if user type 0, other wise repeat the loop
+# --------------- end -------------------- #
+
+# until - opposite of while, exit when status = 0
+until [commands]; do # if meet [] returns exit status 0
+       commands 
+done
+# -- keep trying, looping until it success = status 0
+# ------------- example ------------------ #
+#!/bin/bash
+
+# until-count: display a series of numbers
+
+count=1
+
+until [ $count -gt 5 ]; do # count > 5?, count = 1 which < 5, ststua 1, looping
+	  echo $count
+	  count=$((count + 1))
+done
+echo "Finished."
+# --------------- end -------------------- #
+
+# -- Reading file with loop
+# ------------- example ------------------ #
+#!/bin/bash
+
+# read file with loop, exit when all lines been read
+
+# example1
+while read var1 var2 var3; do
+	  command...
+done < xxxxx.txt # > redirect 'xxxx.txt' as stdinput to supply loop while
+
+# example2
+sort -k 1,1 -k 2n xxxxx.txt | while read var1 var2 var3; do # | supply the result of prev as stdin
+                                                            # vars in command will gone after execution
+                                                            # | execute loop command in subshell
+	  command...
+done
+# --------------- end -------------------- #
 
 
 
+# [7] Trouble Shooting (Debugging Technics)
 
+
+# [8] Flow Control: Branching with CASE
 
 
 
