@@ -508,13 +508,60 @@ anaconda promte
 -> conda install *packages # will take care all dependencies
 
 
-
-
-
-
-
-
-
+# Data Analysis
+# [1] Numpy
+import numpy as np
+# Make array from a list
+My_List = [1,2,3,4]
+My_List2 = [5,6,7,8]
+My_Lists = [My_List, My_List2]
+My_array = np.array(My_Lists) # 2 by 4 array
+My_array.shape # dimension ?L, ?L -> 2L, 4L
+My_array.dtype # 'int32' the type of data
+# Create array directly
+np.zeros(5) # create 1 by 5 float 0s
+np.empty(5) # same above
+np.ones([5,5]) # create 5 by 5 float 1s
+np.eye(5) # create 5 by 5 identity matrix
+np.arange(0,5) # Create an array 0,1,2,3,4 total 5 digits staring at 0 index
+np.arange(-5,5,0.01) # from -5 to 5 by 0.01 array
+# Muliply array
+from __future__ import division # 5 /2 = 2.5 automatically float
+np.array(My_List) * np.array(My_List2) = [1*5, 2*6, 3*7, 4*8] # same spot times together + - * / **power
+np.array(My_List) / 5 # recycle the scaler 5 to all spots
+# index array
+# arr = ([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]) array
+arr[0] # 0
+arr[9] # 9
+arr[0:8] # 0,1,2,3,4,5,6,7 from 0 move 8 digits to 7
+arr[0:8] = 100 # re-assign 0 - 7 to 100
+Slice_of_arr = arr[0:6] # create a slice of array which is just a view of original (No memory problem)
+Slice_of_arr[:] = 99 # all elements in that array by "[:]" assign to 99, original changed too
+copy_arr = arr.copy() # actual copy of original
+# arr = ([[1,2,3,4],
+#         [5,6,7,8],
+#         [8,9,0,0]])
+arr[1] # [5,6,7,8] 
+arr[1][0] # 5 [row][coloumn]
+arr[0:1,1:2] # ([2,3], row 0:1, column 1:2
+#               [6,7])
+arr[[2,3,5]] # row2, 3, 5
+# transposition array
+arr = np.arange(0,50).reshape((10,5)) # create array [1..50], reshape it to 10 by 5 array
+arr.T # transpose the array
+np.dot(arr1, arr2) # matric multiplication 
+arr.transpose((1,0,2)) # previous 1 goes 0, 0 goes 1, 2 goes 2
+arr.swapaxes # ???
+# Universal array function
+np.sqrt(arr) # sqrt each value in the array
+np.exp(arr) # exp each value in the array
+A = np.random.randn(10) # create a array of 10 random numbers
+B = np.random.randn(10) 
+np.add(A,B) # add each splot of two arraies
+np.maximum(A,B) # choose the max of each slot between 2 arries
+# array processing
+import matplotlib.pyplot as plt # for ploting graph
+%matplotlib inline
 
 
 

@@ -28,6 +28,35 @@
 
 
 
+## -------------------------- commands content --------------------------------------- ##
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1371,10 +1400,48 @@ done
 
 
 # [8] Flow Control: Branching with CASE
+case $var in
+	pattern1)  command
+               ;;
+    pattern2)  command
+               ;;
+    pattern3)  command
+               ;;
+esac
+# pattern example
+a) # matches if equals a
+[[:alpha:]]) # matches a single alphabetic character
+???) # matches exactly three characters long
+*.txt) # matches ends with '.txt'
+*) # match any value -> used as 'else'
+# multiple patterns
+pattern1 | pattern2)
 
 
 
+# [9] Positional Parameters
 
+
+# [10] # Flow Control: Looping With 'FOR'
+# original form
+for i in A B C D; do # a list "A B C D"
+	  echo $i;
+done
+
+for i in {A..D}; do # a brace expandsion {}
+	  echo $i;
+done
+
+for i in lala*.txt; do # a pathname expandsion *.txt
+	  echo $i;
+done
+# C language form
+for (( i=0; i<5; i=i+1 )); do # ((exp1; exp2; exp3)) -> exp1 initiate, exp2 determin finish?, exp3 each iteration
+	  echo $i
+done
+
+
+# [10] Strings and Numbers
 
 
 
