@@ -496,9 +496,33 @@ S3 console -> "Create Bucket" -> Name; Region -> "Create" ->
                    s3://myemrbucket/logs
 # -- Launch EMR Cluster
 EMR Console
-# Step1
+# Steps
 "Create Cluster"
--> Choose Cluster Name
+-> Advance Option
+1.Software and Step -> Vendor: Amazon
+                       Release: latest -> choose some common image
+                       Edit software setting ??
+                       Add steps -> create a step ?? (Next)
+2.Hardware -> Network: default a virtual cloud
+              EC2 Subnet ??
+              Choose type / number of nodes (Next)
+3.General Cluster Settings -> Cluster Name: #####
+                              Logging: yes
+                              S3 folder: your S3 "log" folder
+                              Debugging: yes
+                              Termination protection: yes
+                              Tag: ???
+                              EMRFS: ???
+                              Bootstrap: install additional software: ??? (Next)
+4.Security -> Select the EC2 key pair (Same location as instance)
+              Visible to all IAM users (IAM account management)
+              Permission - IAM roles customize
+              EC2 security group: current security group (same location) / master - task
+                                  create a new one
+              Encryption Options: ???
+-> Create Cluster! # takes a few minutes to set up
+
+# 
 
 
 
