@@ -4,16 +4,17 @@
 # CTRL f -> "Setup instance" >>> lanugh instances EC2
 # CTRL f -> "method 1" >>> Single local machine - R-studio launch
 # CTRL f -> "method 2" >>> Hadoop cluster (Manual EC2)
-# CTRL f -> "method 3" >>> Build API connection + Connect to RDS + automate update
-# CTRL f -> "method 4" >>> Host Shiny app on a EC2 instance
-# CTRL f -> "method 5" >>> Create EMR Cluster
+# CTRL f -> "method 3" >>> Hadoop cluster EMR + Rhadoop
+# CTRL f -> "method 4" >>> Build API connection + Connect to RDS + automate update
+# CTRL f -> "method 5" >>> Host Shiny app on a EC2 instance
+# CTRL f -> "method 6" >>> Create EMR Cluster
 
 
 
 
 
 
-## <<<< Setup instance >>>>> ##
+## <<<< Setup instance >>>>> ## 
 ## [1]
 ## ---- Login Credential ---- ##
 Username: whereislem@hotmail.com
@@ -75,12 +76,34 @@ Hadoop3: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC27hloummu71NaqNXBjWmsMEQbtW4p/xA
 
 
 
+
+
+
+
+
+
+
+
+
 ## <<<< Single local machine - R-studio launch >>>> ## >>>>> Method 1
 # Regardless Putty, directly copy "Public DNS" of an instance to launch Rstudio Server
 login: rstudio
 password: rstudio
 # need to reset
 Happy analyzing!
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -270,14 +293,87 @@ library(plyrmr)
 require(plyrmr)
 dat = bind.cols(mtcars, carb.per.cyl = carb/cyl)
 head(dat) # see data processed
-
 # Done! rhdfs, rmr2, plyrmr installed!
 
 
 
 
 
-## <<<< Build API connection + Connect to RDS + automate update >>>> ## >>>>>> Method 3
+
+
+
+
+
+
+
+
+
+
+
+## <<<< Hadoop cluster EMR + Rhadoop >>>> ## ## >>>>>>> Method 3
+url: http://blogs.aws.amazon.com/bigdata/post/Tx37RSKRFDQNTSL/Statistical-Analysis-with-Open-Source-R-and-RStudio-on-Amazon-EMR
+## Install AWS CLI 
+http://docs.aws.amazon.com/cli/latest/userguide/installing.html
+## emR_bootstrap.sh -> saved in your S3 bucket (s3://myfolder1/myfolder2)
+https://github.com/awslabs/emr-bootstrap-actions/blob/master/R/Hadoop/emR_bootstrap.sh
+## hdfs_permission.sh -> saved in your S3 bucket (s3://myfolder1/myfolder2)
+https://github.com/awslabs/emr-bootstrap-actions/blob/master/R/Hadoop/hdfs_permission.sh
+
+## AWS CLI command to install and configure, replace <>
+"<YOUR_BUCKET>" = s3://myfolder1/myfolder2
+"<YOUR_SSH_KEY>" = full path of mykeypair.pem
+"emR_bootstrap.sh" # Saved previously
+"hdfs_permission.sh" # Saved previously
+
+-> Run AWS command below:
+"
+aws emr create-cluster --ami-version 3.2.1 --instance-groups
+InstanceGroupType=MASTER,InstanceCount=1,InstanceType=m3.2xlarge InstanceGroupType=CORE,InstanceCount=5,InstanceType=m3.2xlarge
+--bootstrap-actions Path= s3://<YOUR_BUCKET>/emR_bootstrap.sh,Name=CustomAction,Args=[--rstudio,--rexamples,--plyrmr,--rhdfs]
+ --steps Name=HDFS_tmp_permission,Jar=s3://elasticmapreduce/libs/script-runner/script-runner.jar,Args=s3://<YOUR_BUCKET>/hdfs_permission.sh
+--region us-east-1 --ec2-attributes KeyName=<YOUR_SSH_KEY>,AvailabilityZone=us-east-1a
+--no-auto-terminate --name emR-example
+"
+**Summary**
+[ami version 3.2.1]
+[m3.2xlarge X 1 = master]
+[m3.2xlarge X 5 = core]
+[bootstrap] path = "s3://myfolder1/myfolder2/emR_bootstrap.sh" / Name = CustomAction / Args = [--rstudio,--rexamples,--plyrmr,--rhdfs]
+[Step] Name = HDFS_tmp_permission / Jar = s3://elasticmapreduce/libs/script-runner/script-runner.jar / Args = "s3://myfolder1/myfolder2/hdfs_permission.sh"
+[Region] = us-east-1
+[EC2 attributes] ???
+[keyName] = full path of mykeypair.pem # previous or new created security group
+[AvailabilityZone] = us-east-1a
+[auto terminate] = No
+[Cluster Name] = emR-example
+***********
+## Configure the secruity group
+-> add port:80 / add myIP
+Check Screen shot: url: http://blogs.aws.amazon.com/bigdata/post/Tx37RSKRFDQNTSL/Statistical-Analysis-with-Open-Source-R-and-RStudio-on-Amazon-EMR
+# Log into Rstudio
+Public DNS of Master: "ec2-###-##-##-###.compute-1.amazonaws.com" # Type in browser
+> R
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## <<<< Build API connection + Connect to RDS + automate update >>>> ## >>>>>> Method 4
 # Request instance with AMI on EC2
 edit security group to allow "mysql"
 # Login shell - check (Python, R, mysql server)
@@ -445,7 +541,38 @@ crontab -e -u ubuntu #Create cron file / edit
 
 
 
-## <<<< Host Shiny app on a EC2 instance >>>> ## >>>>> Method 4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## <<<< Host Shiny app on a EC2 instance >>>> ## >>>>> Method 5
 # Request instance with AMI on EC2 *Use AMI has R-base downloaded
 putty >>>>
 # [Optional - R download]
@@ -488,7 +615,41 @@ http://checkip.amazonaws.com/
 
 
 
-## <<<< Create EMR Cluster >>>>> ##
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## <<<< Create EMR Cluster >>>>> ## >>>>>>> Method 6
 # [1] EMR cluster (EC2) + S3 Bucket
 # -- Create Amazon S3 Bucket (For store input, output, log data)
 S3 console -> "Create Bucket" -> Name; Region -> "Create" -> 
@@ -522,7 +683,66 @@ EMR Console
               Encryption Options: ???
 -> Create Cluster! # takes a few minutes to set up
 
-# 
+# submit "Hive, Pig, Jar, etc" scrpits as step in Cluster (UI)
+-> Open Cluster -> Click the name of your cluster
+-> Scroll to the "Step" section, click "Add step"
+-> 1.Select "Step Type" >>> Hive, Pig, Jar, Streaming Program
+>> [Hive, Pig] Script
+"
+Name
+Script S3 location
+Input data S3 location
+Output data S3 location
+Argument??
+Action of failure: Continue
+"
+>> [Streaming Program] Script
+"
+Name
+Mapper function S3 location // Or the name of hadoop streaming command
+Reducer function S3 location // Or the name of hadoop streaming command
+Input data S3 location
+Output data S3 location
+Argument??
+Action on failure: continue
+"
+>> [Java] Script
+"
+Name
+JAR S3 location
+Argument
+Action of failure: continue
+"
+-> click "Add" # Then status -> pending -> Running -> Completed
+Click "Refresh" above Action column to see above
+
+# submit "Hive, Pig, Jar, etc" scrpits as step in Cluster (Hue)
+Hue is a web interface of hadoop (Interactive querying)
+#Create SSH Tunnel to the Master Node to connect Hue
+-> Open Cluster -> Click the name of your cluster
+-> "Master public DNS" appears on the top defaults-file
+-> "~/mykeypair.pem" the full path of security group keypair
+>> [Linux machine]
+ssh -i ~/mykeypair.pem -N -L 8157:ec2-###-##-##-###.compute-1.amazonaws.com:8888 hadoop@ec2-###-##-##-###.compute-1.amazonaws.com
+>> [Windows machine]
+-> Host - hadoop@ec2-###-##-##-###.compute-1.amazonaws.com
+-> key - mykeypair.ppk
+-> In "Category" list -> expand "Connection > SSH" -> click "Tunnels"
+-> In "Source port" type unused local port number: ex. "8157"
+-> In "Destination" type "ec2-###-##-##-###.compute-1.amazonaws.com:8888"
+-> Leave "local" and "Auto" option selected -> click "Add"
+you should see something in "Forwarded ports" like "L8157 ec2-###-##-##-###.compute-1.amazonaws.com:8888"
+-> click "open" -> "yes" # When you log into the master node and are prompted for a user name, type hadoop
+#Loging into Hue
+-> Type the following URL in your browser: "http://localhost:8157"
+-> Type username; Passward [first time] [Create super user credential]
+
+
+
+
+
+
+
 
 
 
