@@ -29,12 +29,34 @@
 
 
 ## -------------------------- commands content --------------------------------------- ##
-
-
-
-
-
-
+# [1] terminal prompt
+# [2] navigation - tree like structure; home dir is the user dir
+# [3] exploring the system
+# [4] Manipulate files and dir
+# [5] unix Command type *** (Check documentaion)
+# [6] Redirection
+# [7] Expansion - type command , press ENTER - bash performs serveral processes upon the text before it excute command
+# [8] Manage permission - unix is multi-task, multi-user system
+# [9] processes - PID - "Process ID"
+## ---------------------------- Environment & Configuration ----------------------------- ##
+## [1] Environment - A body of information during our shell session (two types of data - environment var/ shell var)
+## [2] vi editor
+## [3] Customizing Prompt
+## ---------------------------- Common Tasks and Essential Tools ----------------------------- ##
+# [1] Package Management - installing / maintaining software (package maintainer created package from the source code created by
+#                                                             upstream provider, stored in central repo)
+# [2] Storage media - manipulate data at devices level - manage storage devices
+#                     (Not file level), physical storage, network storage, virtual storage
+# [3] Networking 
+# [4] Searching for files
+# [5] Archiving / backup - timely backup system files; move large blocks of data
+# [5] Archiving / backup - timely backup system files; move large blocks of data
+#                          file compression          ; place to plcae, devices to devices
+# [6] Regular Expressions - REGEX
+# [7] Text Processing 
+# [8] Formatting output
+# [9] Printing 
+# [10] Compiling Programs 
 
 
 
@@ -61,7 +83,7 @@
 
 
 ## ---------------------------- Basic Shell ----------------------------- ##
-# [1] terminal emulator
+# [1] terminal prompt
 [username@machinename]$ # user
 [username@machinename]# # super user
 # simple commands
@@ -1420,6 +1442,28 @@ pattern1 | pattern2)
 
 
 # [9] Positional Parameters
+# ---------- file.sh -------------- #
+#!/bin/bash
+
+# positional parameters
+
+echo "
+Number of argument: $#
+\$0 = $0
+\$1 = $1
+\$2 = $2
+\$3 = $3
+\$4 = $4
+\$5 = $5
+\$6 = $6
+\$7 = $7
+\$8 = $8
+\$9 = $9
+\$10 = ${10}
+"
+# ---------- file.sh -------------- #
+
+
 
 
 # [10] # Flow Control: Looping With 'FOR'
