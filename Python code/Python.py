@@ -559,9 +559,89 @@ A = np.random.randn(10) # create a array of 10 random numbers
 B = np.random.randn(10) 
 np.add(A,B) # add each splot of two arraies
 np.maximum(A,B) # choose the max of each slot between 2 arries
+"http://docs.scipy.org/doc/numpy/reference/ufuncs.html#available-ufuncs"
 # array processing
 import matplotlib.pyplot as plt # for ploting graph
-%matplotlib inline
+%matplotlib inline # show plot in line
+dx,dy = np.meshgrid(arr,arr)
+dx # by row, repeat row
+dy # by column, repeat column
+z = (np.sin(dx) + np.sin(dy)) # apply fun to every, plus same slot across two arr
+plt.imshow(z) # display the 2d arr
+plt.colorbar() # with color bar
+ply.title("xxxxxx")
+A = np.array([1,2,3,4])
+B = np.array([100,200,300,400])
+#Now a boolean array
+condition = np.array([True,True,False,False])
+#Using a list comprehension
+answer = [(A_val if cond else B_val) for A_val,B_val,cond in zip(A,B,condition)]
+answer = np.where(condition,A,B) # the same, if condition, t, f
+np.where(arr < 0,0,arr)
+#For any True
+bool_arr.any()
+# For all True
+bool_arr.all()
+np.unique(countries) # unique var in "countries"
+np.in1d(['France','USA','Sweden'],countries) # those in "countries"? t, t, f
+# array input / output
+np.save("my_array", arr) # save single arr
+arr = np.load("my_array.npy") # load
+np.savez('many_arrs.npz', x = arr1, y = arr2, z = arr3) # save many arrs
+arr_many = np.load('many_arrs.npz') # load all first
+arr1 = arr_many['x'] # load each then 
+np.savetxt('my_arr_text.txt', arr, delimiter = ',') # save as txt file
+arr = np.loadtxt('my_arr_text.txt', delimiter = ',') # load txt file
+
+# [2] Pandas
+import pandas as pd
+from pandas import Series, DataFrame
+obj = Series([3,6,9,12]) # create Series
+obj.values # show values
+obj.index # show index
+ww2_cas = Series([8700000,4300000,3000000,2100000,400000],
+	              index=['USSR','Germany','China','Japan','USA']) # define index strings
+ww2_cas['USSR'] # return value of that index
+ww2_cas[ww2_cas>4000000] # return the rows meets the condition
+'USSR' in ww2_cas # return ture if the index exists
+ww2_dict = ww2_cas.to_dict() # convert series to dictionary
+ww2_Series = Series(ww2_dict) # convert back to Series
+#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

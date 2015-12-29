@@ -28,6 +28,9 @@
 
 
 
+
+
+
 ## -------------------------- commands content --------------------------------------- ##
 # [1] terminal prompt
 # [2] navigation - tree like structure; home dir is the user dir
@@ -54,23 +57,21 @@
 #                          file compression          ; place to plcae, devices to devices
 # [6] Regular Expressions - REGEX
 # [7] Text Processing 
-# [8] Formatting output
-# [9] Printing 
-# [10] Compiling Programs 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# [8] Formatting output (TBD)
+# [9] Printing (TBD)
+# [10] Compiling Programs (TBD)
+## ---------------------------- Writing Shell Scripts ----------------------------- ##
+# [1] Writing first scripts
+# [2] starting a project
+# [3] Top Down Design
+# [4] Flow control - IF statements
+# [5] Reading keybroad input into the program (User interactive)
+# [6] Flow control: Looping with 'WHILE' and 'UNTIL'
+# [7] Trouble Shooting (Debugging Technics) (TBD)
+# [8] Flow Control: Branching with CASE
+# [9] Positional Parameters
+# [10] # Flow Control: Looping With 'FOR'
+# [11] Strings and Numbers (TBD)
 
 
 

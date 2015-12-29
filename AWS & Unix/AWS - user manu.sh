@@ -352,7 +352,7 @@ InstanceGroupType=MASTER,InstanceCount=1,InstanceType=m3.2xlarge InstanceGroupTy
 Check Screen shot: url: http://blogs.aws.amazon.com/bigdata/post/Tx37RSKRFDQNTSL/Statistical-Analysis-with-Open-Source-R-and-RStudio-on-Amazon-EMR
 # Log into Rstudio
 Public DNS of Master: "ec2-###-##-##-###.compute-1.amazonaws.com" # Type in browser
-> R
+> R-studio
 
 
 

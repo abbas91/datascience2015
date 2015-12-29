@@ -1,24 +1,8 @@
-# Modeling Process 
-
-
-# Step1 - Loading Packages
-install.packages()
-
-
-
-# Step2 - Loading Data in
-
-
-
-
-
-# Step3 - Data checking 
-
-
-
-
-
-# Step4 - Data Mugging / Transforming
+################################
+#                              #
+#        Modeling Process      #
+#                              #
+################################
 
 
 
@@ -26,23 +10,41 @@ install.packages()
 
 
 
-# Step5 - Spliting Dataset for Modeling
+# >>> Step1 - Loading Packages
+install.packages("caret")
+library(caret)
 
-# -- Split method required
-
-
-
-
+# >>> Step2 - Loading Data in
 
 
-# Step6 - Initial Models Testing + Learning Curve -[May go Prev]
+# >>> Step3 - Data checking (Pre-Mugging)
 
-# -- Test Model
 
-# -- Validation Metric
+# >>> Step4 - Data Mugging: check error
 
-# -- Learning Curve plot
-# >>> Partition train set for generating "learning curve"
+
+# >>> Step5 - Data checking (Post-Mugging)
+
+
+# >>> Step6 - Data pre-processing based on assumption
+
+
+# >>> Step7 - Data checking (Post-Data ore-processing)
+
+
+# >>> Step8 - Spliting Dataset for Modeling
+# -- Split method required (Training, Validation, Testing Sets)
+sample()
+createDataPartition() # classification: target dist / regression: target quauntile
+
+
+# -- Learning Curve Building
+#Test Model
+
+#**<<Validation Metric>>**
+
+#Learning Curve plot
+#Partition train set for generating "learning curve"
 set.seed(599)
 folds <- createFolds(TRAIN_SET$Y)
 TRAIN_SET.learn <- lapply(folds, 
@@ -77,11 +79,11 @@ rownames(Model.cost.table) <- c()
 names(Model.cost.table) <- c("Cost_Type", "10%", "20%", "30%", "40%", "50%",
                                           "60%", "70%", "80%", "90%", "100%")
 rm(Model.cost.test, Model.cost.train, predict.train, predict.test, i)
-# >>> melt plot format
+#melt plot format
 mdf <- melt(Model.cost.table, id.vars="Cost_Type", 
             value.name="Error_rate", 
             variable.name="Percet_of_Trainset")
-# >>> Plot Learning Curve
+#Plot Learning Curve
 ggplot(data=mdf, aes(x=Percet_of_Trainset, y=Error_rate, group = Cost_Type, colour = Cost_Type)) +
   geom_line() +
   geom_point( size=4, shape=21, fill="white") +
@@ -90,7 +92,11 @@ ggplot(data=mdf, aes(x=Percet_of_Trainset, y=Error_rate, group = Cost_Type, colo
 
 
 
-# Step 7 - 
+# >>> Step 9 - 
+
+
+
+# >>> Step ? -
 
 
 
