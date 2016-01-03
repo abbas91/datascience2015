@@ -13,7 +13,7 @@ install.packages("doParallel", dependencies = c("Depends", "Imports"))
 # load the doParallel for direct use
 library(doParallel)
 # make a cluster with all possible threads (not cores)
-cl <- makeCluster(detectCores())
+cl <- makeCluster(detectCores(), type='PSOCK')
 # register the number of parallel workers (here all CPUs)
 registerDoParallel(cl)
 # return number of parallel workers
