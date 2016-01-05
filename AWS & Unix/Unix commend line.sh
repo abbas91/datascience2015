@@ -1494,11 +1494,100 @@ done
 
 
 ## <<<< Hadoop HDFS commandline >>>> ##
+# [1] Create a directory in HDFS at given path(s).
+Usage:
+hadoop fs -mkdir <paths>
+
+Example:
+hadoop fs -mkdir /user/saurzcode/dir1 /user/saurzcode/dir2
+
+# [2] List the contents of a directory.
+Usage:
+hadoop fs -ls <args>
+
+Example:
+hadoop fs -ls /user/saurzcode
+
+# [3] Upload and download a file in HDFS
+#upload
+Usage:
+hadoop fs -put <localsrc> ... <HDFS_dest_Path>
+
+Example:
+hadoop fs -put /home/saurzcode/Samplefile.txt  /user/saurzcode/dir3/
+
+#download
+Usage:
+hadoop fs -get <hdfs_src> <localdst>
+
+Example:
+hadoop fs -get /user/saurzcode/dir3/Samplefile.txt /home/
+
+# [4] See contents of a file
+Usage:
+hadoop fs -cat <path[filename]>
+
+Example:
+hadoop fs -cat /user/saurzcode/dir1/abc.txt
+
+# [5] Copy a file from source to destination
+Usage:
+hadoop fs -cp <source> <dest>
+
+Example:
+hadoop fs -cp /user/saurzcode/dir1/abc.txt /user/saurzcode/dir2
 
 
+# [6] Copy a file from/To Local file system to HDFS
+#copy from local
+Usage:
+hadoop fs -copyFromLocal <localsrc> URI
+
+Example:
+hadoop fs -copyFromLocal /home/saurzcode/abc.txt  /user/saurzcode/abc.txt
+
+#copy to local
+Usage:
+hadoop fs -copyToLocal [-ignorecrc] [-crc] URI <localdst>
+
+# [7] Move file from source to destination
+Usage:
+hadoop fs -mv <src> <dest>
+
+Example:
+hadoop fs -mv /user/saurzcode/dir1/abc.txt /user/saurzcode/dir2
 
 
+# [8] Remove a file or directory in HDFS
+"Remove files specified as argument. Deletes directory only when it is empty"
+Usage:
+hadoop fs -rm <arg>
 
+Example:
+hadoop fs -rm /user/saurzcode/dir1/abc.txt
+
+#Recursive version of delete
+Usage:
+hadoop fs -rmr <arg>
+
+Example:
+hadoop fs -rmr /user/saurzcode/
+
+
+# [9] Display last few lines of a file
+Usage:
+hadoop fs -tail <path[filename]>
+
+Example:
+hadoop fs -tail /user/saurzcode/dir1/abc.txt
+
+
+# [10] Display the aggregate length of a file
+Usage:
+hadoop fs -du <path>
+
+Example:
+hadoop fs -du /user/saurzcode/dir1/abc.txt
 
 
 
