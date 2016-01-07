@@ -58,6 +58,8 @@ run [[-param param_name = param_value]] [[-param_file filename]] script /* Execu
 
 
 /* [3] ------------------ Pig data model / data type */
+/* data type */
+"scalar type" 'complex type'
 
 
 
