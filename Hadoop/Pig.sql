@@ -59,7 +59,31 @@ run [[-param param_name = param_value]] [[-param_file filename]] script /* Execu
 
 /* [3] ------------------ Pig data model / data type */
 /* data type */
-"scalar type" 'complex type'
+"scalar type" /* java.lang class */
+int / 42 / java.lang.Integer / 4 byte
+long / 500000000L / java.lang.long / 8 byte
+float / 4.14f 'or' 6.022e23f /*exponent format*/ /java.lang.Float / 4 byte
+double / 2.71828 'or' 6.626e-34 /*exponent format*/ / java.lang.Double / 8 byte
+chararray / 'string' 'or' \t\u / java.lang.String / 2 byte per character
+bytearray / any&default / blob 'or' array of bytes
+
+
+'complex type' /* group those scalar items or other complex items */
+map / ['var1'#'string', 'var2'#405]
+"""
+"""
+tuple / ('string', 405)
+"""
+"""
+bag / {('string1', 405), ('string2', 404), ('string3', 403)}
+"""
+"""
+
+'Schemas' /* define data types */
+table = load 'file_name' as (var1:chararray, var2:float, var3:int); /*define schemas using 'load' function */
+table = load 'file_name' as (var1, var2, var3); /* Not define - default to 'bytearray' */
+"example"
+int > 
 
 
 
