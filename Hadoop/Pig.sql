@@ -67,23 +67,91 @@ double / 2.71828 'or' 6.626e-34 /*exponent format*/ / java.lang.Double / 8 byte
 chararray / 'string' 'or' \t\u / java.lang.String / 2 byte per character
 bytearray / any&default / blob 'or' array of bytes
 
-
 'complex type' /* group those scalar items or other complex items */
 map / ['var1'#'string', 'var2'#405]
 """
+A map is a chararray to data elemnt mapping, 
+where that element can be any Pig type, including complex type.
+It is called a Key and used as an index to find the element, referred to as the value.
 """
 tuple / ('string', 405)
 """
+A tuple is a fixed-length, ordered collection of Pig data elements. It has been divided into fields,
+with each filed containing one data element (They don't have to be the same type). It has equal meaning to
+'row' in SQL, each field being a SQL column.
 """
 bag / {('string1', 405), ('string2', 404), ('string3', 403)}
 """
+A bag is an unordered collection of tuples. So, it is not possible to reference tuples in a bag by
+position. 
 """
 
 'Schemas' /* define data types */
 table = load 'file_name' as (var1:chararray, var2:float, var3:int); /*define schemas using 'load' function */
 table = load 'file_name' as (var1, var2, var3); /* Not define - default to 'bytearray' */
 "example"
-int > 
+int > as (a:int)
+long > as (a:long)
+float > as (a:float)
+double > as (a:double)
+chararray > as (a:chararray)
+bytearray > as (a:bytearray)
+map > as (a:map[], 
+	      b:map[int])
+tuple > as (a:tuple(), 
+	        b:tuple(x:int, y:int))
+bag > (a:bag{}, 
+	   b:bag{t:(x:int, y:int)})
+"""
+If not define -> all 'btyearray' data type
+Pig will guess and redefine in the later data processing
+If schema data merge with data without scehma -> all lost scehma (Contagious)
+"""
+var1 * 1000 /* arithmatic operators */ -> as floating points casting to doubles
+     > /* both in strings and numbers */ -> NO way to guess
+
+/* Casting */
+"Undefined"
+table2 = foreach table1 generate map1#'var1' - map1#'var2'
+"Defined - casting" /* define type by () casting */
+table2 = foreach table1 generate (int)map1#'var1' - (int)map1#'var2'
+***"Rules - Page.31 table top"
+"""
+During Pig data type guessing - always widen types when automatic casting
+int vs long -> long
+int, long, vs float -> float
+int, long, float vs double -> double
+Null vs everythong -> Null (Viral)
+"""
+
+
+
+
+/* [4] ------------------ Introduction to Pig Latin */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
