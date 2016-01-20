@@ -1,0 +1,3315 @@
+## -------------- DATA SCIENCE PROCESS ---------------------- ##
+
+## Step 1 --> Business Question (Solve Issue, Identify pattern, solution)
+
+
+## Step 2 --> Meeting with business team to go through the Question/Problem
+
+
+## Step 3 --> Start to structure the business probelm in a sense of data (Strategy = What is it? Where is it? How to get it?)
+
+
+## Step 4 --> Obitain the first data sheet (Initiate Data Preparation)
+
+
+## Step 5 --> Initial Data Explore Analysis I & Talk with Business team to get sense of the data we look at
+
+
+## Step 6 --> Transform Data (Understand the collection method -> Check Quality of data -> Convert variable if needed -> Imputation for missing -> Identify outliers -> Variable selection)
+
+
+## Step 7 --> Secondary Data Explore Analysis II (Double check the issue wont happen)
+
+
+## Step 8 --> Save final data set & document all data transformation process
+
+
+## Step 9 --> Choose a list of models fit in the Business question & Data
+
+
+## Step 10 --> Split Train, Validation and Test set of Data
+
+
+## Step 11 --> Transform Data II for the requirement of each model
+
+
+## Step 12 --> Tranning - Validating - Testing each model (Define the evaulation metrics)
+
+
+## Step 13 --> Evaluation & Share insights with Business team (Test Run on real Data/Make sense)
+
+
+## Step 14 --> Delopyment of the Model (Communicate with Developer)
+
+&&&&&&&&&&&&&&&&&&&&&&&& Improve computation Efficiency (Improve for loop efficiency) &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+## ----------------------- Parallel computation set-up ----------------------------- ##
+
+# -> Create a parallel backend (Cluster) ------------ Step1
+intsall.packages("doParallel")
+library(doParallel)
+
+#Find out how many cores are available (if you don t already know)
+detectCores()
+
+#Create cluster with desired number of cores
+cl = makeCluster(#)
+
+#Register cluster
+registerDoParallel(cl)
+
+#Find out how many cores are being used
+getDoParWorkers()
+
+
+# -> Executing computations in parallel ------------- Step2 (For loop)
+install.packages("foreach")
+library(foreach)
+
+fits = foreach (i = 1:#, .combine = c / "+-*/" / rbind / cbind) %dopar% {
+    xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    return (c(a, b, c))
+}
+# - use %dorng% (involve random numer generation)
+# - .combine gives options for the format of final result
+
+# -> Executing computations in parallel ------------- Step2 (Apply)
+parLapply(cl, list(1, 2, 3), sqrt)
+# parSapply / ...
+
+
+
+
+
+&&&&&&&&&&&&&&&&&&&&&&&&& Load File &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+##Set work directory
+setwd("C:/Users/mark.li/Desktop")
+view1 = read.table("xxx.txt", header = TRUE) ##stringsAsFactors = FALSE (if needed)
+view1 = read.csv("xxx.csv", header = TRUE) ##stringsAsFactors = FALSE (if needed)
+
+##loading large dataset
+install.packages("data.table")
+library(data.table)
+setwd("C:/Users/mark.li/Desktop")
+view1 = fread("xxxxxx.csv")
+
+##assign a name to a value
+assign("name", value)
+
+
+##Copy/Paste
+view1 = read.table(file = "clipboard", header = TRUE)
+
+##Load a text file on desktop
+view1 = read.table("C:/Users/mark.li/Desktop/TESTR.txt", header = TRUE)
+view1 = read.csv("C:/Users/mark.li/Desktop/TESTR.csv", header = TRUE)
+
+##Load zip file
+view1 = read.csv(unz("xxxx.csv.zip", "xxxx.csv"), stringsAsFactors = F)
+
+
+##Load data from web page
+install.packages("XML")
+library(XML)
+url = ("http://.....//....")
+view1 = readHTMLTable(url, encoding = "UTF-8", colClasses="charater") ##A list, can use [[#]] to access right data
+
+
+
+##Link to Tableau
+Install.packages("Rserve")
+library(Rserve)
+Rserve()
+**********In Tableau Calculated feild***********
+SCRIPT_REAL -> sample scripts
+("
+table.data = data.frame(.arg1, .arg2, .arg3, .arg4); 
+table.lm = lm(.arg1~., data = table.data); 
+table.predict = predict(table.lm, table.data)
+"
+,sum([Sales]),sum([Factor1]), sum([Factor2]), sum([Factor3])
+)
+
+##SQL databases
+install.packages("RODBC")
+library(RODBC)
+mydb = odbcConnect("my_dsn", uid = "my_username", pwd = "my_password")
+query = "select * from table"
+view1 = sqlQuery(channel = mydb, query = query, stringsAsFactors = FALSE)
+odbcClose(mydb) ##close connection
+
+
+##Save tables data
+save(table1, table2, table3, file = "view1.RData")
+load("view1.RData")
+
+##Save a whole session / automatic reload next time open
+save.image()
+
+##Allocate more ram on a machine to process data
+options(java.parameters = "-Xmx8000m") ##Can change the value
+
+##Clean all loaded tasks##
+rm(list = ls())
+
+
+##Create Container for data mining Task##
+c.tree.data = new.env()
+evalq(
+ {
+  ................ ##Prepare data Here
+  ................
+ }, c.tree.data)
+c.tree.model = new.env(parent=c.tree.data)
+evalq(
+ {
+  ................ ##Building Model Here
+  ................
+ }, c.tree.model)
+save(c.tree.model, file = "TreeModel.Rdata")
+## Load all information
+load("TreeModel.Rdata")
+ls(c.tree.model) ##Show all objects in the container
+
+
+
+
+
+&&&&&&&&&&&&&&&&&& Data Formation / variablize / segmentation &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+##Remove certain rows
+view1 = subset(view1, var1!="xxx" & var1!="xxx" & var1!="xxx")
+
+##remove na value
+data = (na.omit(data))
+
+
+##Change category var labels
+data$var = factor(data$var, levels = c("old1", "old2"), labels = c("new1", "new2"))
+
+
+##table prop information of a category var
+round(prop.table(table(data$var)) * 100, digits = 1)
+
+##sparate data when load it
+view1 = read.table("xxxx.txt", sep = "-", header = FALSE)
+
+##sparate data if spevify "sparators"
+view1 = do.call(rbind, strsplit(readLines("xxxx.txt"), " - "))
+
+##Create new var based on substring of current categorical var
+view1$var.new = ifelse(substr(view1$var.cat, 1, 4) == "xxxx", "Yes", "No")
+
+##Show as cross tabulet
+with(data, table(var1, var2))
+
+
+##Test two objects are exactly the same
+identical(value1, value2)
+
+
+
+##Rollmean, sum, median, max (Moving forward by a range, mean from first 10, then 2 to 11, 3 to 12,..)
+install.packages("zoo")
+library(zoo)
+# -> specify range "#"
+rollmeanr(var, #, align = "right")
+rollmaxr(var, #, align = "right")
+rollmedianr(var, #, align = "right") # "#" must be obb
+rollsumr(var, #, align = "right")
+
+
+
+##Splits the data into subsets, computes summary statistics for each
+aggregate(var1~var2 + var3 + ..., data = data, FUN="fun")
+# -> FUN apply to var1, var2 and var3 crosstabulet
+
+
+##Rename the col by look up original name
+names(data)[names(data) == "xxx"] = "xxx2"
+
+
+##Sort data by var
+data = data[order(-data$var3),] #desc = +, asc = -
+
+
+## Create empty data.frame
+data = data.frame(xxx(var1) = (data2$var1)) ##Use var1 names from other dataset
+data$var2 = 0
+data$var3 = 0
+
+
+## Create matrix and assign names for rows and columns
+number = c(#,#,#,#,#,#,#,#,#,#)
+table.matrix = matrix(table.matrix, byrow = T/F, ncol = #/nrow = #)
+colnames(table.matrix) = paste0("xx", 1:#) ## xx1, xx2, ...
+rownames(table.matrix) = paste0("zz", 1:#) ## zz1, zz2, ...
+
+
+
+##Factorize numberic variables
+view1$OPERATING_SYSTEM = as.factor(view1$OPERATING_SYSTEM)
+
+##Convert numberic Y to different levels
+HIGH = ifelse (view1$IR >= .7, "Yes","No")
+view1 = data.frame (view1, HIGH)
+view1 = view1[,c(1:6,8:9)]
+
+
+##Create logical var
+view1$var1 = view1$var_new %in% c("xxx", "xx", "xxxx") ## If yes TRUE else FALSE
+
+
+##Code Char factor with lebal
+view1$High = factor(view1$High, levels = c("Yes", "No"), labels = c("High", "Low"))
+
+
+##Select subset using "subset"
+data = subset(view1, var1 %in% c("xxx', "xxxx", "xxx") & var2 >= 10 & var3 == "")
+
+##Apply a FUN to dataset segmented by var
+install.packages("plyr")
+library(plyr)
+data.new = ddplyr(view1, ~var, summarise, new.var1 = mean(var1), new.var2 = mean(var2), ...) #Return a data.frame
+##dlplyr -> Reture a list
+
+
+##"melt" (wide to long) / based and repeat on id var1 to stack all other columns into "value" column, you can rename "variable" column to identify their original column name
+install.packages("reshape2")
+library(reshape2)
+data.long = melt(data, id = "var1", variable.name = "xxxxx", value.name = "xxxxx")
+levels(data.long$variable) = c("var2.name", "var3.name", "var4.name", ...)
+
+##"cast" (long to wide) / convert melt back
+install.packages("reshape2")
+library(reshape2)
+data.wide = dcast(data.long, var1~variable, value.var="value")
+
+
+
+##Quickly convert vars
+view1 = apply(view1[,2:14],2,as.numeric/as.factor)
+
+
+##Delete rows or columns
+view1 = view1[-c(1,3,4,5,6,10),] # rows
+view1 = view1[,-c(1,3,4,5,6,10)] # columns
+
+
+## ------------------- Apply Regular Expressions on dataset -------------------- ##
+clean = function (x) { # -> Can add more statememnts
+x = gsub("regex...", replacement, x)
+}
+
+
+## ------------------ IF Statement ------------------------ ##
+
+if(data$var1 == #) {
+a = 3
+b = 4
+}else{
+a = 0
+b = 0
+}
+
+## ----------------- Merge Dataset ---------------------- ##
+view1.merged = merge(dataset1, dataset2, by = "primary key") # --> simple primary key (the same)
+view1.merged = merge(dataset1, dataset2, by = c("primary key", "Secondary key")) # --> two match keys
+view1.merged = merge(dataset1, dataset2, by.x = "primary key1", by.y = "primary key2") # --> primary key with different names
+view1.merged = merge(dataset1, dataset2, by = "primary key", all=TRUE) # --> (Default-inner join) out join
+view1.merged = merge(dataset1, dataset2, by = "primary key", all.x=TRUE) # --> LEFT JOIN
+view1.merged = merge(dataset1, dataset2, by = "primary key", all.y=TRUE) # --> RIGHT JOIN
+## Change var names
+colnames(data)[#] = "xxxxx"
+
+
+
+## -------------- Seperate Train & Test Set ---------------- ##
+##sample - sampling FUN
+sample(letters[1:2], 100, replace=TRUE, prob=c(0.4,0.6)))
+set.seed(1)
+data.all = sample(75281, 70000) ## Only get part of full sample?
+set.seed(2)
+data.more = sample(70000, 35000) ## If not start from here :)
+view1.all.data = view1[data.all,]
+view1.train.data = view1.all.data[data.more,]
+view1.test.data = view1.all.data[-data.more,]
+view1.test.x = view1.test.data[1:7]
+view1.test.y = view1.test.data[8]
+view1.train.x = view1.train.data[1:7]
+view1.train.y = view1.train.data[8]
+
+
+##Check proportions of vars for each set are the same?
+view1.train.data.f = factor(view1.train.data)
+view1.test.data.f = factor(view1.test.data)
+check.view1 = rbind(table(view1.train.data.f), table(view1.test.data.f))
+chisq.test(check.view1) ##if p-value large, sampling is good
+
+
+## --------------- Holdout Method -------------- ## (Most expensive one)
+##Trainning set - train model 60%
+##Validation set - Tunning parameters 20% 
+##Test set - test final model (train by train + validation) (Not involve in trainning model) 20%
+
+## (((((Direct Split)))))) ##
+  ## >>> Split data
+data = data.frame(data)
+index = sample(1:#all, #all) ##Randomlize original dataset
+train = data[index[1:60%#],]
+validation = data[index[60%#+1:80%#],]
+test = data[index[80%#+1:#all],]
+  ## >>> train & tune model 
+metric_vali = function(n) {
+  model = model(y~..n.., data = train)
+  pred = predict(model, newdata = validation)
+  metric = (....mse,rmse,kappa...)
+  return(metric)
+}
+tune = c(#,#,#,#) ##-> Tunning para..
+metric_var = sapply(tune, metric_vali)
+plot(1:#, metric_var, type = 'b') ##-> # equal number of value in the vector / best model identified
+  ## >>> Train final model/ Test on test set
+train.new = data[index[1:80%#],] ##-> combine all data, as much as possible to tune model
+final.model = model(y~..best.n.., data = train.new)
+pred = predict(final.model, newdata = test)
+metric = (....mse,rmse,kappa...)
+metric ##-> display performance
+  ## >>> Visualize how model line fit in test set (Only on 2 dimensional data)
+install.packages("ggplot2")
+library(ggplot)
+p = ggplot(train.new, aes(x,y)) + geom_point(color = 'gray') + ## First layer - gray plot
+    geom_point(data=test, aes(x,y), color = 'red4') + ## Second layer - red plot
+    geom_line(data = data.frame(x = test$x, y = pred), aes9x,y)) + ## Project the line
+    theme_bw() ## Turn off gray background
+print(p)
+
+## (((((Split with prop)))))) - Manual ## Deal with problem - each partition have a larger or smaller classes
+  ##Identify prop of the var
+prop.table(table(data$var)) ##Find out prop, ex - 0.4 = A, 0.6 = B, n = 100
+  ## >>> reconstruct training set
+index1 = sample(1:40, 40) ##Randomize class1
+index2 = sample(1:60, 60) ##Randomize class2
+index... ##If more classes
+  ## >>> Assign prop to each class in train set, ex - 50% train of all
+train1 = data[data$var=='A',][index1[1:(100*0.4*0.5),] ##Keep prop 0.4 in train
+train2 = data[data$var=='B',][index2[1:(100*0.6*0.5),] ##Keep prop 0.6 in train
+train... ##If more classes
+  ## >>> Combine train set
+train = data.frame(rbind(train1, train2)) ##The train set has the exact as population
+## (((((Split with prop)))))) - package
+install.packages("caret")
+library(caret)
+in_train = createDataPartition(data$var, p = 0.5, list = FALSE) ## ex - 50% train of all
+train = data[in_train,]
+test = data[-in_train,]
+## Can split train again to get validation set
+
+
+
+## ---------------------- Cross-validation ----------------------- ##
+  ## >>> Split train & Test set
+install.packages("caret")
+library(caret)
+in_train = createDataPartition(data$var, p = 0.5, list = FALSE) ## ex - 50% train of all
+train = data[in_train,]
+test = data[-in_train,]
+  ## >>> Create FUN to 10 fold CV on training set
+rmse_cv = function (n, train) { ## -> n parameter
+m = nrow(train)
+num = sample(1:10, m, replace=T) ## define the number of folds
+rmse = numeric(10) ## -> Create a container to store rmse
+for (i in 1:10) { ## -> for loop to iterating through each fold
+data.t = train[num!=i,]
+data.v = train[num==i,]
+model = model(Y...n, data=data.t)
+pred = predict(model, newdata=data.v)
+rmse[i] = sqrt(mean((data.v$var - pred)^2))
+}
+return(mean(rmse))
+}
+p = c(#,#,#,#,#) ## define "n" parameters
+rmse = sapply(p, rmse_cv, train) ## a vector n mean(rmse) for each parameter
+  ## >>> Plot result
+plot(1:n, rmse, type = 'b')
+  ## >>> Check performance on test set
+n = which.min(rmse) ##use small one
+or
+n = eyeballing result
+final.model = model(Y~....n.., data=train) ##Use all train data set
+pred = predict(final.model, newdata=test)
+rmse = sqrt(mean((test$var - pred)^2))
+rmse
+  ## >>> Deployment
+final.model = model(Y~....n.., data=data) ##Use all data
+
+
+## ---------------------- Bootstrap Sampling ---------------------------- ## (Not much data, small data)
+  ## >>> Split train & Test set
+install.packages("caret")
+library(caret)
+in_train = createDataPartition(data$var, p = 0.5, list = FALSE) ## ex - 50% train of all
+train = data[in_train,]
+test = data[-in_train,]
+  ## >>> Create FUN to Booststrao on training set
+rmse_bs = function(n, train) { ## -> n parameter
+m = nrow(train)
+rmse = numeric(10) ## -> Create a container to store rmse
+for (i in 1:10) { ## -> for loop to iterating 10 times
+index = sample(1:m, m, replace=T) ## create same size boostrap data set (Each time)
+data.t = train[index,]
+data.v = train[-index,]
+model = model(Y...n, data=data.t)
+pred = predict(model, newdata=data.v)
+rmse[i] = sqrt(mean((data.v$var - pred)^2))
+}
+return(mean(rmse))
+}
+p = c(#,#,#,#,#) ## define "n" parameters
+rmse = sapply(p, rmse_bs, train) ## a vector n mean(rmse) for each parameter
+  ## >>> Plot result
+plot(1:n, rmse, type = 'b')
+  ## >>> Check performance on test set
+n = which.min(rmse) ##use small one
+or
+n = eyeballing result
+final.model = model(Y~....n.., data=train) ##Use all train data set
+pred = predict(final.model, newdata=test)
+rmse = sqrt(mean((test$var - pred)^2))
+rmse
+  ## >>> Deployment
+final.model = model(Y~....n.., data=data) ##Use all data
+
+
+
+
+
+##Use list to store different data forms
+subject1 = list(var1 = var1[2], var2 = var2[1], var3 = var3[1])
+##Obitain from list
+subject1 [c("var1", "var2")] ##Same to data.frame
+subject1$var1 ##Same to data.frame
+
+##Standarize / Normalize Data
+## Normalize (Not Normal DIS) or Standardize (Normal DIS)
+## Normalize
+normalize = function (x) {
+return ((x - min(x)) / (max(x) - min(x)))
+}
+## Apply Normalize FUN to a table
+view1 = as.data.frame(lapply(view1, normalize))
+## Standarize 
+view1 = as.data.frame(scale(view1))
+var = as.data.frame(scale(var))
+## Check between 0 and 1
+summary(view1)
+summary(var)
+
+
+
+##Deal with missing value
+##Replace "missing" to NA
+view1$var[view1$var == ""] = NA
+##Show "NA" in a table
+table(view1$var, useNA = "ifany")
+##summary will show "NA"
+summary(view1$var)
+##Convert extrame case into "NA"
+view1$var = ifelse(view1$var >= 5 & view1$var < 30, view1$var, NA)
+##Imputation - use an assume AVG for NA and group by another variable
+AVG.FUN = ave(view1$var.na, view1$var.cate, FUN = function (x) mean(x, na.rm = TRUE))
+view1$var.na = ifelse(is.na(view1$var.na), AVG.FUN, view1$var.na)
+
+
+
+
+
+##Scaling Data 
+## Check numeric vars before scaling
+summary(data[c("var1", "var2", "var3")])
+
+## ((((Plain code normalization process))))) ##
+normalize = function(x) {
+  return ((x - min(x)) / (max(x) - min(x)))
+}
+##Normalize
+normalized.data = as.data.frame(lapply(data[2:31], normalize))
+##confirm performance
+summary(data[c("var1", "var2", "var3")])
+
+
+
+## ---- recenter 
+data = scale(data) ## -> Center with 0 and deviate with few digits
+
+## ---- rescale to 0-1 
+install.packages("reshape")
+library(reshape)
+data = rescaler(data, "range") ## -> Scale data to min 0 and max 1
+
+## ---- rank 
+install.packages("reshape")
+library(reshape)
+data = reshape(data, "rank") ## -> Interested in relative position of the value rather than actual value
+
+
+## ---- log transform
+data = log(data) ## -> convert borad range of positive numbers to a narrow range positive, to extrame large var
+data[data == -Inf] = NA #(infinite value log(0) treated as missing)
+
+
+## ---- recenter using median/MAD
+install.packages("reshape")
+library(reshape)
+data = rescaler(data, "robust") ## -> Like recenter, yet more robust to outliers
+
+## ---- By Group (?????????)
+
+
+
+##Imputation (Deal with missing value)
+## ---- Zero & Constant/Missing
+data[is.na(data)] = 0 ## Known that missing is 0
+data[is.na(data)] = # ## Known that missing is #
+
+## ---- Mean/Median/Mode
+## ---- Mean(Normal distribute)
+data[is.na(data)] = mean(data, na.rm = TRUE)
+
+## ---- Median(Skewness data)
+data[is.na(data)] = median(data, na.rm = TRUE)
+
+## ---- Mode(Categorical var)
+data[is.na(data)] = mode(data, na.rm = TRUE)
+
+## ---- Impute with predict model
+install.packages("mice")
+library(mice)
+flux(data) ##Use the vars has a large "outflux" to build a model preidict missing (load all data with missing)
+## Build model to impute ?????????????????????????????????????????
+
+
+
+## ---- Multipe Imputation Method
+##Fitting a set of models that represent the non-missing values of the variable in question
+##Using these models to impute several values for each missing value
+##ComBinning these values to produce statistical inferences about the imputed variables
+install.packages("mice")
+library(mice)
+#imputation
+imp = mice(sleep, m=5, seed=1234, printFlag=FALSE) 
+#build 5 linear models
+fit = with(imp, lm(Dream ~ Span + Gest))
+#combine 5 lm results
+pooled = pool(fit)
+summary(pooled) ?????????????????????????????????????????????????????????????????????
+
+
+
+
+## ---- Use "VIM" packages kNN to impute missing value
+install.packages("VIM")
+library(VIM)
+data.knn = kNN(data)
+
+
+
+## Data aggregation
+## ---- Recoding (Convert variables)
+## ---- Binning 
+bins<-10
+cutpoints = quantile(x,(0:bins)/bins)
+binned = cut(var,cutpoints,include.lowest=TRUE)
+
+
+
+## ---- Convert categories to variables
+groupvec = c(0,20,40,60,80,100)
+labels = c('0-20','20-40','40-60','60-80','80-100')
+data$newvar = cut(data$numeric_var, breaks=groupvec,labels=labels, include.lowest=TRUE)
+##pivo-plot cases match each group
+install.packages("reshape2")
+library(reshape2)
+dcast(data, ca_var1~ca_var2, value.var = 'var3', fun = length) ##-> count cases match each combination
+
+## ---- Create dummy vars
+install.packages("caret")
+library(caret)
+v = dummyVars(~ca_var, data) 
+v = data.frame(predict(v,data)) ##Dummy vars
+
+## ---- Category reduction
+##What is the maximum acceptable number of categories?
+##How do we reduce the number of categories?
+##What are the potential issues at deployment time?
+## ---- entropy value (Categorical var)
+entropy = function(x) {
+    labelcounts = table(x)
+    prob = labelcounts/sum(labelcounts)
+    shannonent = -sum(prob * log(prob,2))
+    return(shannonent)
+}
+entropy(x) ##-> the close to 0.5 the better (Ave Information in each level) Need split?
+## ---- compare entropy gain by split (z - categorical)
+entropy_gain = function(data, value) {
+    n = nrow(data)
+    shan_tot = entropy(data$y)
+    sub1 = subset(data, z==value) ##-> define how to split ca_var by looking up other ca_var
+    sub2 = subset(data, z!=value)
+    sub1n = nrow(sub1)
+    sub2n = nrow(sub2)
+    shan_sub = (sub1n*entropy(sub1$y)+sub2n*entropy(sub2$y))/n
+    gain = shan_tot - shan_sub
+    return(gain)
+}
+## ---- compare entropy gain by split (z - continous)
+entropy_gain = function(x,y,value) {
+    n = length(y)
+    shan_tot = entropy(y)
+    subx1 = x[x<=value]
+    subx2 = x[x>value]
+    suby1 = y[x<=value]
+    suby2 = y[x>value]
+    n1 = length(suby1)
+    n2 = length(suby2)
+    shan_sub = (n1* entropy(suby1)+n2*entropy(suby2))/n
+    gain = shan_tot - shan_sub
+    return(gain)
+}
+result = sapply(unique(data$z), function(x) entropy_gain(data,x))
+data$z[which.max(result)] ## Split by which z value is the best?
+
+
+
+## Change varabile distribution
+## ---- Rank transformations
+var = rank(var)
+
+## ---- Box-cox transformations
+install.packages("caret")
+library(caret)
+var = BoxCoxTrans(var)
+
+
+
+&&&&&&&&&&&&&&&&&& Data Explortary Analysis &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+##Get subset of data
+x = subset(data, var1 == '1. xxx', select = 'var2')
+x = unlist(x) ##Above return list
+
+##Percentage mix among categorical vars
+table.dul = with(data, table(var1, var2))
+table.dul = as.matrix(table.pivot)
+plot(table.dul) # -> Visual
+table.pivot = apply(table.dul, 2, function (x) x / sum(x)) ## 1 by row / 2 by col
+
+##pivot variables by table(var1, var2) split by var3
+with(data, table(var1, var2, var3))
+
+##pivot var1 by column, var2 - var3 by row (% of total)
+table.tri = with(data, ftable(var1~var2+var3))
+round(apply(table.tri,2, function (x) x/sum(x)), digit = 2)
+
+##explore metrics of an numeric var by pivoting an categorical var
+install.packages("plyr")
+library(plyr)
+ddply(data, .(cate_var), function(x) each(mean, length) (x$numer_var)
+
+
+##t-test (Assume variance in vars the same, make sense when mean makes sense)
+t.test(var, mu=#) ##-> whether the true mean range of var equal to #
+t.test(var1, var2) ##-> whether those two vars are significantly different
+
+##F-test (Test the equality of variance of two samples)
+var.test(var1, var2) ##-> Test the equality of variance of two samples
+
+##Test for normality
+shapiro.test(var) ##Whether normaily distributed
+qqnorm(var) ##plot see the normality
+
+##Non-parametric test (If t-test not work)
+wilcox.test(var1, var2) ##Same as t-test
+
+##Chi-squared test (If there is correlation)
+chisq.test(var1, var2) ##If there is correlation
+
+##Check central tendency, dispersion of vars
+mean(var1); sd(var1)
+mean(var2); sd(var2) ##colse to each other?
+qqplot(var1, var2) ?????????????????????????????????????????????????????????????????????????
+
+
+
+
+
+
+
+## Deatail Categorical summary
+install.packages("Hmisc")
+library(Hmisc)
+describe(data) ## Other information besides 'Summary"
+
+## Deatil Numeric summary
+install.packages("fBasics")
+library(fBasics)
+basicStats(numeric vars) ## mean sd max min / .95 confidence Lcl mean and Ucl mean
+
+## Distribution 
+hist(var)
+
+## Cumulative Distribution
+install.packages("Hmisc")
+library(Hmisc)
+Ecdf(vars) ## p() of a random x =< var? (Risk?)
+
+
+## Benford's Law (identify oddities in data)
+install.packages("benford.analysis")
+library(benford.analysis)
+benford(data, number.of.digits = #, sign = "positive", discrete=TRUE, round=3)
+
+
+## Powerful plot of dataset
+panel.hist <- function(x, ...)
+{
+usr <- par("usr"); on.exit(par(usr))
+par(usr=c(usr[1:2], 0, 1.5) )
+h <- hist(x, plot=FALSE)
+breaks <- h$breaks; nB <- length(breaks)
+y <- h$counts; y <- y/max(y)
+rect(breaks[-nB], 0, breaks[-1], y, col="grey90", ...)
+}
+panel.cor <- function(x, y, digits=2, prefix="",
+cex.cor, ...)
+{
+usr <- par("usr"); on.exit(par(usr))
+par(usr = c(0, 1, 0, 1))
+r <- (cor(x, y, use="complete"))
+txt <- format(c(r, 0.123456789), digits=digits)[1]
+txt <- paste(prefix, txt, sep="")
+if(missing(cex.cor)) cex.cor <- 0.8/strwidth(txt)
+text(0.5, 0.5, txt)
+}
+##Call
+pairs(data, diag.panel=panel.hist, upper.panel=panel.smooth, lower.panel=panel.cor)
+
+
+## Colored Y by any 2X - See whether clear to tell difference in Y (Find best set of vars to predict Y)
+install.packages("ggplot2")
+library(ggplot2) ## Y need to be factor
+p = ggplot() +
+    geom_point(data=data, aes(x=X1, y=X2, colour=Y, shape=Y), size=3) +
+    theme_bw()
+
+
+
+## Skewness
+install.packages("propagate")
+library(propagate)
+skewness(vars) ## Positive or negative skewed
+kurtosis(vars) ## Sharp peak (large vale) or flat peak (small value) or Gaussian peak (0)
+
+## Missing Value
+install.packages("mice")
+library(mice)
+md.pattern(vars) ## n of obsevs of each missing pattern
+##Get row numbers of missing observs
+which(is.na(var))
+complete.cases(data) ##Return "True/False" for all rows
+##quick visualize missing status
+install.packages("VIM")
+library(VIM)
+aggr(data)
+
+
+
+## Boxplot data
+boxplot(data = vars, col=rainbow(#))
+##Boxplot numeric vars by each categorical var
+par(mfrow = c(1,3)) ##define how many charts
+for(i in 2:3) { ##Define categorical vars
+boxplot(as.formula(paste0('Numeric_var~', names(data)[i])), data = data, ylab = "Numeric_var", xlab = names(data)[i])
+}
+
+
+
+
+
+
+
+
+
+head(view1)
+tail(view1)
+names(view1)
+dim(view1)
+str(view1)
+plot(view1)
+summary(view1) ##Check mean medium see off to determine central tendency
+unique(var) ##Unique value
+##% quantile display
+quantile(var)
+quantile(var, probs = c(0.01, 0.99) ##show 1% 99% quantiles
+range(var) ##min max
+diff(range(var)) ##Difference max min
+var(var) ##Variance
+sd(var) ##Standard Deviation
+round(prop.table(table(view1$var)) * 100, digits = 1) ##Give % of different factors
+##Display categorical var distribution
+table(var)
+prop.table(var)
+##Find mode (function)
+Mode <- function(x) {
+ux <- unique(x)
+ux[which.max(tabulate(match(x, ux)))]
+}
+
+
+
+##Advanced Scatter plot
+install.packages("psych")
+library(psych)
+pairs.panels(view1)
+##Others..
+install.packages("car")
+library(car)
+scatterplotMatrix(data, smoother = F)
+
+
+
+
+##Exame relationship between two categoribles (Cross-tabulations)
+install.packages("gmodels")
+library(gmodels)
+CrossTable(x = var1, y = var2, chisq = TRUE/FALSE) ##values in cell (# of observ, Chi-square stats - each contribution to chi-test, row%, col%, table%) 
+
+
+##Culmulated distance table
+dist(scale(view2, center = FALSE))
+
+
+##Covariance matrix
+cov(view1[, c("var1", "var2", "var3")])
+##separate by subset of data
+cov(subset(view1, var1 == "xxx") [, c("var1", "var2", "var3")])
+
+
+##Correlation metrix & Correlation plot
+##Matrix
+cor(view1[,c("var1", "var2", "var3")])
+##Plot
+install.packages("corrplot")
+library(corrplot)
+cortable = cor(view1[,c("var1", "var2", "var3")])
+corrplot(cortable)
+
+##Correlation between missing value
+ind = as.data.frame(abs(is.na(view1)))
+new.ind = ind[, sapply(ind,sd)!=0]
+install.packages("corrplot")
+library(corrplot)
+cortable = cor(new.ind)
+corrplot(cortable)
+
+
+## Hierarchical Correlation ## Early Join - High correlation (Signal or Group)
+cor.table = cor(data, use="pairwise", method="pearson")
+hc = hclust(dist(cor.table), method="average")
+dn = as.dendrogram(hc)
+plot(dn, horiz = TRUE)
+
+
+
+
+##Probability plot for check single variable normality / outliers
+##Single
+qqnorm(view2[,"IR"], main = "IR")
+qqline(view2[,"IR"])
+##All Table
+layout(matrix(1:6, nc = 2))
+sapply(colnames(view2), function (x) {
+qqnorm(view2[[x]], main = x)
+qqline(view2[[x]])
+})
+
+##Chi-square plot for check multivate data normality / outliers - (NEED FIXXXXXXXXXXXXXXXXXXX)
+x = view1[,c("var1", "var2", "var3")]
+cm = colnames (x)
+s = cov(x)
+d = apply(x, MARGIN = 1, function (x)
+t(x-cm)%*% solve(s) %*%(x-cm) )
+plot(qchisq( (1:nrow(x) - 1/2) / nrow (x), df = 2), sort (d),
+xlab = expression (paste( chi[2]^2, "Quantile" )),
+ylab = "Ordered Distance")
+abline(a = 0, b = 1)
+
+
+##Relationship between Xs and Y linear?
+view1.lm = lm(Y~., data = view1)
+plot(predict(view1.lm), residuals(view1.lm),) ##Linearity
+lines(lowess(predict(view1.lm),residuals(view1.lm)), col="blue")
+##Relationship between X and Y linear? --> Non-linearity / porpotional noise / auto-correlation of noise
+plot(view1.lm$residuals~x)
+
+
+
+##Identify outlier
+plot(predict(view1.lm), rstudent(view1.lm)) ##rstudent > 3 (outliers)
+
+##Runclustering to identify outlier
+???????????????????????????????????????????????????????????????????????????????????????????????????
+
+
+
+
+
+##Plot Leverage statistics
+view1.lm = lm(Y~., data = view1)
+hatvalues(view1.lm) ## leverage
+plot(hatvalues(view1.lm)) ## plot leverage
+which.max(hatvalues(view1.lm)) ## the biggest value
+##Outlier / Leverage points (If greatly exccess the average) 
+plot(rstudent(view1.lm), hatvalues(view1.lm))
+
+
+##Check time-seriers data (correlation of error terms)
+plot(view1$time_var, residuals(view1.lm)) ## see trend connected each points [Yes]
+
+
+##Collinearity (VIF) - the less the range to 1 the less collinearity
+library(car)
+vif(view1.lm) ##value >=5 or 10 means collinearity [min = 1]
+
+
+
+
+
+
+
+##&&&&&&&&&&& T Test / U Test / Chi-squared Test &&&&&&&&&&&&&&&&&&&&&&&&&&
+
+
+
+
+
+
+
+
+
+
+
+
+##&&&&&&&&&&& Anova / Ancova / Manova / Mancova &&&&&&&&&&&&&&&&&&&&&&&##
+##Factorize numeric vars first
+
+## Anova ##
+## One Way Anova (Completely Randomized Design)
+fit = aov(y ~ A, data=view1) 
+## Randomized Block Design (B is the blocking factor)
+fit = aov(y ~ A + B, data=view1) 
+## Two Way Factorial Design
+fit = aov(y ~ A + B + A:B, data=view1)
+fit = aov(y ~ A*B, data=view1) # same thing 
+## One Within Factor
+fit = aov(y~A+Error(Subject/A),data=view1)
+## Two Within Factors W1 W2, Two Between Factors B1 B2
+fit = aov(y~(W1*W2*B1*B2)+Error(Subject/(W1*W2))+(B1*B2),data=view1) 
+## Evaluate Result
+summary(fit) # Display type I ANOVA table
+drop1(fit,~.,test="F") # type III SS and F Tests (Cause A+B diff from B+A)
+anova(fit1, fit2) # # type III SS and F Tests (Cause A+B diff from B+A)
+## Plot
+plot(fit)
+## Tukey Honestly significant differences
+TukeyHSD(fit, conf.level = 0.95) # where fit comes from aov()
+
+## Manova ##
+Y = cbind(y1, y2, y3)
+fit = manova(Y~ A*B)
+summary(fit, test = "pillai") ##Other test options - "Wilks", "Hotelling-Lawley", and "Roy"
+summary.aov(fit) ##Get univariate statisc each ys
+## reverse A+B to B+A to get type III (same)
+
+
+
+### ------------------------------------- ggplot ------------------------------------------------------ ###
+install.packages("ggplot2")
+library(ggplot)
+
+# Scatter plot with smooth line (point)
+ggplot(data, aes(varx, vary)) + geom_point(shape=5, size=2) + geom_smooth() + xlab("name") + ylab("name2") + ggtitle("name_all")
+# data, varx-vary, show point, show smooth line, x-name, y-name, title-name
+
+# boxplot with x,y text labels
+ggplot(data, aes(varx, vary)) + geom_boxplot() + theme(axis.text.x = element_text(angle = 45)) + labs(x = "varx", y = "vary")
+# adjust text angle, labs must bespecified
+
+
+# cross tabulet plot *(Need to "melt" the data first) or 3 columns with 1 cate
+ggplot(data, aes(var1, var2)) + geom_point() + geom_smooth() + facet_wrap(~var3, ncol = #/nrow = #, scales = "free_y") + xlab("name") + ylab("")
+# facet_wrap -> sparate chart basedon variable, ncol/nrow - layout
+
+
+# Horizontal Bar Chart
+#Sort data first to show water fall
+data = transform(data, var1=reorder(var1,data$var2)) #desc = +, asc = -
+ggplot(data, aes(x=var1, y=var2)) + geom_bar(stat='identity', color="black", fill="blue") +
+                                    coord_flip() +
+                                    labs(x = "xxxx", y = "xxxx") +
+                                    ggtitle("xxxxxxxxx") +
+                                    theme(plot.title = element_text(size=18, face="bold"))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&&&&&&&&&&&&&&&&&&&&& Basic Regression &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+PACKAGE: ISLR / MASS /
+
+##Simple linear regression
+view1.lm.s = lm(Y~X, data = view1)
+
+##Multi-linear regression
+view1.lm.m = lm(Y~., data = view1)
+
+##Nonparametric regressions (Loess)
+view1.lo = loess(Y~., data = view1, span=0.8, degree=2) ##span - how big each local / degree - poylmal degree
+
+
+##Evaluate model performance
+summary(view1.lm)
+
+
+##Propotional noise
+install.packages("car")
+library(car)
+boxCox(view1.lm) ## lamboda close to which integer (-1, 0, 1)
+## -1, 1 --> lm(y~x,weights=1/x^2) 2,3,4..
+## 0 --> lm(log(y)~x) 
+##Remember transfer back y when get predicted value
+
+
+##auto-correlation of noise
+##Test whether corrlated
+res = model$residuals
+cor.test(res[-#observ],res[-1]) ##p-value significant = correlated
+acf(res) ## except 0, which lag has highest ACF
+install.packages("nlme")
+library(nlme)
+glsmodel = gls(y~x,corr = corAR1()) ## 1 lag = corAR1, 2 lag = corAR2... same as lm()
+
+
+##Outlier 
+install.packages("car")
+library(car)
+influencePlot(model)
+##Outliers: student residual rstudent
+##Leverage points: leverage hatvalues
+##Influential points: Cooks distance cooks.distance
+##Update model without outliers
+model2 = update(model,y~x,subset=-32) ##row numbers
+
+
+
+##Colinearity between vars
+##Variables Selection
+model1 = lm(var~., data = data)
+anova(model1) ## Large p-value indicates not significant
+install.packages("car")
+library(car)
+vif(model) ## vars have high vif value are colinearity
+## update model with new selection of vars
+model2 = update(model1, .~. -var_bad)
+##or
+model2 = lm(var~view1.train.x[#:#])
+##check
+anova(model2)
+## choose model -> low bic, aic value
+anova(model1, model2, test='Chisq') ## Null hypothesis - No improvement 
+AIC(model1, model2)
+BIC(model1, model2) ##Select model has the low value of both
+
+
+
+
+##Add Interaction terms
+view1.lm.m = lm(Y~x1+x2+x3+X2:x3, data = view1)
+view1.lm.m = lm(Y~x1*x2*x3, data = view1) ##Include all interaction terms
+
+##Polymal regression (non-linearity)
+view1.lm.p = lm(Y~x+I(x^2), data = view1) #power 2 - ...
+
+##Confidence interval of estimates
+confint(view1.lm, level = 0.95)
+
+##plot regression fit line to a two dimensions data
+par(mfrow = c(2,2)
+view1.lm = lm(Y~X, data = view1)
+plot(view2$X, view2$Y)
+lines(x,model1$fit,col='red',lty=2,lwd=2)
+lines(x,model2$fit,col='blue',lty=2,lwd=2)
+
+
+
+##plot basic multivarates summary of linear model
+model = lm(mag~., data = quakes)
+par(mfrow = c(2,2))
+plot(model); par(mfrow = c(1,1))
+
+
+##Predict value
+view1.predict = predict(view1.lm, subdata = view1.test.x)
+
+
+
+## ------ Measuring performance for Regression
+##MSE
+MSE = mean( (view1.test.y - view1.predict)^2)
+#RMSE
+RMSE = sqrt(mean((view1.test.y-view1.predict)^2))
+#Residual standard error
+Residual standard error = sqrt(sum((view1.test.y-view1.predict)^2)/#DF)
+##AIC
+AIC(model1, model2, model3) ##-> The small the better (After linearity changes)
+##NMSE
+nmse = mean((view1.test.y-view1.predict)^2)/mean((view1.test.y-mean(view1.test.y))^2)
+##MAE
+mae = mean(abs(view1.test.y-view1.predict))
+##R-squared
+RSQ = (cor(view1.test.y, view1.predict))^2
+
+
+
+
+
+&&&&&&&&&&&&&&&&&&&&& Basic Classification &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+PACKAGE: ISLR / MASS / class /
+
+##Logistic Regression
+view1.glm = glm(HIGH~., data = view1.train.data, family = binomial)
+
+##LDA Classification
+view1.lda = lda(HIGH~., data = view1.train.data)
+
+##QDA Classification
+view1.qda = qda(HIGH~., data = view1.train.data)
+
+##RDA Classification
+PACKAGE: klaR /
+view1.rda = rda(HIGH~., data = view1.train.data, lambda = 2) ##Change lambda from 0(QDA) to 1(LDA)
+
+##KNN Classification
+##Standarize Data
+standarized.train.x = as.data.frame(scale(view1.train.x))
+standarized.test.x = as.data.frame(scale(view1.test.x))
+set.seed (1)
+view1.knn.pred = knn(standarized.train.x, standarized.test.x, view1.train.y, k = #) ##Give the predict value at the same time (Instant learning No model)
+
+
+##Predict value
+##Logistic Regression
+view1.glm.prod = predict(view1.glm, subset = view1.test.x, type = "response")
+view1.glm.prod.y = rep("No", 10000) ##Y length
+view1.glm.prod.y [view1.glm.prod > .5] = "Yes"
+##LDA Classification
+view1.predict.lda = predict(view1.lda, data = view1.train.x) 
+view1.predict.lda.class = view1.predict.lda$class 
+##QDA Classification
+view1.predict.qda = predict(view1.qda, data = view1.train.x)
+view1.predict.qda.class = view1.predict.qda$class
+##RDA Classification
+view1.predict.rda = predict(view1.rda, data = view1.test.x)
+view1.predict.rda.class = view1.predict.rda$class
+##KNN Classification
+##Give and run at the same time
+
+
+##Predict the probability (Binary) by new value
+prob1 = 1/(1+exp(-(sum(coef(model)*c(1,1,1,83)))))
+prob0 = 1/(1+exp(-(sum(coef(model)*c(1,1,0,83)))))
+prob1-prob0 ##Candidate1 vs Candidate2
+##Ex.0.198
+
+
+
+## ------ Measuring performance for Regression
+##Confusion  matrix
+##Logistic Regression
+view1.glm.prod.y = rep("No", 10000)
+view1.glm.prod.y [view1.glm.prod > .5] = "Yes"
+view1.glm.prod.y = data.frame(view1.glm.prod.y) 
+view1.glm.prod.y = view1.glm.prod.y[,1] ##Vectorize
+view1.test.y = view1.test.y[,1] ##Vectorize
+table (view1.glm.prod.y, view1.test.y)
+##LDA Classification
+view1.predict.lda.class = view1.predict.lda.class[,1] ##Vectorize
+view1.test.y = view1.test.y[,1] ##Vectorize
+table(view1.predict.lda.class, view1.test.y)
+##QDA Classification
+view1.predict.qda.class = view1.predict.qda.class[,1] ##Vectorize
+view1.test.y = view1.test.y[,1] ##Vectorize
+table(view1.predict.qda.class, view1.test.y)
+##RDA Classification
+view1.predict.rda.class = view1.predict.rda.class[,1] ##Vectorize
+view1.test.y = view1.test.y[,1] ##Vectorize
+table(view1.predict.rda.class, view1.test.y)
+##KNN Classification
+view1.knn.pred = view1.knn.pred [,1] ##Vectorize
+view1.test.y = view1.test.y[,1] ##Vectorize
+table(view1.knn.pred, view1.test.y)
+
+
+##Confusion matrix (Package:gmodels)
+install.packages("gmodels")
+library(gmodels)
+view1.predict.lda.class = view1.predict.lda.class[,1] ##Vectorize
+view1.test.y = view1.test.y[,1] ##Vectorize
+CrossTable(x = view1.test.y, y = view1.predict.lda.class, prop.chisq = FALSE)
+##Others
+install.packages("caret")
+library(caret)
+confusionMatrix(view1.test.y,pred.y, positive='1')
+
+
+
+
+
+##Accurate Rate 
+mean (view1.glm.prod.y == view1.test.y)
+mean (view1.predict.lda.class == view1.test.y)
+mean (view1.predict.qda.class == view1.test.y)
+mean (view1.predict.rda.class == view1.test.y)
+mean (view1.knn.pred == view1.test.y)
+**accuracy = (TP + TN)/(TP + TN + FP + FN)
+accuracy = (table[1,1]+table[2,2])/(sum(table))
+
+
+
+##Error rate 
+mean (view1.glm.prod.y != view1.test.y)
+mean (view1.predict.lda.class != view1.test.y)
+mean (view1.predict.qda.class != view1.test.y)
+mean (view1.predict.rda.class != view1.test.y)
+mean (view1.knn.pred != view1.test.y)
+error.rate = 1 - accuracy
+
+
+##Sensitivity
+**Sensitivity: measures the proportion of positive examples that were correctly classified
+sensitivity = table[2,2]/(table[2,2]+table[1,2])
+
+
+##Specificity
+**Specificity: measures the proportion of negative examples that were correctly classified
+specificity = table[1,1]/(table[1,1]+table[2,1])
+
+
+##Precision
+**Precision: measures the proportion of positive examples that are truly positive
+precision = table[2,2]/(table[2,1]+table[2,2])
+
+
+##Recall
+**Recall: is a measure of how complete the results are
+recall = table[2,2]/(table[1,2]+table[2,2])
+
+
+##Kappa
+**kappa statistic adjusts accuracy by accounting for the possibility of a correct prediction by chance alone
+pmat = table/sum(table)
+p = addmargins(pmat)
+pr.actual = p[1,1] + p[2,2]
+pr.expected = p[1,3] * p[3,1] + p[2,3] * p[3,2]
+kappa = (pr.actual-pr.expected)/(1-pr.expected)
+kappa
+**Scale
+##Poor agreement = Less than 0.20
+##Fair agreement = 0.20 to 0.40
+##Moderate agreement = 0.40 to 0.60
+##Good agreement = 0.60 to 0.80
+##Very good agreement = 0.80 to 1.00
+
+
+
+
+##Change Threashhold
+sum (view1.predict.lda$posterior [,1] >= .5) ##How many "YES" / changes made
+sum (view1.predict.lda$posterior [,1] <  .5) ##How many "NO" / changes made
+view1.predict.lda.class = rep("No", 10000) ##Y length
+view1.predict.lda.class [view1.predict.rda$posterior > .5] = "Yes" ##Make NEW "CLASS" of changed threashold
+## NO KNN
+
+##ROC Curve
+install.packages("ROCR")
+library(ROCR)
+rocplot = function(pred, truth, ...) {
+predob = prediction (pred, truth)
+perf = performance (predob, "tpr", "fpr")
+plot (perf, ...) }
+##Logistic Regression
+rocplot (view1.glm.prod, view1.test.y, main = "Logistic")
+##LDA Classification
+rocplot (view1.predict.lda$x, view1.test.y, main = "LDA") ##What is "x"
+##QDA Classification
+rocplot (view1.predict.qda$x, view1.test.y, main = "QDA") ##What is "x"
+##RDA Classification
+rocplot (view1.predict.rda$x, view1.test.y, main = "RDA") ##What is "x"
+##KNN ??
+##Others..
+library(ROCR)
+pred = prediction( pred.prob, data$y)
+perf = performance(pred, measure="tpr",x="fpr")
+plot(perf)
+## Better graph with AUC
+preObs = data.frame(prob=pred.prob,obs=data$y)
+preObs = preObs[order(preObs$prob),]
+install.packages("pROC")
+library(pROC)
+modelroc = roc(preObs$obs,preObs$prob)
+plot(modelroc, print.auc=TRUE, auc.polygon=TRUE, 
+     grid=c(0.1, 0.2), grid.col=c("green", "red"), 
+     max.auc.polygon=TRUE, auc.polygon.col="skyblue", 
+     print.thres=TRUE)
+##Explaination for ROC
+## - If the target variable is binary categorical, in addition to confusion matrix, we can also evaluate the model with ROC curve.
+## - Many models allow the prediction output to be the probability. The confusion matrix takes 0.5 as the critical point to determine which samples are POS and which are neg, meanwhile the sensitivity TPR and the specificity TNR can be calculated.
+## - In addition to the training parameters of models, the selection of critical point will also influence TPR and TNR greatly. Sometimes you can select the critical point according to the specific problems and needs.
+## - If selelcting a series of critical point, we will get the corresponding TPR and TNR. Concatenate thses points represented by TPR and TNR to get the ROC curve.
+## - ROC curve can help us clearly understand the performance of a classifier, and facilitates the performance comparison of different classifiers.
+
+
+
+##Lift Curve
+## - The lift curve is a popular technique in direct marketing.
+## - One useful way to think of a lift curve is to consider a data mining model that attempts to identify the likely responders to a mailing by assigning each case a “probability of responding" score. 
+library(ROCR)
+pred = prediction( pred.prob, data$y)
+perf1 = performance(pred, measure='lift',x='rpp')
+plot(perf1)
+
+## High/Low similarity - Dissimilarity
+## Calculate distance eduliadian of two vars
+dist(rbind(x1, x2))
+
+
+
+## KNN classifier (NYC class version) ##
+## *** Requre stored records
+## *** Distance metric to compute distance between records
+## *** The value of K
+## Good -> Robust to outlier / No assumption
+## Bad -> Not good for high dimensional data
+
+
+
+## ((((((Plain code version))))))) ##
+
+## IF NA take out to calculate dist 
+## Euclidean Distance - scale
+dist(rbind(x,y)) ## Build-in
+eudist = sqrt(sum((x-y)^2))
+
+## Minkowski Distance
+minkowski = function(x,y,p) {
+            (sum((x-y)^p))^(1/p)
+}
+minkowski(x,y,2)
+dist(rbind(x,y), method = 'minkowski', p = 2) ## Build-in
+
+## Mahalanobis Distance
+Mahalanobis = function(x, y, sigma) {
+   return(sqrt((x-y)%*%solve(sigma)%*%t(x-y)))
+}
+sigma = cov(x,y)
+Mahalanobis(x,y,sigma)
+
+## Cosin Distance
+install.packages("proxy")
+library(proxy)
+(res = dist(rbind(x, y), method='cosine'))
+
+## Simple Matching - how many match
+dist(rbind(x, y), method='simple matching')
+
+## Jaccard Distance
+dist(rbind(x, y), method = "Jaccard")
+## Ex Jaccard Distance
+dist(rbind(x, y), method = "eJaccard")
+
+
+
+knnclassify = function(newdata, data, labels, k=3) {
+n = nrow(data)
+# Compute distance
+diffmat = apply(data,1,function(x) sum((x-newdata)^2))
+distance = sqrt(diffmat)
+distindex = order(distance)
+classcount = vector(mode='numeric', length=k)
+names(classcount) = unique(labels)
+for (i in 1:k) {
+    votelabel = labels[distindex[i]]
+    classcount[votelabel] = classcount[votelabel] + 1
+}
+# take the majority vote
+res = names(which.max(classcount))
+return(res)
+}
+## RUN Code
+knnclassify(newdata, traindata, trainlabels)
+## Calulate error rate (FUN)
+knntest <- function(file,testratio=0.5){
+  data <- read.table(file,stringsAsFactors=F)
+  n <- nrow(data)
+  m <- ncol(data)
+  xdata <- as.matrix(data[,1:3])
+  labels <- data[,m]
+  xdata <- scale(xdata)
+  ntrain <-  n*(1-testratio)
+  indextrain <- 1:ntrain
+  xtrain <- xdata[indextrain,]
+  xtest <- xdata[-indextrain,]
+  ytrain <- labels[indextrain]
+  ytest <- labels[-indextrain]
+  ntest <- n - ntrain
+  pre <- character(ntest)
+  error <- 0
+  for (i in 1:ntest){
+    pre[i] <- knnclassify(xtest[i,],xtrain,ytrain,k=3)
+    if (pre[i] != ytest[i]) error <- error + 1
+  }
+  return(error/ntest)
+}
+
+
+
+## ((((((Package: class)))))) ##
+install.packages("class")
+library(class)
+# cross-validation
+knn_cv <- function(x,y,n=5,k){
+  m <- nrow(x)
+  num <- sample(1:n,m,replace=T)
+  res <- numeric(n)
+  for (i in 1:n) {
+      x.t <- x[num!=i, ]
+      x.v <- x[num==i, ]
+      y.t <- y[num!=i]
+      y.v <- y[num==i]
+      pred <- knn(train=x.t,test=x.v,cl=y.t,k=k)
+      accu <- sum(pred==y.v)/length(pred)
+      res[i] <- accu
+      }
+  return(mean(res))
+}
+## RUN one
+data = data.frame(scale(data[,-4]),data[,4])
+knn_cv(data[1:3],data[,4],n=5,k=5)
+## RUN CV on Ks
+accu = sapply(1:12,function(k){
+  knn_cv(data[1:3],data[,4],n=10,k=k)
+}) ## n = ? fold / k = ? neigbor
+plot(1:12,accu,type='b') ##Plot all and find the best K
+
+
+## (((((Package: caret)))))) - Self tuning ##
+install.packages("caret")
+library(caret)
+fitControl = trainControl(method = "repeatedcv", 
+                           number = 10,
+                           repeats = 3)
+
+knnTune = train(x = data[1:3], y = data[,4],
+                 method = "knn",
+                 preProc = c("center", "scale"),
+                 tuneGrid = data.frame(.k = 1:20),
+                 trControl = fitControl)
+plot(knnTune)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& TEXT Analysis Modeling &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+## ----------------------------------- Quick TEXT Loading and Formation ---------------------------------------------------- ##
+Packages: /
+
+## -- Load in Data -- ##
+text.v = scan("C:/Users/mark.li/Desktop/TESTR.txt", what = "character", sep = "\n") ##Read file and break by different line
+text.v [#] ##Get different line or lines
+text.v.specific = which(text.v == "xxxxxxx") ##Get different line NUMBER[#] if you already know the "xxxx"
+length(text.v) ##Total how many lines in artile
+
+## -- Transform Data -- ##
+##Aggregate every line into one line of strings
+text.v.1 = paste(text.v, collapse = " ") 
+##Lower case
+text.v.1.low = tolower(text.v.1)
+##Take out numbers, marks, punctuations
+text.v.1.low.clean = strsplit(text.v.1.low, "\\W")
+##Convert "list" to var
+text.v.1.low.clean = unlist(text.v.1.low.clean)
+##Exclude "space" strings
+not.blank = which(text.v.1.low.clean != " ")
+text.v.1.low.clean = text.v.1.low.clean[not.blank]
+
+## navigate in the data
+text.v.1.low.clean [#:#] ##Know which #
+text.v.1.low.clean [which(text.v.1.low.clean == "xxxxx")] ##Know words #
+
+## % of a words compare to total ##
+a = length(text.v.1.low.clean [which(text.v.1.low.clean == "xxxxx")])
+b = length(text.v.1.low.clean)
+a / b
+
+## Unique words ##
+unique(text.v.1.low.clean)
+
+## Word Frequency table sorted ##
+text.v.1.low.clean.t = table(text.v.1.low.clean)
+text.v.1.low.clean.t.sort = sort(text.v.1.low.clean.t, decreasing = TRUE)
+## Get Frequency of any words ##
+text.v.1.low.clean.t.sort["xxx"]
+## Compare frequency of words ##
+text.v.1.low.clean.t.sort["xxx1"] / text.v.1.low.clean.t.sort["xxx2"]
+## Plot Top frequency words ##
+plot(text.v.1.low.clean.t.sort[1:10], type = "b", xlab = "Top Ten Words", ylab = "Percentage of full text", xaxt = "n")
+axis(1,1:10, labels = names(text.v.1.low.clean.t.sort [1:10]))
+
+## Distribution plot of a word ##
+time.v = seq(1:length(text.v.1.low.clean))
+word.v = which(text.v.1.low.clean == "xxx")
+count.v = rep(NA, length(time.v))
+count.v [word.v] = 1
+plot(count.v, main = "Dispersion Plot of 'XXX'", xlab = "Distribution", ylab = "xxx", type = "h", ylim = c(0,1), yaxt = 'n')
+
+## Get line # of strings by matching REGEX ##
+position.v = grep("^CHAPTER \\d", text.v)
+text.v[position.v]
+
+
+
+
+
+## ----------------------------------- Naive Bayes Classifier (Text mining) ---------------------------------------------------- ##
+Packages: tm / wordcloud / e1071 / gmodels
+
+install.packages("tm")
+library(tm)
+
+##Factorize class var
+view1$Type = factor(view1$Type)
+table(view1$Type)
+
+##Create Corpus of raw doc
+view1.x.corpus = Corpus(VectorSource(view1$Text)) ##Collection of text doc
+print(view1.x.corpus)
+inspect(view1.x.corpus [1:15]) ##Look at specific messages in doc
+
+##Lean up data (lower case, numbers, stop words, punctuations, white space)
+view1.x.corpus.clean = tm_map(view1.x.corpus, tolower)
+view1.x.corpus.clean = tm_map(view1.x.corpus.clean, removeNumbers)
+view1.x.corpus.clean = tm_map(view1.x.corpus.clean, removeWords, stopwords())
+view1.x.corpus.clean = tm_map(view1.x.corpus.clean, removePunctuation)
+view1.x.corpus.clean = tm_map(view1.x.corpus.clean, stripWhitespace)
+##Check difference
+inspect(view1.x.corpus.clean [1:3])
+inspect(view1.x.corpus [1:3])
+
+##Split message into individual elements (Tokenization)
+view1.x.dtm = DocumentTermMatrix(view1.x.corpus.clean) ##Each column each word, each row each message, counts in cell
+
+##Create Train / Test set 
+view1.train = view1[1:#,] ##Split raw data
+view1.test = view1[#:#,]
+view1.x.dtm.train = view1.x.dtm[1:#,] ##split Tokenlized matrix
+view1.x.dtm.test = view1.x.dtm[#:#,]
+view1.x.corpus.clean.train = view1.x.corpus.clean [1:#,] ##Split corpus doc
+view1.x.corpus.clean.test = view1.x.corpus.clean [1:#,]
+##Check portion of different type in test / train (Better close)
+prop.table(table(view1.train$Type))
+prop.table(table(view1.test$Type))
+
+##Word cloud creation (min.freq = 1% number of messages)
+install.packages("wordcloud")
+library(wordcloud)
+##Total
+wordcloud(view1.x.corpus.clean.train, min.freq = 40, random.order = FALSE)
+A = subset(view1.train, Type == "A")
+B = subset(view1.train, Type == "B")
+x11()
+wordcloud(A$Text, min.freq = 40, random.order = FALSE, scale = c(3, 0.5)) ##scale - Max, min fronts
+x11()
+wordcloud(B$Text, min.freq = 40, random.order = FALSE, scale = c(3, 0.5))
+
+##Filter out less frequent features before modeling
+##Save a list of reminding elements
+view1.x.dict = Dictionary(findFreqTerms(view1.x.dtm.train, #)) ## - # based on 0.1% of records in  data set
+##process on both dataset
+view1.x.dtm.train.c = DocumentTermMatrix(view1.x.corpus.clean.train, list(dictionary = view1.x.dict))
+view1.x.dtm.test.c = DocumentTermMatrix(view1.x.corpus.clean.test, list(dictionary = view1.x.dict))
+
+##Convert "counts" in cell into "Yes/No" categorical var
+convert_counts = function (x) {
+x = ifelse(x > 0, 1, 0)
+x = factor(x, levels = c(0,1), labels = c(""No"",""Yes""))
+return (x)
+}
+view1.x.dtm.train.c = apply(view1.x.dtm.train.c, MARGIN = 2, convert_counts)
+view1.x.dtm.test.c = apply(view1.x.dtm.test.c, MARGIN = 2, convert_counts)
+
+##Run Model
+install.packages("e1071")
+library(e1071)
+classifier = naiveBayes(view1.x.dtm.train.c, view1.train$Type, laplace = 0)
+##Predict on test
+classifier.pred = predict(classifier, view1.x.dtm.test.c)
+##Performance? - Confusion Table
+install.packages("gmodels")
+library(gmodels)
+CrossTable(classifier.pred, view1.test$Type, prop.chisq = FALSE, prop.t = FALSE, dnn = c('predict', 'actual'))
+
+
+## ((((((Plain Code Bayes Classifier))))))) ##
+## Join propability ##
+## -> Calculate P() for each condition in each var (Potential Pro - one 0 all 0) - solution:
+##Modified Probability Estimation
+
+## -> For numberic var
+##Discretize the range into bins (transform to cate)
+        one ordinal attribute per bin
+        violates independence assumption
+##Two-way split: (A < v) or (A > v) (transform to case)
+        choose only one of the two splits as new attribute
+##Probability density estimation: (Assume a distribution p())
+        Assume attribute follows a normal distribution
+        Use data to estimate parameters of distribution (e.g., mean and standard deviation)
+        Once probability distribution is known, can use it to estimate the conditional probability P(Ai|c)
+## ---- Ex.
+mean_no = mean(data$var[data$Y=='no'])
+mean_yes = mean(data$var[data$Y=='yes'])
+sd_no = sd(data$var[data$Y=='no'])
+sd_yes = sd(data$var[data$Y=='yes'])
+p3 = dnorm(x=120,mean_no,sd_no) ##Assume normal - x = 120, the p()
+
+## -> For categorical var
+##percent of cases
+p1 = nrow(data[data$var2=='no' & data$Y=='no', ])/length(Y[Y=='no']) ##p() that var2 = 'no' and Y = 'no'
+p2 = nrow(data[data$var3=='married' & data$Y=='no', ])/length(Y[Y=='no']) ##p() that var3 = 'married' and Y = 'no'
+
+##Final P() predicted for the one (var2 = no; var3 = married, x = 120)
+final.p = p1 * p2 * p3
+
+## ----- Really getting start ---- ##
+# posting <- list(c('my', 'dog', 'has', 'flea', 'problems', 'help', 'please'),
+                c('maybe', 'not', 'take', 'him', 'to', 'dog', 'park', 'stupid'),
+                c('my', 'dalmation', 'is', 'so', 'cute', 'I', 'love', 'him'),
+                c('stop', 'posting', 'stupid', 'worthless', 'garbage'),
+                c('mr', 'licks', 'ate', 'my', 'steak', 'how', 'to', 'stop', 'him'),
+                c('quit', 'buying', 'worthless', 'dog', 'food', 'stupid')) 
+# varY = c(0,0,0,1,0,1,1)
+
+# exact unique words
+words = unique(unlist(posting))
+
+# transform words string to vector
+word2vec = function(words,input){
+  wordvec = rep(0,length(words))
+  for (i in 1:length(input)){
+    if (input[i] %in% words) {
+      wordvec[which(words== input[i])] <- 1
+    } else  print('this word is not in my vocabulary')
+  }
+  return(wordvec)
+} ##(numer of unique words, 1 yes, 0 no for each vec-post)
+
+## Making 0/1 matrix for all posts
+xmat = do.call('cbind',lapply(posting,function(x) word2vec(words,x)))
+dim(xmat) ##Row = Unique words / Col = Posts
+
+## Train Model to calculate p() for each words in the bag
+nbtrain <- function(xmat,class){
+  numdoc <- ncol(xmat)
+  numwords <- nrow(xmat)
+  ppos <- mean(class)
+  p0num <- p1num <- rep(1,numwords) ##Modified Probability Estimation add 1
+  p0denom <- p1denom <- 2 ##Modified Probability Estimation add C
+  for (i in 1:numdoc){
+    if (class[i] == 1) {
+      p1num <- p1num + xmat[,i]
+      p1denom <- p1denom + sum(xmat[,i])
+      } else {
+      p0num <- p0num + xmat[,i]
+      p0denom <- p0denom + sum(xmat[,i])      
+    }
+  }
+  p1vec <- log(p1num/p1denom) ##A vector of p() of 1 for each word
+  p0vec <- log(p0num/p0denom) ##A vector of p() of 0 for each word
+  return(list(p0vec=p0vec,p1vec=p1vec,ppos=ppos))
+}
+res <- nbtrain(xmat,varY)
+## Define prediction Function
+nbclassify <- function(newvec,model){
+  p1 <- sum(newvec*model$p1vec)+log(model$ppos)
+  p0 <- sum(newvec*model$p0vec)+log(1-model$ppos)
+  return(ifelse(p1>p0,1,0))
+}
+## Predict
+entry = c('stupid', 'garbage')
+wordvec = word2vec(words,entry) ##Create matrx
+nbclassify(wordvec,res) 
+## -> 0 or 1
+
+
+
+
+
+
+
+
+## ----------------------------------- Sentiment Analysis (Text mining) ---------------------------------------------------- ##
+Packages: 
+install.packages("xxxxx")
+library(xxxx)
+
+## Raw text data pre-processing ##
+## --> I  data.frame / Each line each sentence / Lower, upper, puncuation ok
+
+
+## Needs Bags of Words ##
+http://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html
+## Decompressor needed here ##
+hu.liu.pos = scan('C:/Users/Mark/Desktop/positive-words.txt', what = 'character', comment.char = ';')
+hu.liu.neg = scan('C:/Users/Mark/Desktop/negative-words.txt', what = 'character', comment.char = ';')
+## Add any new words? ##
+pos.words = c(hu.liu.pos, "xxx", "xxx", "xxx")
+neg.words = c(hu.liu.neg, "xxx", "xxx", "xxx")
+
+## --- Create Function ---- ##
+score.sentiment = function(sentences, pos.words, neg.words, .progress='none')
+{
+require(plyr)
+require(stringr)
+# we got a vector of sentences. plyr will handle a list or a vector as an "l" for us
+# we want a simple array of scores back, so we use "l" + "a" + "ply" = laply:
+scores = laply(sentences, function(sentence, pos.words, neg.words) {
+# clean up sentences with R's regex-driven global substitute, gsub():
+sentence = gsub('[[:punct:]]', '', sentence)
+sentence = gsub('[[:cntrl:]]', '', sentence)
+sentence = gsub('\\d+', '', sentence)
+# and convert to lower case:
+sentence = tolower(sentence)
+# split into words. str_split is in the stringr package
+word.list = str_split(sentence, '\\s+')
+# sometimes a list() is one level of hierarchy too much
+words = unlist(word.list)
+# compare our words to the dictionaries of positive & negative terms
+pos.matches = match(words, pos.words)
+neg.matches = match(words, neg.words)
+# match() returns the position of the matched term or NA
+# we just want a TRUE/FALSE:
+pos.matches = !is.na(pos.matches)
+neg.matches = !is.na(neg.matches)
+# and conveniently enough, TRUE/FALSE will be treated as 1/0 by sum():
+score = sum(pos.matches) - sum(neg.matches)
+return(score)
+}, pos.words, neg.words, .progress=.progress )
+scores.df = data.frame(score=scores, text=sentences)
+return(scores.df)
+}
+
+## Use ##
+view1.sentiment = score.sentiment(view1, pos.words, neg.words)
+## get sentiment score ##
+sent.score = view1.sentiment$score
+view1.sentment [1:100, 'score'] ## Score + text
+
+## Word could of the pos neg text ## (min.freq = 1% number of messages)
+install.packages("wordcloud")
+library(wordcloud)
+
+-- Refer to above model / May need text clearnance before proceed
+
+x11()
+wordcloud(A$Text, min.freq = 40, random.order = FALSE, scale = c(3, 0.5)) ##scale - Max, min fronts
+x11()
+wordcloud(B$Text, min.freq = 40, random.order = FALSE, scale = c(3, 0.5))
+
+
+
+
+
+
+
+
+&&&&&&&&&&&&&&&&&&&&& Var Selection / Regularization &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+## *** Redundant features (highly correlated - sales, tax)
+## *** Irrelevant features (ID numbers)
+## *** High dimension will add sparses and noisey to data, hard to find outliers..
+
+##Brute-force approch: Try all possible subset as input to data mining algorthm (Computational expensive)
+
+##Decision Tree: cut different layers to find out the importance of each varible (Use entropy, Gini) (Automatical pune tree)
+
+
+
+##Subset selection (forward)
+view1.regfit.forward = regsubsets(PERCENT_INVIEW~.,view1, method = "forward")
+view1.best.forward = summary(view1.regfit.forward)
+par(mfrow = c(2,2))
+plot(view1.best.forward$rss, xlab = "number of variables", ylab = "rss", type = 'l') ##Small
+plot(view1.best.forward$cp, xlab = "number of variables", ylab = "cp", type = 'l') ##Small
+plot(view1.best.forward$bic, xlab = "number of variables", ylab = "bic", type = 'l') ##Small
+plot(view1.best.forward$rsq, xlab = "number of variables", ylab = "rsq", type = 'l') ##Large
+##See model number
+which.min (view1.best.forward$rss)
+##Get names
+coef(view1.regfit.forward,#)
+
+
+##Subset selection (Backward)
+view1.regfit.backward = regsubsets(PERCENT_INVIEW~.,view1, method = "backward")
+view1.best.backward = summary(view1.regfit.backward)
+par(mfrow = c(2,2))
+plot(view1.best.backward$rss, xlab = "number of variables", ylab = "rss", type = 'l') ##Small
+plot(view1.best.backward$cp, xlab = "number of variables", ylab = "cp", type = 'l') ##Small
+plot(view1.best.backward$bic, xlab = "number of variables", ylab = "bic", type = 'l') ##Small
+plot(view1.best.backward$rsq, xlab = "number of variables", ylab = "rsq", type = 'l') ##Large
+##see model number
+which.min (view1.best.backward$rss)
+##Get names
+coef(view1.regfit.backward,#)
+
+
+##Shrinkage Methods
+## *** Ridge -> outliers
+## *** LASSO -> Colinearity
+## *** Unimportant vars shrink first
+
+##Lasso Regression & Ridge Regression variable selection ----(need fixed)
+PACKAGE: glmnet / 
+install.packages("glmnet")
+library(glmnet)
+view1.x = model.matrix (PERCENT_INVIEW~., view1) [,-1]
+view1.y = view1$PERCENT_INVIEW
+grid = 10^seq (10,-2, length = 100)
+##Run Model
+view1.lasso = glmnet(view1.x, view1.y, alpha = 1, lambda = grid) ## ----> Lasso Regression
+view1.Ridge = glmnet(view1.x, view1.y, alpha = 0, lambda = grid) ## ----> Ridge Regression
+view1.lasso.2 = cv.glmnet(view1.x, view1.y, standardize=FALSE) #Cross-validation
+view1.Ridge.2 = cv.glmnet(view1.x, view1.y, standardize=FALSE) #Cross-validation
+##Plot - cv
+op = par(mfrow = c(1,2))
+plot(view1.lasso.2$glmnet.fit, "norm", label = TRUE)
+plot(view1.lasso.2$glmnet.fit, "lambda", label = TRUE)
+plot(view1.lasso.2) ##Cv plot
+coef(view1.lasso.2, s=view1.lasso.2$lambda.1se) ##Best solution
+predict(view1.lasso.2$glmnet.fit, s=view1.lasso.2$lambda.1se, newx=view1.test.x) ##predict with best solution
+##plot - normal
+plot(view1.lasso.2)
+##Get numbers
+view1.lasso$df
+coef(view1.lasso) [,100]
+L100 = coef(view1.lasso) [,100]
+L99 = coef(view1.lasso) [,99]
+L98 = coef(view1.lasso) [,98]
+L97 = coef(view1.lasso) [,97]
+L96 = coef(view1.lasso) [,96]
+##Get variable names
+names(L100[L100!=0])
+names(L99[L99!=0])
+names(L98[L98!=0])
+names(L97[L97!=0])
+names(L96[L96!=0])
+
+## >>>>>>>>>>>>>> Lasso Regression & Ridge Regression variable selection ----(NYC Class version)
+install.packages("glmnet")
+library(glmnet)
+grid = seq(0,10,0.1) ##-> Change scale of shirnkage parameter
+modelRidge = cv.glmnet(x=data[,-Y], y=data[,Y], family="gaussian", alpha = 0, lambda = grid)
+modelLASSO = cv.glmnet(x=data[,-Y], y=data[,Y], family="gaussian", alpha = 1, lambda = grid)
+modelNET = cv.glmnet(x=data[,-Y], y=data[,Y], family="gaussian", alpha = 0.5, lambda = grid)
+##Plot
+modelRidgeF = modelRidge$glmnet.fit
+modelLASSOF = modelLASSO$glmnet.fit
+modelNETF = modelXXXXXX$glmnet.fit
+par(mfrow=c(1,3))
+plot(modelRidgeF, xvar='Lambda', main='Ridge')
+plot(modelLASSOF, xvar='Lambda', main='LASSO')
+plot(modelNETF, xvar='Lambda', main='Elastic NET')
+##Best Model
+coef(modelRidge, s=modelRidge$lambda.1se) ##Get coef
+coef(modelLASSO, s=modelLASSO$lambda.1se) ##Get coef
+coef(modelNET, s=modelNET$lambda.1se) ##Get coef
+predict(modelRidgeF, s=modelRidge$lambda.1se, newx=test) ##Predict
+predict(modelLASSOF, s=modelLASSO$lambda.1se, newx=test) ##Predict
+predict(modelNETF, s=modelNET$lambda.1se, newx=test) ##Predict
+
+
+
+
+
+
+
+
+##Dimensionality Reduction
+## *** Avoid curse of dimensionality
+## *** Help to eliminate irrelevant features or reduce noise
+##Partial Least Squares (PLS) ## --- Supervised Demention reduction
+Packages: pls /
+install.packages("pls")
+library(pls)
+set.seed(1)
+view1.pls = plsr(varY~., data = view1.train.data, scale = TRUE, validation = "cv") ## If no validation, could use "ncomp = #" to get coefficients
+summary(view1.pls)
+##Validation plot##
+validationplot(view1.pls, val.type = "MSEP") ## ---> Lowest MSE
+view1.pls.pred = predict(view1.pls, view1.test.data.x, ncomp = #) ## "#" --> the lowest number above
+mean((view1.pls.pred - view1.test.data.y)^2) ## MSE
+
+
+##Principal Component Regression (PCA) ## --- Un-Supervised Demention reduction
+##Capture the largest amount of variance
+## ((((((PCA in plain code))))))) ##
+eig = eigen(cor(data)) ##data should be numeric vars
+eig$values ##Represent the degree of importance
+eig$vectors ##The direction of each pcs
+vector1 = eig$vectors[,1,drop=F]
+vector2 = eig$vectors[,2,drop=F]
+vector.... ##If more dimensions
+New.pc1 = scale(data) %*% vector1
+new.pc2 = scale)data) %*% vector2
+new...  = ................vector..
+
+
+## ((((((PCA packages:pls)))))) ##
+Packages: pls /
+install.packages("pls")
+library(pls)
+set.seed(2)
+view1.pcr = pcr(varY~., data = view1.train.data, scale = TRUE, validation = "cv") ## If no validation, could use "ncomp = #" to get coefficients
+summary(view1.pcr)
+##Validation plot##
+validationplot(view1.pcr, val.type = "MSEP") ## ---> Lowest MSE
+view1.pcr.pred = predict(view1.pcr, view1.test.data.x, ncomp = #) ## "#" --> the lowest number above
+mean((view1.pcr.pred - view1.test.data.y)^2) ## MSE
+
+
+## ((((((PCA packages:base)))))) ##
+printModel = prcomp(x=data[,-Y], retx=TRUE, center=TRUE, scale=TRUE)
+##sqrt root of eigenvalue
+printModel$sdev
+##Direction of pcs
+printModel$rotation
+##Summary
+summary(printModel)
+##Plot
+plot(printModel$x[,1:2], ##PC1 and PC2
+pch=16, 
+col=as.numeric(data[,Y]))
+
+
+## (((((PCA packages:caret)))))) - Quick dimension reducation ##
+install.packages("caret")
+library(caret)
+pcaProc = preProcess(data[-Y], method = 'pca')
+dataProced = predict(pcaProc, data[-Y]) ##New data set with all PCs
+Train = dataProced[trainIndex,]
+Test = dataProced[-trainIndex,]
+
+
+
+
+
+
+
+##Singular Value Decomposition
+
+
+
+
+
+
+##Entropy Gain Selection
+## ((((( Manual plain code ))))) ##
+entropy = function(x) {
+  labelcounts = table(x)
+  prob = labelcounts/sum(labelcounts)
+  shannonent = -sum(prob * log(prob,2))
+  return(shannonent)
+}
+entropy_gain = function(x,y,value) {
+  n = length(y)
+  shan_tot = entropy(y)
+  subx1 = x[x<=value]
+  subx2 = x[x>value]
+  suby1 = y[x<=value]
+  suby2 = y[x>value]
+  n1 = length(suby1)
+  n2 = length(suby2)
+  shan_sub = (n1*entropy(suby1)+n2*entropy(suby2))/n
+  gain = shan_tot - shan_sub
+  return(gain)
+}
+best_gain = function(x,y) {
+  result = sapply(x, function(value)entropy_gain(x,y,value))
+  return(result[which.max(result)])
+}
+## >>> type in "data[,-Y]" and "data$Y"
+result1 = sapply(data[,-Y],function(col) best_gain(col, data$Y))
+selected1 = names(result1)[order(result1, decreasing=T)][1:#topvars] ##Specify # of top vars want to use
+selected1 ##Print out the names of vars
+## ((((( Packages ))))) ##
+install.packages("CORElearn")
+library(CORElearn)
+result2 = attrEval(Y~., data=data, estimator='GainRatio') ##Best vars for predict Y
+selected2 = names(result2)[order(result2, decreasing=T)][1:10] ##get top 10 best vars
+selected2 ##Print out the names of vars
+
+
+
+
+
+
+
+
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Non-linearity adding &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+Packages: ISLR / splines / locfit / gam
+
+## ---------------- Polynomial Regression --------------------- ##
+install.packages("ISLR")
+library(ISLR)
+view1.ploy.re = lm(varY~poly(varX,#), data = view1.train.data) ## "#" --> power (Regression)
+view1.ploy.cla = glm(varY~poly(varX,#), data = view1.train.data, family = binomial) ## "#" --> power (Classification)
+
+## Hypothesis test on selection ##
+view1.ploy.1 = lm(varY~poly(varX,1), data = view1.train.data) ## "#" --> power1
+view1.ploy.2 = lm(varY~poly(varX,2), data = view1.train.data) ## "#" --> power2
+view1.ploy.3 = lm(varY~poly(varX,3), data = view1.train.data) ## "#" --> power3
+view1.ploy.4 = lm(varY~poly(varX,4), data = view1.train.data) ## "#" --> power4
+view1.ploy.5 = lm(varY~poly(varX,5), data = view1.train.data) ## "#" --> power5
+
+view1.ploy.1 = glm(varY~poly(varX,1), data = view1.train.data, family = binomial) ## "#" --> power1
+view1.ploy.2 = glm(varY~poly(varX,2), data = view1.train.data, family = binomial) ## "#" --> power2
+view1.ploy.3 = glm(varY~poly(varX,3), data = view1.train.data, family = binomial) ## "#" --> power3
+view1.ploy.4 = glm(varY~poly(varX,4), data = view1.train.data, family = binomial) ## "#" --> power4
+view1.ploy.5 = glm(varY~poly(varX,5), data = view1.train.data, family = binomial) ## "#" --> power5
+
+anova(view1.ploy.1, view1.ploy.2, view1.ploy.3, view1.ploy.4, view1.ploy.5) ## --> Better P() value better fit the data
+
+## Prediction ##
+view1.ploy.re.pred = predict(view1.ploy.re, newdata = view1.test.data.x, se = T, type = "link" / "response") ## link --> predicition / response --> P()
+view1.ploy.cla.pred = predict(view1.ploy.cla, newdata = view1.test.data.x, se = T, type = "link" / "response") ## link --> predicition / response --> P()
+
+
+
+## ----------------- Step Function ----------------------- ##
+table(cut(varX, #)) ## --> "#" number of cut / show cutting points
+view1.step = lm(varY~cut(varX, #), data = view1)
+## Get coefficients
+coef(summary(view1.step))
+
+
+
+## ------------------ Splines ----------------------- ## <<<<<< NOT AVAILABLE >>>>>>>
+install.packages("splines")
+library(splines)
+model1 = lm(y~bs(x,df=10,degree=1)) ##Spline regression
+model2 = lm(y~ns(x,df=10)) ##Natural spline regression
+
+
+## ----------------------- Local Regression ------------------------------- ##
+install.packages("locfit")
+library(locfit)
+plot(varX, varY, cex = 0.5, col = "darkgrey")
+title("Local Regression")
+view1.local = loess(varY~varX, span = 0.2, data = view1) ##Change span to other %
+## Plot predicted value ##
+lines(varX, predict(view1.local, varX), col = "blue", lwd = 2)
+
+
+## ------------------------ <<<<<< Generalized Additive Model >>>>>>>> ------------------------------ ##
+install.packages("gam")
+library(gam)
+
+
+
+
+
+
+
+
+
+
+
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&& TREE-BASED Methods (Regression / Classification) &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+Packages: C50 / gmodels / RWeka / rpart / tree / randomForest / gbm
+
+## ---------- DEA -------------- ##
+
+##Check numberic var
+summary(view1$var1)
+##Check factor var
+table(view1$var2)
+
+##Split train / test dataset
+set.seed(12345)
+view1.rand = view1[order(runif(# of observ)),] ##random order the data
+##Check
+head(view1$var1)
+head(view1.rand$var1)
+##Split
+view1.rand.train = view1.rand[1:#,]
+view1.rand.test = view1.rand[#+1:#end,]
+##Check wether proper split %
+prop.table(table(view1.rand.train$var1))
+prop.table(table(var1.rand.test$var1))
+
+
+
+
+## ----------- Decision Tree (C50) classification ---------------- ##
+install.packages("C50")
+library(C50)
+##Run model - By default post-pure tree already
+Tree.m = C5.0(view1.rand.train[-varY], view1.rand.train$varY, trials = #, costs = NULL/cost.matrix) 
+##(Above) "#" - number of iterations in boosting
+##Cost matrix - adjust penalty to limit more costly error -> c(no(a)-no,yes(a)-no,no(a)-yes,yes(a)-yes) 
+cost.matrix = matrix(c(0,1,4,0), nrow = 2)
+##Check performance on train set
+summary(Tree.m) ##Could see each decision
+
+##Performance on test dataset
+Tree.m.pred = predict(Tree.m, view1.rand.test[-varY]) ##type = class / prob 
+##Confusion Matrix
+install.packages("gmodels")
+library(gmodels)
+CrossTable(view1.rand.test$varY, Tree.m.pred, prop.chisq = FALSE, prop.c = FALSE, prop.r = FALSE, prop.t = TRUE, dnn = c('actual', 'predicted'))
+
+
+
+
+## ------------ Decision Rules classification --------------- ##
+install.packages("RWeka")
+library(RWeka)
+
+##One Rule Classification
+one.r.classifier = OneR(type~., data = view1)
+##RIPPER Classification
+rip.classifier = JRip(type~., data = view1)
+
+##Find out rule
+summary(one.r.classifier) ##Most Important Rule
+summary(rip.classifier) ##Multiple rules - If Else Statement
+
+##Prediction
+one.r.classifier.pred = predict(one.r.classifier, view1.test.x)
+rip.classifier.pred = predict(rip.classifier, view1.test.x)
+
+##Confusion matrix
+install.packages("gmodels")
+library(gmodels)
+CrossTable(view1.test.y, one.r.classifier.pred, prop.chisq = FALSE, prop.c = FALSE, prop.r = FALSE, prop.t = TRUE, dnn = c('actual', 'predicted')) ##OneR
+CrossTable(view1.test.y, rip.classifier.pred, prop.chisq = FALSE, prop.c = FALSE, prop.r = FALSE, prop.t = TRUE, dnn = c('actual', 'predicted')) ##RIPPER
+
+
+## ------------ Decision Tree (rpart / RWeka) Regression --------------- ##
+
+## Regression Tree --------- Good for understand relationship
+install.packages("rpart") ##Good for mix cate/numeric
+library(rpart)
+
+##Run Model
+Tree.m = rpart(varY~., data = view1.rand.train)
+##Check rules
+Tree.m
+## -> node), split var, n of observ follow, deviation, Y value(Predicted), * denote terminal node
+##More statistical infor
+summary(Tree.m)
+
+##Plot decision tree
+install.packages("rpart plot")
+library(rpart plot)
+rpart.plot(Tree.m, digits = 3, fallen.leaves = TRUE, type = 3, extra = 101) ##digits (# of digits value show)
+##or fancy plot
+install.packages("rattle")
+library(rattle)
+fancyRpartPlot(Tree.m)
+
+##Predict on test dataset
+Tree.m.pred = predict(Tree.m, view1.rand.test[-varY])
+summary(Tree.m.pred)
+summary(view1.rand.test$varY)
+## -> Compare which quantiles very off
+##MSE(Test)
+mean((Tree.m.pred - view1.rand.test$varY)^2)
+##MAE - on avg how off to actual value
+MAE = function (actual, predicted) {
+mean(abs(actual - predicted))
+}
+MAE(Tree.m.pred, view1.rand.test$varY)
+##How predict corrlated with actual
+cor(Tree.m.pred, view1.rand.test$varY)
+
+## -------------- Decision tree (party) ------------------------ ##
+install.packages("party")
+library(party)
+
+
+
+
+
+
+
+
+
+
+
+
+## Model Tree --------------- Good for actual predict
+install.packages("RWeka") ##Good for all
+library(RWeka)
+
+##Run Model
+Tree.m = M5P(varY~., data = view1.rand.train)
+##Check rules
+Tree.m
+## -> Most similar except LM1, LM2 (linear model with fixed coffe for each var - result in prediction)
+##More statistical infor
+summary(Tree.m)
+
+##Predict on test dataset
+Tree.m.pred = predict(Tree.m, view1.rand.test[-varY])
+summary(Tree.m.pred)
+summary(view1.rand.test$varY)
+## -> Compare which quantiles very off
+##MSE(Test)
+mean((Tree.m.pred - view1.rand.test$varY)^2)
+##MAE - on avg how off to actual value
+MAE = function (actual, predicted) {
+mean(abs(actual - predicted))
+}
+MAE(Tree.m.pred, view1.rand.test$varY)
+##How predict corrlated with actual
+cor(Tree.m.pred, view1.rand.test$varY)
+
+
+
+
+## -------------- Other Simple Tree Models classification / Regression (Note) ----------------- ##
+install.packages("tree")
+library(tree)
+
+##Run Model
+Tree.m = tree(varY ~ ., data = view1.rand.train) ##Class / Regress -> VarY
+summary(Tree.m) ##Vars used, # of terminal nodes, misclassification rate(Train), Residual mean deviation(Small -> good fit)
+##Plot
+plot(Tree.m)
+text(Tree.m, pretty = 0)
+##More infor
+Tree.m (Rules)
+
+##Whether pruning tree?
+set.seed (1234)
+Tree.m.cv = cv.tree(Tree.m, FUN = prune.misclass) ##-> Classification tree
+Tree.m.cv = cv.tree(Tree.m) ##-> Regression tree
+
+##Plot -> Find the lowest - Size
+par(mfrow = c(1,2))
+plot(Tree.m.cv$size, Tree.m.cv$dev, type = "b")
+plot(Tree.m.cv$k, Tree.m.cv$dev, type = "b")
+
+##Prune tree
+Tree.m.prune = prune.misclass(Tree.m, best = #) ##Classification -> #(size) 
+Tree.m.prune = prune.tree(Tree.m, best = #) ##Regression -> #(size) 
+
+##Predict on test dataset
+Tree.m.pred = predict(Tree.m.prune, newdata = view1.rand.test[-varY]) ##Regression tree
+Tree.m.pred = predict(Tree.m.prune, newdata = view1.rand.test[-varY], type = "class") ##Classification
+##Confusion table (Classification)
+install.packages("gmodels")
+library(gmodels)
+CrossTable(view1.rand.test$varY, Tree.m.pred, prop.chisq = FALSE, prop.c = FALSE, prop.r = FALSE, prop.t = TRUE, dnn = c('actual', 'predicted')) 
+##MSE(Test)
+mean((Tree.m.pred - view1.rand.test$varY)^2)
+##MAE - on avg how off to actual value
+MAE = function (actual, predicted) {
+mean(abs(actual - predicted))
+}
+MAE(Tree.m.pred, view1.rand.test$varY)
+
+
+
+## ---------------------- Bagging & RandomForest ------------------------ ##
+install.packages("randomForest")
+library(randomForest)
+
+##Run Model
+randomforest.m = randomForest(varY~., data = view1.rand.test, mtry = #1, importance = TRUE, ntree = #2) 
+## - #1(m = p/3(Regression), m = p^-2 (classification),random), m = p (Bagging)
+## - #2(# of trees in bagging)
+randomforest.m ## -> # of trees, trees considered when split, mean of squared residuals, % var explained
+
+##Predict on test dataset
+randomforest.m.pred = predict(randomforest.m, newdata = view1.rand.test[-varY]) ##Regression tree
+randomforest.m.pred = predict(randomforest.m, newdata = view1.rand.test[-varY], type = "class") ##Classification
+##Confusion table (Classification)
+install.packages("gmodels")
+library(gmodels)
+CrossTable(view1.rand.test$varY, randomforest.m.pred, prop.chisq = FALSE, prop.c = FALSE, prop.r = FALSE, prop.t = TRUE, dnn = c('actual', 'predicted')) 
+##MSE(Test)
+mean((randomforest.m.pred - view1.rand.test$varY)^2)
+##MAE - on avg how off to actual value
+MAE = function (actual, predicted) {
+mean(abs(actual - predicted))
+}
+MAE(Tree.m.pred, view1.rand.test$varY)
+
+
+##Importance of each variables
+importance(randomforest.m)
+## -> Vars, % in MSE, INc Node Purity (The bigger value the important)
+
+
+
+## ------------------------ Boosting ------------------------------------- ##
+install.packages("gbm")
+library(gbm)
+
+##IF Classification, need to convert varY to binary
+view1$varY = ifelse(view1$varY == "Yes", 1, 0)
+
+##Run Model
+boost.m = gbm(varY~., data = view1.rand.test, shrinkage = #1, distribution = "gaussian"/"bernoulli", n.trees = #2, interaction.depth = #3)
+## distribution -> gaussian (regression) / bernoulli (Binary Classification)
+## #1 -> Contro learning rate of boosting
+## #2 -> # of tree (Too large will overfit) CV to get best
+## #3 -> Control the complexity of the boosting
+
+##Predict on test dataset
+boost.m.pred = predict(boost.m, newdata = view1.rand.test[-varY], n.tree = #2) ##Regression
+boost.m.pred = predict(boost.m, newdata = view1.rand.test[-varY], n.tree = #2, type = "response") ##And..
+boost.m.pred = as.factor(ifelse(boost.m.pred > 0.5, "Yes", "No"))  ##Classification
+##Convert back Yvar to factor
+view1$varY = as.factor(ifelse(view1$varY == 1, "Yes", "No"))
+
+##Confusion table (Classification)
+install.packages("gmodels")
+library(gmodels)
+CrossTable(view1.rand.test$varY, boost.m.pred, prop.chisq = FALSE, prop.c = FALSE, prop.r = FALSE, prop.t = TRUE, dnn = c('actual', 'predicted')) 
+##MSE(Test)
+mean((boost.m.pred - view1.rand.test$varY)^2)
+##MAE - on avg how off to actual value
+MAE = function (actual, predicted) {
+mean(abs(actual - predicted))
+}
+MAE(Tree.m.pred, view1.rand.test$varY)
+
+
+## <<<<<<<<<<<<<< Plain Code for Tree Model >>>>>>>>>>>>>>>>>>>>>>>> ##
+## (((((Target VarY = Categorical))))) ##
+## -------- Using Entropy FUN
+entropy = function(x) {
+  labelcounts = table(x)
+  prob = labelcounts/sum(labelcounts)
+  shannonent = -sum(prob * log(prob+1e-10,2))
+  return(shannonent)
+}
+## --------- Using Gini FUN
+gini = function(x) {
+  labelcounts = table(x)
+  prob = labelcounts/sum(labelcounts)
+  ginivalue = 1 - sum(prob ^ 2)
+  return(ginivalue)
+}
+
+## Identify Best Split of a dataset using Entropy/Gini (Call those FUNs first)
+## -> Gini ((Split binary var))
+# parent node gini
+gini_p = gini(data$varY)
+# children node
+node1 = data[data$var1=='yes', ]
+node2 = data[data$var1=='no', ]
+# children node gini
+gini_1 = gini(node1$varY)
+gini_2 = gini(node2$varY)
+# weight gini 
+gini_w = (nrow(node1)*gini_1 + nrow(node2)*gini_2)/nrow(data)
+# gini gain is 0.077
+gini_gain_var1 = gini_p - gini_w ##---> If split varY by this var, how many infor gain?
+
+## -> Gini ((Split multiple level var))
+# parent node gini
+gini_p = gini(data$cheat)
+# children node, there are 3 possible splite
+gini_gain_mstatus = list()
+for (critic in c('single','married','divorced')){
+  node1 = data[data$mstatus==critic,]
+  node2 = data[data$mstatus!=critic,]
+  # children node gini
+  gini_1 = gini(node1$cheat)
+  gini_2 = gini(node2$cheat)
+  # weight gini 
+  gini_w = (nrow(node1)*gini_1 + nrow(node2)*gini_2)/nrow(data)
+  # gini gain
+  gini_gain_mstatus[[critic]] = gini_p - gini_w
+} ##------> If split varY by each level, how many infor each level gain? (Find the best split)
+
+## -> Gini ((Split the numeric var))
+gini_continue = function(var2,varY,value) {
+  n = length(varY)
+  gini_parent = gini(varY)
+  subx1 = var2[var2<=value]
+  subx2 = var2[var2>value]
+  suby1 = varY[var2<=value]
+  suby2 = varY[var2>value]
+  n1 = length(suby1)
+  n2 = length(suby2)
+  gini_child = (n1* gini(suby1)+n2*gini(suby2))/n
+  gain = gini_parent - gini_child
+  return(gain)
+}
+result = sapply(var2,function(value)gini_continue(var2,varY,value))
+gini_gain_var2 = var2[which.max(result)] ##------> The best numeric value to achieve the 
+
+## -> Entropy ((Split the categorical var))
+entropy_gain = function(data,varY,var1,level) {
+  n = nrow(data)
+  shan_tot = entropy(data[varY])
+  sub1 = data[data[var1]==level,]
+  sub2 = data[data[var1]!=level,]
+  sub1n = nrow(sub1)
+  sub2n = nrow(sub2)
+  shan_sub = (sub1n* entropy(sub1[varY])+sub2n*entropy(sub2[varY]))/n
+  gain = shan_tot - shan_sub
+  return(gain)
+}
+sapply(c('level1','level2','level3'), function(x) entropy_gain(data,varY,var1,x))
+##---------> If split varY by each level, how many infor each level gain? (Find the best split)
+
+
+
+
+
+## (((((Target VarY = Numerical))))) ##
+##
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&& ANN (Artifical Neuroul Network) &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+Packages: neuralnet / 
+
+install.packages("neuralnet")
+library(neuralnet)
+
+## Normalize (Not Normal DIS) or Standardize (Normal DIS)
+## Normalize
+normalize = function (x) {
+return ((x - min(x)) / (max(x) - min(x)))
+}
+## Apply Normalize FUN to a table
+view1 = as.data.frame(lapply(view1, normalize))
+## Standarize 
+view1 = as.data.frame(scale(view1))
+var = as.data.frame(scale(var))
+## Check between 0 and 1
+summary(view1)
+summary(var)
+
+##Run Model
+network.m = neuralnet(varY~., data = view1.train.data, hidden = #) ## -> "#" denotes the number of hidden nodes (Find the best)
+
+##Predict
+network.m.pred = compute(network.m, view1.test.x) ## -> 1.neurons - weight for each node; 2.net.result - predicted values
+##Plot network
+plot(network.m) ## weights of each node, SSE, steps of complxity
+
+##Evaluating Performance
+##Numic prediction
+cor(network.m.pred$net.result, view1.test.y) ## -> the higher the better
+##Classification
+install.packages("gmodels")
+library(gmodels)
+CrossTable(view1.test.y, network.m.pred$net.result, prop.chisq = FALSE, prop.c = FALSE, prop.r = FALSE, prop.t = TRUE, dnn = c('actual', 'predicted')) 
+
+
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&& Association Rule (Market Basket Analysis) Unsupervised &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+Packages: arules / 
+
+install.packages("arules")
+library(arules)
+
+##Reading transactional data into R
+view1 = read.transactions("C:/Users/mark.li/Desktop/TESTR.csv", sep = ",") ## Binary matrix, column as items, row as transactions
+summary(view1) 
+## number of transactions, unique items, density (Propotion of non-zero cells - calculate purchased items total)
+## Frequency by item / frequency by Size of transaction
+
+## Check items on specific transactions
+inspect(view1[1:5])
+## Check frequency on speific items
+itemFrequency(view1[,1:5])
+
+##Visualize item Frequency (By support vale or Top #)
+itemFrequencyPlot(view1, support = 0.1) ## At least 10% support items
+itemFrequencyPlot(view1, topN = 20) ## Top 20 support value items
+
+##Scatter plot whole matrix
+image(view1[1:200]) ## Plot whole data
+image(sample(view1, 100)) ## Plot sample data
+
+##Run Model
+arule.m = apriori(data = view1, parameter = list(support = 0.006, confidence = 0.25, minlen = 2))
+## Support -> If 30 day's period (Data period), twice a day (assumed) = 60 purchases, support value = 60 / # of total item purchased
+## confidence -> Show up ?% of time - usually 0.25 (25% of time shows up)
+## minlen = 2 (At least 2 items combinations, 1 is not worth evaluate)
+
+##Evaluate Rules developed
+summary(arule.m)
+## Statisc of support, confidence, lift, different size and count if rules (lhs + rhs = size)
+
+##Check most relevant / important rules
+rules.work = inspect(sort(arule.m, by = 'lift') [1:10] ## Top 10 rules by high lift value / Default = DESC, if not -> decreasing = FALSE
+##Check Rules for specific items
+rules.work = inspect(subset(arule.m, item / lhs / rhs %in% / %pin% / %ain% "xxxx" / c("xxxx", "xxxxxx"), confidence / lift / support > #))
+## item / lhs / rhs -> Where to look up the keywords
+## %in% - Match at least one word / %pin% - partial match / %ain% - match all the words
+
+##Export to CSV file
+write(rules.work, file = "rule.csv", sep = ",", quote = TRUE, row.name = FALSE)
+##Share with others to group rules into "Actionable" - works / "Trivial" - Too obvious / "Inexplicable" - Non-sense
+
+
+
+
+
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&& Support Vector Machine (Classification) &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+Packages: e1071 / kernlab
+
+## ------------------------------------------- Package 1
+install.packages("e1071")
+library(e1071)
+
+## Run models - step 1
+## linear
+view1.svm.linear = svm(HIGH~., data = view1.train.data, kernel = "linear", cost = 10, scale = FALSE)
+## Ploy-2
+view1.svm.ploy2 = svm(HIGH~., data = view1.train.data, kernel = "polynomial", cost = 10, degree = 2, scale = FALSE)
+## ploy-3
+view1.svm.ploy3 = svm(HIGH~., data = view1.train.data, kernel = "polynomial", cost = 10, degree = 3, scale = FALSE)
+## Radial
+view1.svm.radial = svm(HIGH~., data = view1.train.data, kernel = "radial", cost = 10, gamma = 1, scale = FALSE)
+
+## ROC graph
+install.packages("ROCR")
+library(ROCR)
+rocplot = function(pred, truth, ...) {
+predob = prediction (pred, truth)
+perf = performance (predob, "tpr", "fpr")
+plot (perf, ...) }
+
+## Get predicted classes on traning data set - step 2
+## linear
+view1.svm.linear.pre = svm(HIGH~., data = view1.train.data, kernel = "linear", cost = 10, scale = FALSE, decision.values = T)
+## Ploy-2 pre
+view1.svm.ploy2.pre = svm(HIGH~., data = view1.train.data, kernel = "polynomial", cost = 10, degree = 2, scale = FALSE, decision.values = T)
+## ploy-3 pre
+view1.svm.ploy3.pre = svm(HIGH~., data = view1.train.data, kernel = "polynomial", cost = 10, degree = 3, scale = FALSE, decision.values = T)
+## Radial pre
+view1.svm.radial.pre = svm(HIGH~., data = view1.train.data, kernel = "radial", cost = 10, gamma = 1, scale = FALSE, decision.values = T)
+
+## Get predicted value on testing data set - step 3
+view1.svm.linear.y = attributes(predict(view1.svm.linear.pre, view1.test.x, decision.values = TRUE))$decision.values
+view1.svm.ploy2.y = attributes(predict(view1.svm.ploy2.pre, view1.test.x, decision.values = TRUE))$decision.values
+view1.svm.ploy3.y = attributes(predict(view1.svm.ploy3.pre, view1.test.x, decision.values = TRUE))$decision.values
+view1.svm.radial.y = attributes(predict(view1.svm.radial.pre, view1.test.x, decision.values = TRUE))$decision.values
+
+## Produce ROC
+par(mfrow = c(4,1))
+rocplot (view1.svm.linear.y, view1.train.data$HIGH, main = "Linear")
+abline(a = 0, b = 1, lwd = 2, lty = 2)
+rocplot (view1.svm.ploy2.y, view1.train.data$HIGH, main = "ploy2")
+abline(a = 0, b = 1, lwd = 2, lty = 2)
+rocplot (view1.svm.ploy3.y, view1.train.data$HIGH, main = "ploy3")
+abline(a = 0, b = 1, lwd = 2, lty = 2)
+rocplot (view1.svm.radial.y, view1.train.data$HIGH, main = "radial")
+abline(a = 0, b = 1, lwd = 2, lty = 2)
+
+##Accurate Rate 
+mean (view1.svm.linear.y == view1.test.y)
+mean (view1.svm.ploy2.y == view1.test.y)
+mean (view1.svm.ploy3.y == view1.test.y)
+mean (view1.svm.radial.y == view1.test.y)
+
+##Error rate 
+mean (view1.svm.linear.y != view1.test.y)
+mean (view1.svm.ploy2.y != view1.test.y)
+mean (view1.svm.ploy3.y != view1.test.y)
+mean (view1.svm.radial.y != view1.test.y)
+
+
+
+
+## ------------------------------------- Package 2
+install.packages("kernlab")
+library(kernlab)
+
+## Standardize / Normalize (Automatic)
+
+##Run Model
+view1.svm = ksvm(view1.train.y ~ view1.train.x, data = view1.train.data, kernel = "vanilladot" / "ploydot" / "tanhdot" / "rbfdot", C = 1)
+## -> Kernal types --  "vanilladot" (Linear) / "ploydot" (Ploy) / "tanhdot" (hyperbolic tangentsigmoid) / "rbfdot" (radial basis)
+## -> C -- cost of violation of contraints "#"
+
+##Prediction
+view1.svm.pred = predict(view1.svm, view1.test.x, type = "response" / "probabilities")
+
+##Confusion table
+install.packages("gmodels")
+library(gmodels)
+CrossTable(view1.test.y, view1.svm.pred, prop.chisq = FALSE, prop.c = FALSE, prop.r = FALSE, prop.t = TRUE, dnn = c('actual', 'predicted')) 
+
+##Error / Accurate Rate
+agreement = view1.svm.pred == view1.test.y
+table(agreement) ##- numbers
+prop.table(table(agreement)) ##- rate
+
+
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Unsupervised Learning &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+## ----------------------- Principal Components Analysis (PCA) -------------------------------- ##
+Packages: stats / 
+
+## ---- package: stats
+install.packages("stats")
+library(stats)
+
+##Run Model
+pca.m = prcomp(view1, scale = TRUE)
+names(pca.m) 
+## "sdev" - SD of each PC
+## "rotation" - PC loading vectors (p of them)
+## "center" - means of each variance
+## "scale" - SD of each Variance
+## "x" - PC scores vectors
+
+##Create var contains variance explained by each PC
+variance = pca.m$sdev^2
+pvar = variance / sum(variance)
+
+##Plot variance (PVE)
+par(mfrow = c(1,2))
+## Variance by each PC
+plot(pvar, xlab = "Principal Component", ylab = "Proportion of variance explained", ylim = c(0,1), type = 'b')
+## Variance cumulative by each PC
+plot(cumsum(pvar), xlab = "Principal Component", ylab = "Proportion of variance explained", ylim = c(0,1), type = 'b')
+
+##Plot first 3 PCs by color code different level of an categorical variable
+##Create functions to code different color
+cols = function (vec) {
+cols = rainbow (length (unique(vec)))
+return (cols [as.numeric(as.factor(vec))])
+}
+##Plot
+par(mfrow = c(1,3))
+plot(pca.m$x[,1:2], col = cols(view1$var), pch = 19, xlab = "Z1", ylab = "Z2")
+plot(pca.m$x[,c(1,3)], col = cols(view1$var), pch = 19, xlab = "Z1", ylab = "Z3")
+plot(pca.m$x[,2:3], col = cols(view1$var), pch = 19, xlab = "Z2", ylab = "Z3")
+
+
+
+## ----------------------- K mean Clustering -------------------------------- ##
+Packages: stats / 
+
+## ---- package: stats
+install.packages("stats")
+library(stats)
+
+##Scale the data first
+view1 = as.matrix(scale(view1))
+
+##Run Model
+k.mean.m = kmeans(view1, k, nstart = 20 / 50) ## -> specify "k" Assumptions
+k.mean.m$size ## -> size of each cluster
+k.mean.m$centers ## -> charatiristics across all features (Negative < AVG / Positive > AVG)
+##View aggregate numbers of each group
+view1$cluster = k.mean.m$cluster
+aggregate(data = view1, var1~cluster, mean / max / ...)
+# Sqrt error mean select K / usually sqrt(n/2) = k
+# Use multiple run to identify the converge of centriods to conque randomness 10 = min
+# Or use elbow method - plot of # of clusters and % of variance explained (Choose the "elbow" point)
+
+
+
+# ((((((Plain Code))))))) - k mean #
+
+datamat = as.matrix(data)
+
+# --- Distance FUN --- #
+distfunc = function(veca, vecb) {
+    return(sqrt(sum((veca - vecb)^2)))
+}
+
+# --- FUN generates rand centroids --- #
+randcent = function(dataset, k) {
+    centroids = apply(dataset, 2, function(x) {
+        minj = min(x)
+        rangj = max(x) - minj
+        return(minj + rangj * runif(k))
+    })
+    return(centroids)
+}
+
+
+# --- Create k mean FUN --- #
+kmeansfunc = function(dataset,k,distmean=distfunc,createcent=randcent){
+  n = nrow(dataset)
+  clusterassment = matrix(rep(0,2*n),nrow=n,ncol=2)
+  centroids = createcent(dataset,k)
+  clusterchanged = TRUE
+  while(clusterchanged) {
+    clusterchanged = FALSE
+    for (i in 1:n) {
+      mindist = Inf
+      minindex =  -1
+      for (j in 1:k){
+        distji = distmean(centroids[j,],dataset[i,])
+        if(distji<mindist){
+          mindist = distji
+          minindex = j
+        }
+      }
+      if(clusterassment[i,1] != minindex) clusterchanged = TRUE
+      clusterassment[i,] = c(minindex,mindist)
+    }
+# print(centroids)
+    for (cent in 1:k) {
+      ptsinclust = dataset[clusterassment[,1]==cent, ]
+      centroids[cent,] = apply(ptsinclust,2,mean)
+    }
+  }
+  return(list(centroids=centroids,clusterassment=clusterassment))
+}
+
+# ((((((Plain Code))))))) - k mean (Bisecting) #
+
+
+datamat = as.matrix(data)
+
+# --- Distance FUN --- #
+distfunc = function(veca, vecb) {
+    return(sqrt(sum((veca - vecb)^2)))
+}
+
+
+# --- Create k mean FUN --- #
+bikmeans <- function(dataset,k,distmean=distfunc){
+  n <- nrow(dataset)
+  clusterassment <- matrix(rep(1,2*n),nrow=n,ncol=2)
+  centroids <- apply(dataset,2,mean)
+  centlist <- matrix(centroids,ncol=2)
+  for(j in 1:n){
+    clusterassment[j,2] <- distmean(centroids,dataset[j,])
+  }
+  while(nrow(centlist)<k) {
+    lowestsse <- Inf
+    for (i in 1:nrow(centlist)) {
+      ptsincurrcluster <- dataset[clusterassment[,1]==i, ]
+      kmeansres <- kmeansfunc(ptsincurrcluster,2,distmean)
+      centroidmat <- kmeansres$centroids
+      splitclustass <- kmeansres$clusterassment
+      ssesplit <- sum(splitclustass[,2]^2)
+      ssenotsplit <- sum((clusterassment[clusterassment[,1]==i,2])^2)
+      if ((ssesplit+ssenotsplit)<lowestsse){
+        bestcenttosplit <- i
+        bestnewcents <- centroidmat
+        bestclustass <- splitclustass
+        lowestsse <- ssesplit + ssenotsplit
+      }
+    }
+    centlist[bestcenttosplit,] <- bestnewcents[1,]
+    centlist <- rbind(centlist,bestnewcents[2,])
+    bestclustass[bestclustass[,1]==2,1] <- nrow(centlist)
+    bestclustass[bestclustass[,1]==1,1] <- bestcenttosplit
+    clusterassment[clusterassment[,1]==bestcenttosplit,] <- bestclustass
+  }
+  return(list(centlist=centlist,clusterassment=clusterassment))
+}
+
+
+
+
+
+## ----------------------- Hierarchical Clustering -------------------------------- ##
+Packages: stats / 
+
+## ---- package: stats
+install.packages("stats")
+library(stats)
+
+##Scale the data first
+means = sapply(data, mean)
+SD = sapply(data, sd)
+dataScale = scale(data, center = means, scale = SD)
+Dist = dist(dataScale, method = "euclidean") # Euclidean distance
+##Plot Heatmap Groups
+heatmap(as.matrix(Dist), labRow = F, labCol = F)
+
+
+##Run Model
+hier.m = hclust(Dist, method = "complete" / "average" / "single" / "centroid") ## -> Euclidean Distance
+hier.m = hclust(as.dist(1 - cor(t(view1))), method = "complete" / "average" / "single" / "centroid") ## -> Correltaion Distance
+
+##Cut the tree (# of clusters)
+hier.m = cutree(hier.m, #)
+
+
+##Plot Tree (With cut line)
+plot(hier.m, main = "xxxx Linkage", xlab = " ", sub = " ", cex = .9)
+abline(h = 139, col = "red") ## >cutree(hier.m, #)
+
+
+## --- Compare different clustering methods 
+table (hier.m, k.mean.m$cluster)
+## --- Clustering on Principal components 
+pca.m = prcomp(view1, scale = TRUE)
+hier.m = hclust(dist(pca.m$x[,1:5]), method = "complete" / "average" / "single" / "centroid") ## -> Euclidean Distance
+hier.m = hclust(as.dist(1 - cor(t(pca.m$x[,1:5]))), method = "complete" / "average" / "single" / "centroid") ## -> Correltaion Distance
+
+
+
+
+
+################### ------------------- Recommendation System ------------------- #############################
+
+## ------------------ Collaborative Filtering - Based on same people rating (Recommendation System) -------------------- ##
+
+# -> Edculidian dist (How long the distance) Very basic..
+
+## Create a matrix of users and movies by ratings -------- Step 1
+matrix.rating = c(#,#,#,#,#,NA,#,#,#,#,NA,#,NA)
+matrix.rating = matrix(matrix.rating, byrow = T/F, ncol = #/nrow = #)
+colnames(matrix.rating) = paste0("Movie", 1:#) ## Movie1, Movie2, ... by col
+rownames(matrix.rating) = paste0("User", 1:#) ## User1, User2, ... by row
+
+## Using cast to combine vars for matrix
+install.packages("reshape2")
+library(rehsape2)
+rating.matrix = acast(data, var_user ~ var_item, value.var = "var_rating")
+install.packages("recommenderlab")
+library(recommenderlab)
+# -> convert to realRatingMatrix
+rating.matrix = as(rating.matrix, "realRatingMatrix")
+
+
+
+## Create Correlation matrix of movie ratings by user against user ------- Step 1.2 (Get a sense of the correlation)
+User.cor.table = cor(t(matrix.rating), method = "pearson", use = "pairwise.complete.obs") # pairwise.complete.obs -> Ignore NA
+
+
+## Create FUN to identify top match users that have similar taste ------- Step 2
+topmatch = function(Rating.matrix, user, n.top = 3) {   # Top 3 users
+      similar = as.matrix(1/(1 + dist(Rating.matrix))) # Edculidian dist
+      peoplevec = similar[user,]
+      res = peoplevec[order(peoplevec, decreasing = T)][1:n.top]
+      return(res)
+}
+# ex. topmatch(matrix.rating, "user2") # -> Find the top 2 similar users to user2 
+
+## Create FUN take above FUN to recommend the movies you might like --------- Step 3
+getrecommend = function(Rating.matrix, user) {
+    # how many no rating items
+    unrate = colnames(Rating.matrix)[is.na(Rating.matrix[user,])] # -> all unrate movie names of that user
+    if (length(unrate) == 0)
+       return(NA)
+    # Find top match users for that user
+    other = topmatch(Rating.matrix, user, n.top = 6)
+    # Find top match users' rating for the unrated movies of that user
+    otherscore = Rating.matrix[names(other), unrate, drop = F]
+    # Score each choice
+    choice = numeric()
+    for (i in 1:length(unrate)) {
+        choice[i] = sum(otherscore[,i] * other, na.rm = T) / sum(other[!is.na(otherscore[,i])])
+    }
+    names(choice) = unrate
+    res = choice[order(choice, decreasing = T)]
+    return(res)
+}
+# ex. getrecommend(matrix.rating, ""User2") # return the top recommended movies by predicted rating
+
+
+
+## ----------------- Singular Value Decomposition (SVD) (Recommendation system) ------------------------ ##
+
+# -> Cosine dist (How large the angle, how likely) Improved.. 
+
+## Create a matrix of users and movies by ratings -------- Step 1
+matrix.rating = c(#,#,#,#,#,NA,#,#,#,#,NA,#,NA)
+matrix.rating = matrix(matrix.rating, byrow = T/F, ncol = #/nrow = #)
+colnames(matrix.rating) = paste0("Movie", 1:#) ## Movie1, Movie2, ... by col
+rownames(matrix.rating) = paste0("User", 1:#) ## User1, User2, ... by row
+
+
+install.packages("plyr")
+install.packages("proxy")
+
+## Create FUN to identify top match users that have similar taste ------- Step 2
+topmatch_svd = function(matrix.rating, user, n.top = 3, dim = 3) {
+
+     library(plyr)
+     matrix.rating = aaply(matrix.rating, 2, function(x) { # ->impute NA with mean
+            x[is.na(x)] = mean(x, na.rm = T)
+            return(x)
+     })
+     matrix.rating = t(matrix.rating)
+     res = svd(matrix.rating) # Apply singluar value decomposition
+     # Create user matrix
+     datau = data.frame(res$u[, 1:dim])
+     rownames(datau) = rownames(matrix.rating)
+     library(proxy)
+     similar = as.matrix(simil(datau, method = "cosine")) # cosine similarity
+     peoplevec = similar[people,]
+     res = peoplevec[order(peoplevec, decreasing = T)][1:n.top]
+     return(res)
+}
+# ex. topmatch_svd(matrix.rating, "user2") # -> Find the top 2 similar users to user2 
+
+
+## Create FUN take above FUN to recommend the movies you might like --------- Step 3
+getrecommend_svd = function(matrix.rating, user) {
+    unrate = colnames(Rating.matrix)[is.na(Rating.matrix[user,])] # -> all unrate movie names of that user
+    if (length(unrate) == 0)
+       return(NA)
+    # Find top match users for that user
+    other = topmatch_svd(Rating.matrix, user, n.top = 6)
+    # Find top match users' rating for the unrated movies of that user
+    otherscore = Rating.matrix[names(other), unrate, drop = F]    
+    # Score each choice
+    choice = numeric()
+    for (i in 1:length(unrate)) {
+        choice[i] = sum(otherscore[,i] * other, na.rm = T) / sum(other[!is.na(otherscore[,i])])
+    }
+    names(choice) = unrate
+    res = choice[order(choice, decreasing = T)]
+    return(res)
+}
+# ex. getrecommend(matrix.rating, ""User2") # return the top recommended movies by predicted rating
+
+
+
+## ------------------- IBCF (Item based collaborative filtering) (recommendation system) --------------------- ##
+install.packages("recommenderlab")
+library(recommenderlab)
+
+# Matrix already created by above seasion
+# -> convert to realRatingMatrix
+rating.matrix = as(rating.matrix, "realRatingMatrix")
+colnames(matrix.rating) = paste0("Movie", 1:#) ## Movie1, Movie2, ... by col
+rownames(matrix.rating) = paste0("User", 1:#) ## User1, User2, ... by row
+
+# Run model
+ml.recommModel = Recommender(matrix.rating[1:#], method = "IBCF")
+# -> learned using # users, type of recommender = IBCF
+
+# Predict
+ml.predict = predict(ml.recommModel, matrix.rating[#:#], n = 5)
+as(ml.predict, "list")
+# show #:# users, their top 5 recommendations by list
+
+
+
+
+
+
+
+&&&&&&&&&&&&&&&&&& Evaluate Classification &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+## Confusion Matrix
+## Type --- 1
+install.packages("gmodels")
+library(gmodels)
+CrossTable(view1.test.y, view1.svm.pred, prop.chisq = FALSE, prop.c = TRUE, prop.r = TRUE, prop.t = TRUE, dnn = c('actual', 'predicted')) 
+## Type --- 2
+install.packages("caret")
+library(caret)
+confusionMatrix(view1.svm.pred, view1.test.y, positive = "Yes")
+
+
+## Check Prop (Very Detail)
+check.t = c(actual_type, pred_type, prob_True_positive)
+
+
+## ROC graph
+install.packages("ROCR")
+library(ROCR)
+pred = prediction(predictions = view1.svm.pred, labels = view1.test.y)
+perf = performance(pred, measure = "tpr", x.measure = "fpr")
+plot(perf, main = "ROC curve for this classifier", col = "blue", lwd = 3)
+abline(a = 0, b = 1, lwd = 2, lty = 2)
+## Calculate AUC (Area Under Curve) --- 0.5(bad) -> 1(Great)
+perf.auc = performance(pred, measure = "auc")
+unlist(perf.auc@y.values) ##AUC Value
+
+
+## Kappa Statistic (Adjusted Accuracy Rate)
+install.packages("irr")
+library(irr)
+kappa = kappa2(data.frame(view1.test.y, view1.svm.pred))$value
+
+
+## True Positive rate (0 - 1)
+install.packages("caret")
+library(caret)
+sensitivity(view1.svm.pred, view1.test.y, positive = "Yes")
+
+## True Negative rate (0 - 1)
+install.packages("caret")
+library(caret)
+specificity(view1.svm.pred, view1.test.y, negative = "No")
+
+
+
+&&&&&&&&&&&&&&&&&& Data Resampling / Cross-validation &&&&&&&&&&&&&&&&&&&&&&&&
+
+## ------------------ Hold Out Method (Sample segments has similar proportion of each var)
+Install.packages("caret")
+library(caret)
+
+train = createDataPartition(view1$Yvar, p = 0.75) ## 75% -> Train set
+view1.train.data = view1[train, ]
+view1.test.data = view1[-train, ] ## 25% -> test set
+
+
+
+## ----------------- K - Fold Cross-Validation (Classification = Kappa score)
+Install.packages("caret")
+library(caret)
+Install.packages("irr")
+library(irr)
+install.packages("C50")
+library(C50)
+
+set.seed(123)
+folds = createFolds(view1$Yvar, k = #)
+cv.results = lapply(folds, function (x) {
+view1.train.data = view1.all.data[x, ] 
+view1.test.data = view1.all.data[-x, ] 
+view1.model = C5.0(Yvar~., data = view1.train.data)  ## --> Change Model Here ***
+view1.model.pred = predict(view1.model, view1.test.data) ##Might be specify "Class" "response" "prob" "posterior" "raw" "probability" / If no class, using prob convert ot class # HIGH = ifelse (view1$IR >= .7, "Yes","No") / Data.frame it
+view1.test.y = view1.test.data$Yvar 
+kappa = kappa2(data.frame(view1.test.y, view1.model.pred))$value
+return (kappa)
+})
+mean(unlist(cv.results)) ## CV Kappa score
+## ---- IF 0 Category / negative kappa
+unlist(cv.results)
+kappas = data.frame(unlist(cv.results)); non.zero.kappa = kappas[kappas>0,] 
+length(non.zero.kappa)
+non.zero.kappa.mean.5 = mean(non.zero.kappa)
+non.zero.kappa.mean.5
+## --- Avg Kappa --- ##
+mean(non.zero.kappa.mean.1, non.zero.kappa.mean.2, non.zero.kappa.mean.3, non.zero.kappa.mean.4, non.zero.kappa.mean.5)
+## <0 less than chance agreement (Poor)
+## 0.01-0.20 Slight agreement (Slight)
+## 0.21-0.40 Fair agreement (Fair)
+## 0.41-0.60 Modernate agreement (Moderate)
+## 0.61-0.80 Substanial agreement (Substantial)
+## 0.81-0.99 Almost perfect agreement (Almost perferct)
+
+
+## ----------------- K - Fold Cross-Validation (Multiple regression = MSE)
+Install.packages("caret")
+library(caret)
+
+set.seed(123)
+folds = createFolds(view1$Yvar, k = #)
+cv.results = lapply(folds, function (x) {
+view1.train.data = view1[x, ]
+view1.test.data = view1[-x, ]
+view1.model = lm(Yvar~., data = view1.train.data)
+view1.model.pred = predict(view1.model, view1.test.data) ##Might be specify "Class" "response" "prob" "posterior" "raw" "probability"
+view1.test.y = view1.test.data$Yvar
+MSE = mean( (view1.test.y - view1.model.pred)^2)
+})
+mean(unlist(cv.results)) ## CV MSE
+
+
+
+
+
+&&&&&&&&&&&&&&&&&&&&&&&& Automatic parameter tuning and model comparsion &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+## ------------- Simple Model Parameter Tuning ------------------------ ##
+Packages: caret / 
+
+install.packages("caret")
+library(caret)
+
+ctrl = trainControl(method = "cv", number = 10 / "LGOCV", p = 0.75 / "repeatedcv", number = 10, repeats = 10 / "boot", number = 25 / , selectionFunction = "oneSE" / "best" / "tolerance") 
+## "oneSE" -> best within simplicity / "best" -> best / "tolerance" -> simplicity
+
+grid = expand.grid(.parameter1 = "xxx" / c(#,#,#), .parameter2 = "xxx" / c(#,#,#), .parameter3 = "xxx" / c(#,#,#)) ##Depends on Models
+
+set.seed(300)
+m = train(Yvar~., data = view1, method = "C5.0", metric = "RMSE" / "Rsquared" / "Accuracy" / "Kappa", trControl = ctrl, tuneGrid = grid)
+m ## Summary best model and parameters used
+
+##Predict
+m.pred = predict(m, view1) ##Use the best model to predict
+
+
+
+## ------------- Bagging ------------------------ ##
+Packages: caret / 
+
+install.packages("caret")
+library(caret)
+
+
+
+
+
+## ------------- Boosting ------------------------ ##
+
+
+
+
+## -------------- Create loop for simple parameter tunning ---------------- ##
+##RDA Loop##
+kappa.rda = rep(0,50) ## Insert tunning parameter sacle
+for (i in 1:50) { ## Change scale here too
+view1.rda = rda(HIGH~., data = view1.train.data, lambda = i*0.1) ## --- Change Model
+view1.predict.rda = predict(view1.rda, data = view1.test.x, type = "class") ## --- Change Model
+view1.predict.rda = view1.predict.rda$class ## --- Change Model
+view1.predict.rda = data.frame(view1.predict.rda) ## --- Change Model
+kappa.rda[i] = kappa2(data.frame(view1.test.y, view1.predict.rda))$value[1] ## Only change predict value / kappa name
+}
+plot(kappa.rda) ## Change kappa name
+which.max(kappa.rda)
+kappa.rda[which.max(kappa.rda)]
+
+
+
+
+
+
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Optimization with R &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+
+## --------------- Linear Programming Optimization ------------------------- ##
+Packages: lpSolve /
+
+install.packages("lpSolve")
+library(lpSolve)
+
+# Set up problem: maximize
+# x1 + 9 x2 + x3 subject to
+# x1 + 2 x2 + 3 x3 <= 9
+# 3 x1 + 2 x2 + 2 x3 <= 15
+#
+f.obj <- c(1, 9, 1) ## -> vector coefficients for each variable in function 
+f.con <- matrix (c(1, 2, 3, 3, 2, 2), nrow=2, byrow=TRUE) ## -> coefficients for each variable in constraint function
+f.dir <- c("<=", "<=") ## -> constraint function
+f.rhs <- c(9, 15) ## -> constraint function
+#
+# Now run.
+#
+lp ("max", f.obj, f.con, f.dir, f.rhs) ## -> int.vec = 1:# (Vector #) as integer
+## Not run: Success: the objective function is 40.5
+lp ("max", f.obj, f.con, f.dir, f.rhs)$solution
+## Not run: [1] 0.0 4.5 0.0
+
+# Get sensitivities / upper lower
+#
+lp ("max", f.obj, f.con, f.dir, f.rhs, compute.sens=TRUE)$sens.coef.from
+## Not run: [1] -1e+30 2e+00 -1e+30
+lp ("max", f.obj, f.con, f.dir, f.rhs, compute.sens=TRUE)$sens.coef.to
+## Not run: [1] 4.50e+00 1.00e+30 1.35e+01
+
+
+## --------------------- Packages ------------------ ##
+
+LP (Linear programming, 90C05): boot, clpAPI, cplexAPI, glpkAPI, limSolve, linprog, lpSolve, lpSolveAPI, quantreg, rcdd, Rcplex, Rglpk, Rmosek, Rsymphony 
+• GO (Global Optimization): nloptr, irace 
+• SPLP (Special problems of linear programming like transportation, multi-index, etc., 90C08): clue, lpSolve, lpSolveAPI, optmatch, quantreg, TSP 
+• BP (Boolean programming, 90C09): cplexAPI, glpkAPI, lpSolve, lpSolveAPI, Rcplex, Rglpk 
+• IP (Integer programming, 90C10): cplexAPI, glpkAPI lpSolve, lpSolveAPI, Rcplex, Rglpk, Rmosek, Rsymphony 
+• MIP (Mixed integer programming and its variants MILP for LP and MIQP for QP, 90C11): cplexAPI, glpkAPI, lpSolve, lpSolveAPI, Rcplex, Rglpk, Rmosek, Rsymphony 
+• QP (Quadratic programming, 90C20): cplexAPI, kernlab, limSolve, LowRankQP, quadprog, Rcplex, Rmosek 
+• SDP (Semidefinite programming, 90C22): Rcsdp 
+• MOP (Multi-objective and goal programming, 90C29): goalprog, mco 
+• NLP (Nonlinear programming, 90C30): Rdonlp2, Rsolnp 
+• GRAPH (Programming involving graphs or networks, 90C35): igraph, sna 
+• IPM (Interior-point methods, 90C51): cplexAPI, kernlab, glpkAPI, LowRankQP, quantreg, Rcplex 
+• RGA (Methods of reduced gradient type, 90C52): stats ( optim()), gsl 
+• QN (Methods of quasi-Newton type, 90C53): stats ( optim()), gsl, lbfgs, nloptr, ucminf 
+• DF (Derivative-free methods, 90C56): dfoptim, minqa, nloptr 
+• HEUR (Approximation methods and heuristics, 90C59): irace 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
