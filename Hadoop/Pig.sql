@@ -128,13 +128,63 @@ Null vs everythong -> Null (Viral)
 
 
 /* [4] ------------------ Introduction to Pig Latin */
+-- Case Sensitivities --
+load = LOAD ; A <> a 
+""" Command, keywords not sensitive ; 
+Relationship, table sensitive to case """
+
+-- Comments --
+""" -- xxxx -- (Single line comments) 
+    /* xxxxxx */ (Multiple lines comments) """
+
+-- Input & Output --
+load
+table = load '/data/example/file' using PigStorage(); -- (Default) can specify actual path in HDFS of that file; Can also do the full path like
+                                                      -- 'hdfs://nn.acme.com/data/example/file' to read the file from the HDFS NameNode:nn.acme.com
+                                                      -- If no path specified, run in Home Dir of your HDFS
+                                                      -- Default using 'PigStorage' (load tab-delimited file from HDFS)
+                                  using PigStorage(,); -- Change to ',' separater
+table = load '/data/example/file' using HBaseStorage(); -- If data in storage systems, ex. Hbase
+table = load '/data/example/file' as (var1, var2, var3, var4); -- Specify Schema to the data loaded (above)
+table = load '/data/example/' -- Will load ALL files in that directory or sub-directory
+table = load '/data/example/?' -- Any single character
+             '/data/example/*' -- Zero or more characters
+             '/data/example/[abc]' -- match single character from the list
+             '/data/example/[a-z]' -- match single character from the range
+             '/data/example/[^abc]' -- NOT match single character from the list 
+             '/data/example/[^a-z]' -- NOT match single character from the range
+             '/data/example/\c' -- escaple the letter meaning
+             '/data/example/{ad,cd}' -- match a string from the list of strings     
+
+-- Store --
+Store
+store table into '/data/example/file' using PigStorage(); -- Write the result out to HDFS or Storage system / can specify actual path like in 'load'
+                                      using PigStorage(,);
+                                      using HBaseStorage();
+
+-- Dump -- 
+dump -- Display the output to screen for ac hoc debugging
+dump table; -- complex type: []map, ()tuples, {}bags, each fields separated by ','
 
 
-
-
-
-
-
+-- Relational Operations --
+"""They help you transform your data by sorting, grouping, joining, projecting, and filtering"""
+""" More advanced operators are in Page 57 """
+-- foreach --
+""" it takes a set of expressions and applies them to every record in the data pipeline """
+foreach
+table = load '/data/example/file' as (var1, var2, var3, var4);
+table2 = foreach table generate var1, var3; -- only extract 'var1' and 'var3' ; 'Null' is viral ex. 1 + null = null
+table2 = foreach table generate var2 - var4; -- + - * / % (By name)
+                                $2 - $4; -- (By position)
+                                *; -- All fields
+                                ..var3; -- var1, var2, var3
+                                var2..var3; -- var2, var3
+                                var2..; -- var2, var3, var4
+-- Condition operator --
+2 == 2 ? 1 : 4 -- if 2 equals 2, then return 1; if not, returns 4
+null == 2 ? 1 : 4 -- returns 'Null' viral
+2 == 2 ? 1 : 'xxx' -- type error; both need to be same type
 
 
 
