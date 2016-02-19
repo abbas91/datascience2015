@@ -186,6 +186,143 @@ table2 = foreach table generate var2 - var4; -- + - * / % (By name)
 null == 2 ? 1 : 4 -- returns 'Null' viral
 2 == 2 ? 1 : 'xxx' -- type error; both need to be same type
 
+-- Projection operators -- (Extract value from complex type)
+A = load 'file' as (bat:map[]); 
+B = foreach A generate bat#'string'; -- map projection operator '#'
+
+A = load 'file' as (t:tuple(x:int, y:int));
+B = foreach A generate t.x, t.$2; -- tuple projection operator '.'
+
+A = load 'file' as (b:bag{t:tuple(x:int, y:int)});
+B = foreach A generate b.x; 
+                       b.(x,y); -- Different from above two, bag need to create a new bag to extract
+                                -- + - * / not work on bag objects
+
+-- UDF (User Defined Function) -- ***
+"""UDF can be invoke in 'foreach' called 'evaluation function'
+   takes one record at a time and produce one output """
+
+A = load 'file' as (name:chararry, age:int, gpa:float);
+B = foreach A generate myudf.FUN(name); -- define a fun for further comstomization
+
+"UDF can be define in Java, Python and Javascript" -- Apendix A
+
+
+-- name fields --
+foreach """will infer the names of the new tuple by the old data input, will try to keep the same
+           if no operation applied. If any operation applied, there will be no name if not assigned"""
+describe A; -- tell data type
+"A: {name: chararray,chararray}"
+
+
+-- Filter -- 
+""" evaluate the data, only those qualify will be passed download. It generate a booleaan value T/F """
+A = load 'file' as (name:chararry, age:int, gpa:float);
+B = filter A by age == scalar; maps; tuple 
+                    != scalar; maps; tuple
+                    >  scalar;
+                    <  scalar;
+                    >= scalar;
+                    <= scalar;
+             by name matches 'regex';
+                not name matches 'regex';
+--combine
+a and b or not c => (a and b) or (not c)-- highest -> 'not', 'and', 'or'   
+1st and 2nd : "if ist failed, 2nd not eval"
+1st or 2nd : "if ist pass, 2nd not eval"
+-- 'A == NULL' => NULL; NULL will be ignored by regex as well
+a is null ; a is not null -- to test null
+-- UDF in filter
+B = filter my_udf.fun(); -- will generate boolean value to filter data too
+
+
+
+-- Group --
+""" No like group by in SQL, not direct link to aggregation, it only collect all records from the same value
+    and then group them into a bag{} 'A key - named groups and a bag of collected records'. 
+    Then you can pass this into aggregation functions if you want."""
+A = load 'file' as (name:chararry, var:charrary, age:int, gpa:float);
+B = group A by name; -- group name will be 'A'
+cnt = foreach B generate group, COUNT(A); -- passs to aggregated function
+store B into 'file_group' -- Save it for later
+
+B = group A by name;
+describe B;
+"B: {group: bytearray, 
+ A: {name:chararry, var:charrary, age:int, gpa:float}}" -- Single, key field named 'group'
+B = group A by (name, var);
+describe B;
+"B: {group: (name:chararry, var:charrary), 
+ A: {name:chararry, var:charrary, age:int, gpa:float}}" -- multiple, key field named 'group'
+B = group A all;
+describe B;
+"B: {all: bytearray, 
+ A: {name:chararry, var:charrary, age:int, gpa:float}}"
+--***All NULL will be in the same 'NULL' group when grouping--
+
+
+
+-- Order By --
+""" use 'order' to sort your data by certain vars """ -- only scalar, complex type sorting produce error / Null is smallest when sorting
+A = load 'file' as (name:chararry, var:charrary, age:int, gpa:float);
+B = order A by age;
+            by age, gpa;
+            by age desc, gpa; -- define sort 
+            by age, gpa asc; -- define sort
+
+
+
+-- Distinct --
+""" same like distinct in SQL, but works only on all data """
+A = load 'file' as (name:chararry, var:charrary, age:int, gpa:float);
+B = foreach generate name, var;
+dis_B = distinct B; -- reduce duplicated records
+
+
+
+-- Join --
+""" Join data file by primary keys (default - inner join) not match, null droped """
+A = load 'file' as (name:chararry, var:charrary, age:int, gpa:float);
+B = load 'file' as (name:chararry, var:charrary, hieght:int, weight:float);
+J = join A by name, B by name; -- single key (inner join)
+    join A by (name, var), B by (name, var); -- multiple keys (inner join)
+    join A by name left outer, B by name; -- left join
+    join A by name right outer, B by name; -- right join
+    join A by name full outer, B by name; -- full join
+-- join will preserve the name from data source --
+describe J;
+"jnd: {A::name: chararrary, A::var: chararrary, A::....
+       B::name: chararrary, B::var: chararrary, B::....} " -- when use vars, if same name needs to define like 'A::name' or 'B::var'
+-- Outter join (left right full) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
