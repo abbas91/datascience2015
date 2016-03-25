@@ -209,3 +209,123 @@ llply
 
 
 # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Optimization function in Model>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+# &&&&&&&&&&&&&&&&&& Blind Search
+""" Full blind search assumes the exhaustion of all alternatives, any previous search does not 
+affect how next solutions are tested, given full search space is tested, optimum solution is always found """
+
+""" Only applible to discrete search space and in two ways:
+    1. Setting full search space in a matrix and then sequentially test each row of the matrix
+    2. In a recursive way, setting search space as a tree, each brunch denotes a possible value for a given
+       variable and all solutions appear at the leaves - (Type1 - depth first, starts at root, goes to brunch asap 
+       	                                                  Type2 - breadth first, starts at root, search all nodes at a given level)
+"""
+
+""" Disadvantage - computational infeasible """
+
+
+# [Full blind search]
+
+# (1) --------------- full blind search
+#     search - matrix with solutions X D
+#     FUN - evaluation function
+#     type - "min" or "max"
+#     ... - extra?
+fsearch <- function (search, FUN, type = "min", ...) {
+	x <- apply(search, 1, FUN, ...) # run FUN over all search rows
+	ib <- switch(type, min=which.min(x), max=which.max(x))
+	return (list(index=id, sol=search[ib,], eval=x[ib]))
+}
+
+
+
+
+
+
+# (1) --------------- depth first full search
+#     l - level of the tree
+#     b - branch of the tree
+#     domain - vector list of size D with domain values
+#     FUN = eval function
+#     type = "min" or "max"
+#     D - dimension (number of variables)
+#     x - current solution vector
+#     bcur - current best sol
+#     ... - extra?
+dfsearch <- function (l=1, b=1, domain, FUN, type="min", D=length(domain), x=rep(NA,D), bcur=switch(type, min=list(sol=NULL, eval=Inf),
+	                                                                                                      max=list(sol=NULL, eval=-Inf)),...) {
+	if((l-1) == D) { # "leave" with solution x to be tested:
+      f=FUN(x,...); fb=bcur$eval
+      ib=switch(type, min=which.min(c(fb,f)),
+      	              max=which.max(c(fb,f)))
+      if(ib == 1) return (bcur) else return(list(sol=x, eval=f))
+} else { # go through sub branches
+	for (j in 1:length(domain[[l]])) {
+		x[l] = domain[[l]][j]
+		bcur = dfsearch(l+1, j, domain, FUN, type, D=D, x=x, bcur=bcur, ...)
+	}
+	return (bcur)
+  }
+}
+
+
+
+
+
+
+
+
+
+# [Grid search]
+""" Reduce the space of solutions by implementing a regular hyper dimensional search with a 
+given step size. Grid search is particularly used for hyperparameter optimization of machine learning algorithms, 
+such as NNL, SVM. So, it is faster.
+"""
+
+"""
+Disadvantage - more easily stuck by local minium
+"""
+
+
+
+
+# [Monte Carlo search]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
