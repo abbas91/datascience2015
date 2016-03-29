@@ -1459,18 +1459,195 @@ matrix([[ 1.33333333, -0.66666667],
 
 " Test whether the result of the inverse of  mm  multiply  mm  is a identity matrix: "
 m * m.I
+
+
+
+# mean
+" To calculate the mean of the numbers in matrix or array, use the .mean() method: "
+m = mat([3, 2, 1])
+a = array(m) # convert a matrix to array
+print a.mean()
+print m.mean()
+2.0
+2.0
+
+from numpy import mean
+print mean(a)
+print mean(m)
+2.0
+2.0
+
+
+# Sort
+" .sort() method can be used to sort a matrix or array: "
+m = mat([3, 2, 1])
+m.sort()
+m
+"matrix([[1, 2, 3]])" # Note that use this method will loss the original order, make a copy if you want to keep your original data.
+
+
+# Random sampling in Numpy
+rand(d0, d1, ..., dn) # Random values in a given shape from [0, 1] uniformly.
+randn(d0, d1, ..., dn) # Return a sample (or samples) from the “standard normal” distribution.
+randint(low[, high, size]) # Return random integers from low (inclusive) to high (exclusive).
+random_integers(low[, high, size]) # Return random integers between low and high, inclusive.
+random_sample([size]) # Return random floats in the half-open interval [0.0, 1.0).
+random([size]) # Return random floats in the half-open interval [0.0, 1.0).
+ranf([size]) # Return random floats in the half-open interval [0.0, 1.0).
+sample([size]) # Return random floats in the half-open interval [0.0, 1.0).
+choice(a[, size, replace, p]) # Generates a random sample from a given 1-D array
+
+from numpy import random
+random.rand(2, 3)
+"""
+array([[ 0.70001978,  0.69059499,  0.64586369],
+       [ 0.50370903,  0.87010881,  0.74388861]]) 
+"""
+random.randn(2, 3)
+"""
+array([[ 1.07956698,  0.42241258, -0.93731842],
+       [ 0.21060919, -0.13326986, -0.61693296]])
+"""
+random.randint(5, size=10) # Generate 10 random integers from 0(include) to 5(exclude):
+"array([4, 3, 1, 3, 0, 1, 2, 0, 2, 4])"
+random.randint(low=1, high=6, size=(5, 5)) 
+# Return random integers from low (inclusive) to high (exclusive)
+"""
+array([[4, 2, 1, 1, 1],
+       [4, 3, 1, 5, 1],
+       [3, 2, 2, 3, 3],
+       [1, 1, 1, 3, 2],
+       [3, 5, 4, 5, 4]])
+"""
+random.random_integers(low=1, high=5, size=(5, 5)) 
+# Return random integers from low (inclusive) to high (inclusive)
+"""
+
+array([[2, 5, 5, 1, 1],
+       [2, 2, 2, 4, 1],
+       [4, 1, 5, 5, 2],
+       [1, 3, 4, 4, 1],
+       [5, 3, 2, 5, 5]])
+"""
+"""
+The only difference between function randint and random_integers is the high argument 
+is excluded in randint while it's included in random_integers.
+"""
+
+# The functions random_sample, random, ranf, sample are similar to rand, 
+# but different from the way to define the dimensions.
+random.rand(3, 3) # 3-3 array
+"""
+array([[ 0.59456034,  0.28652971,  0.47488913],
+       [ 0.89846765,  0.82264671,  0.75137963],
+       [ 0.60963399,  0.00620382,  0.78680171]])
+"""
+random.ranf([3, 3]) 
+# 3-3 array, note that the dimension should be included in a list or array
+"""
+array([[ 0.61330923,  0.7010375 ,  0.73574806],
+       [ 0.18704789,  0.60682643,  0.45903498],
+       [ 0.81561344,  0.94776034,  0.95131061]])
+"""
+random.ranf(2, 3, 3) # otherwise trigger a error
+!error
+
+
+
+# choice 
+"Sampling from a data set"
+all_set = [1, 2, 3, 5, 8, 13, 21, 34, 55]
+random.choice(all_set, size=10)
+"array([55, 13,  2, 21,  1,  8, 34,  2,  3,  8])"
+# In default, function choice sample from the given set with replacement.
+# We can also set the replacement with false, 
+# but the size can not be larger than the size of the set:
+random.choice(all_set, size=10, replace=False)
+!error
+
+" example - Birthday problem "
+def generateBirthday(num):
+    '''
+    num: number of people
+    '''
+    birthdays = range(366)
+    randomChoose = np.random.choice(birthdays, size=num, replace=True)
+    return len(set(randomChoose)) != num 
+
+def sameBirthdayProb(num, times = 1e3):
+    '''
+    num: number of people
+    times: number of simulation times
+    '''
+    result = []
+    for i in np.arange(times):
+        result.append(generateBirthday(num))
+    return np.mean(result)
+
+sameBirthdayProb(20)
+0.39900000
+
+# More Function
+"Function    Description"
+abs, fabs   # Compute the absolute value element-wise for integer, floating point, or complex values. Use fabs as a faster alternative for non-complex-valued data.
+sqrt    # Compute the square root of each element.
+square  # Compute the square of each element.
+exp  # Compute the exponent e x of each element
+log, log10, log2, log1p # Natural logarithm (base e), log base 10, log base 2, and log(1 + x), respectively
+sign    # Compute the sign of each element: 1 (positive), 0 (zero), or -1 (negative)
+ceil    # Compute the ceiling of each element, i.e. the smallest integer greater than or equal to each element
+floor   # Compute the floor of each element, i.e. the largest integer less than or equal to each element
+rint    # Round elements to the nearest integer, preserving the dtype
+modf    # Return fractional and integral parts of array as separate array
+isnan   # Return boolean array indicating whether each value is NaN (Not a Number)
+isfinite, isinf # Return boolean array indicating whether each element is finite (non- inf , non- NaN ) or infinite, respectively
+cos, cosh, sin, sinh, tan, tanh # Regular and hyperbolic trigonometric functions
+arccos, arccosh, arcsin, arcsinh, arctan, arctanh  # Inverse trigonometric functions
+
+
+
+
+# Descriptive statistics
+"""
+Descriptive statistics are what you are probably most familiar with - 
+some examples are the mean and variance of a sample.
+These are measures of central tendency(mean), spread(variance) and shape(skewness, kurtosis) 
+respectively.
 """
 
 
+import numpy as np
+print np.mean([1, 2]) # mean
+print np.mean([1, 2, 3, 4, 5])
+
+print np.var([1, 2 ,3 ,4, 5]) # variance
+print np.var([1, 2])
+
+# Skewness - Skewness is a measure of the asymmetry of the probability distribution of a real-valued random variable about its mean.
+x = [1, 2, 3, 4, 5]
+def skew(x):
+    x = np.array(x)
+    return np.mean(((x - np.mean(x)) / np.std(x)) ** 3)
+skew(x)
 
 
+# Kurtosis - is a measure of the "peakedness" of the data. In a similar way to the concept of skewness, kurtosis is a descriptor of 
+# the shape of a probability distribution.
+def kurtosis(x):
+    x = np.array(x)
+    return np.mean((x - np.mean(x))**4) / np.var(x)**2
+kurtosis([1, 2, 3 ,4 ,5])
 
 
+# Distributions
+"""
+In addition to looking at summary values, we can also look at the data as a whole and see how it is shaped, or distributed.
 
+One of the easiest ways is through a histogram. We choose a number of buckets and store the count of each member that belongs to that bucket.
 
-
-
-
+What data strucutes could we use for representing histograms?
+The mode is the most frequent value. How would we find that with your histogram data structure?
+"""
 
 
 
