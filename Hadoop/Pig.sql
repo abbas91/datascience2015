@@ -185,6 +185,7 @@ table2 = foreach table generate var2 - var4; -- + - * / % (By name)
 2 == 2 ? 1 : 4 -- if 2 equals 2, then return 1; if not, returns 4
 null == 2 ? 1 : 4 -- returns 'Null' viral
 2 == 2 ? 1 : 'xxx' -- type error; both need to be same type
+B = foreach A generate (a == 'yes' ? 'ok' : 'No') as b;
 
 -- Projection operators -- (Extract value from complex type)
 A = load 'file' as (bat:map[]); 
@@ -289,6 +290,12 @@ J = join A by name, B by name; -- single key (inner join)
     join A by name left outer, B by name; -- left join
     join A by name right outer, B by name; -- right join
     join A by name full outer, B by name; -- full join
+    join A by name, B by name, C by name; -- Multiple join (Only for inner join)
+
+A1 = load 'file' as (name:chararry, var:charrary, age:int, gpa:float);
+A2 = load 'file' as (name:chararry, var:charrary, age:int, gpa:float);
+B = join A1 by name, A2 by name; -- self join is supported (Need to load data twice A1, A2)
+
 -- join will preserve the name from data source --
 describe J;
 "jnd: {A::name: chararrary, A::var: chararrary, A::....
@@ -297,22 +304,137 @@ describe J;
 
 
 
+-- Limit -- (Still read all)
+A = load 'file';
+A_limilt = limit A 10; -- Only return 10 rows (Not same each time)
+A_limit = order limit A 10; -- Only return 10 rows (Same each time)
+
+
+-- Sample --
+A = load 'file';
+some = sample A 0.2; -- sample 20% of the data
+
+
+
+-- Parallel --
+# Parallel your reduce jobs 
+group, order, distinct, join, limit, cogroup, cross -- reduce operator
+A = group B by var1 parallel 10; -- set individually for each
+A_sort = order A by var2 desc parallel 2;
+# Set as script wise
+set default parallel 10;
+'...all operation use 10 reducers'
 
 
 
 
 
+-- UDF - User Defined Function
+" let user define their function, mostly in java, then in Python"
+" Pig uses Jython to execute Python / No Python 3 features"
+" Also, there are built-in UDFs in Pig"
+" Piggybank is a collection of UFS release along with Pig, need to register"
+-- Register UDF ex. want to use 'reverse UDF' in Piggybank
+register 'your/path/file/piggybank.jar'; -- You need you specify the path of the jar in your local system where you have extracted the pig.
+define Reverse org.apache.pig.piggybank.evaluation.string.Reverse(); -- define the path to the actual fun
+define Reverse org.apache.pig.piggybank.evaluation.string.Reverse('F'); -- if argument needs to be, can add it
+A = load 'file' as (a, b, c);
+B = foreach A generate Reverse(b); 
+-- Register Python UDF
+-- the Python script must in your current directory
+register 'test.py' using jython as bballudfs;
+A = load 'file' as (a, b, c);
+B = foreach A generate bballudfs.test(b); -- careful of Python dependents in the nodes
+
+-- Calling Static Java Functions --
+p54 ???
 
 
 
 
 
+-- Advanced Pig Latin --
+
+flatten -- sometimes you have a tuple or a bag and you want to remove that level of nesting
+
+A = load 'file' as (name:bag{t:(x:int, y:int)});
+B = foreach A generate flatten(name) as name;
+
+"""
+name1, x1, y1
+name1, x2, y2
+"""
+# n * m rows
+
+foreach -- nested foreach
+
+A = load 'file' as (x:chararray, y:int);
+B = group A by x;
+C = foreach B {
+    f = A.y; # create inner operations to manipulate vars more
+    g = distinct f;
+    generate group, COUNT(g); # last line always be "generate" Or use UDF() here
+}
+
+
+join -- multiple implementation
+
+# join small to large data
+A = load 'file_big' as (x:int, c:int);
+B = load 'file_small' as (x:int, b:int);
+C = join A by x, B by x using 'replicated'; -- fragment replicated join: save small data into each instance memory
+                                            -- only the most left data gets replicated
+
+# join skewed data (Some nodes has more data to process)
+A = load 'file' as (x:chararray);
+B = load 'file2' as (x:chararray, c:int);
+C = join A by x, B by x using 'skewed'; -- most left has most guanularity
+
+# join sorted data (first sort all inputs by join keys, then merge together) 
+A = load 'file_1' as (x:int, c:int);
+B = load 'file_2' as (x:int, b:int);
+C = join A by x, B by x using 'merge';
+
+
+cogroup -- instead of collecting records of one input based on a key,
+        -- it collects records of n inputs based on a key
+A = load 'file1' as (id:chararray, var1:int);
+B = load 'file2' as (id:chararray, var2:int);
+C = cogroup A by id, B by id;
+describe C;
+" C: {group: int, A: {id:chararray, var1:int}, 
+                  B: {id:chararray, var2:int}}"
+
+
+union -- Put two data sources by concatenating them (No match key needed)
+
+A = load 'file1' as (id:chararray, var:int);
+B = load 'file2' as (id:chararray, var:int);
+C = union A, B;
+describe C;
+" C: {id:chararray, var:int} "
+
+# if scehma totally different
+A = load 'file1' as (id:chararray, var:int, x:int);
+B = load 'file2' as (id:chararray, var:int, y:float, z:int);
+C = union onschema A, B;
+describe C;
+" C: {id:chararray, var:int, x:int, y:float, z:int} "
+
+
+
+cross -- take every record in A and combine with every record in B, A:n, B:m -> n X m output
+
+A = load 'file1' as (id:chararray, var:int);
+B = load 'file2' as (id:chararray, var:int);
+C = cross A, B;
 
 
 
 
+-- Integrate other script to pig --
 
-
+stream -- Pass the result pig object to another script
 
 
 

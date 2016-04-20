@@ -29,6 +29,13 @@ y = 1:10
 summary(lm(y~x))
 
 
+# -- set working directory
+import os
+os.getcwd() # disply current wd
+os.chdir('/user/xxxx/xxx') # change current wd to
+
+
+
 
 # -- Keywords (Command)
 import keyword as kw
@@ -685,6 +692,7 @@ def square1(x):
 
 print square1(2)
 
+sexCount = sorted(sexCount.items(), key=lambda x: x[1]) # call fun to create a var tmp
 
 # Class & File ------------------------------------------ Create a new class
 import string
@@ -1341,6 +1349,11 @@ array([[ 1.,  0.,  0.],
 
 
 
+" concatenate arraries "
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+np.concatenate([a, b])
+
 
 
 
@@ -1648,6 +1661,928 @@ One of the easiest ways is through a histogram. We choose a number of buckets an
 What data strucutes could we use for representing histograms?
 The mode is the most frequent value. How would we find that with your histogram data structure?
 """
+
+# - Read Same dataset into Python on afrequency
+
+class Abalone(object):
+    def __init__(self, sex, length, diameter, height, whole_weight, shucked_weight, viscera_weight, shell_weight, rings):
+        self.sex = sex
+        self.length = float(length)
+        self.diameter = float(diameter)
+        self.height = float(height)
+        self.whole_weight = float(whole_weight)
+        self.shucked_weight = float(shucked_weight)
+        self.viscera_weight = float(viscera_weight)
+        self.rings = int(rings)
+    
+    def data(self):
+        return [self.sex, self.length, self.diameter, self.height, self.whole_weight, \
+                self.shucked_weight, self.viscera_weight, self.rings]
+
+with open('data/abalone.data') as f:
+    abalone_file = f.readlines()
+    abalones = [Abalone(*row.split(',')) for row in abalone_file]
+
+
+for i in range(5): # Read the file top 5
+    print abalones[i].data() 
+
+"""
+['M', 0.455, 0.365, 0.095, 0.514, 0.2245, 0.101, 15]
+['M', 0.35, 0.265, 0.09, 0.2255, 0.0995, 0.0485, 7]
+['F', 0.53, 0.42, 0.135, 0.677, 0.2565, 0.1415, 9]
+['M', 0.44, 0.365, 0.125, 0.516, 0.2155, 0.114, 10]
+['I', 0.33, 0.255, 0.08, 0.205, 0.0895, 0.0395, 7]
+"""
+
+
+
+
+# plotting (matplotlib > pyplot) - http://matplotlib.org/
+import matplotlib.pyplot as plt
+
+plt.rcParams['figure.figsize'] = 8, 6 # Adjust plot size
+plt.rcParams.keys() # more choices
+# Basic plot
+plt.plot(x, y)
+# line style maker
+plt.plot(x, y, '-') : '-', '--', '-.', ':', '.', '*', ...
+
+# color / legend
+plt.plot(x, y, color = 'blue', label='sin(x)')
+plt.plot(x, y2, color = 'red', label='cos(x)')
+plt.legend(loc=1) # 1:topright, 2:topleft, 3:bottomleft, 4:bottomright
+
+# text / title
+plt.title('$sin(x)$ VS $cos(x)$', fontsize = 25)
+plt.text(1.6, 0, '$sin(x) > cos(x)$', fontsize = 20) # 1.6, 0 -> x y for coordiates on plot
+plt.text(1, -0.5, '$y = cos(x)$', fontsize = 20)
+plt.text(3, 0.3, '$y = sin(x)$', fontsize = 20, color = 'blue') # add color
+
+
+# axis
+### axis
+plt.xlabel('x', fontsize = 15)
+plt.ylabel('y', fontsize = 15)
+plt.xticks(fontsize=10,rotation=45);
+plt.yticks(fontsize=10,rotation=45);
+plt.xlim(-0.5, 5.5)
+plt.ylim(-1.5, 1.5)
+
+
+# Scatter plot
+plt.scatter(x, y, alpha = 0.1) # alpha - transparency
+
+
+# Histogram
+plt.hist(x, alpha = 0.3) 
+plt.hist(x, bins = 25, alpha = 0.3) # The arguments bins can be used to control the number of intervals
+
+
+# barplot
+plt.bar(cat_var, values, width = 0.35, alpha = 0.3)
+
+
+
+# Plot multiple plots
+# the first subplot 
+plt.subplot(131) # - 1 row, 3 column, as 1st plot             
+plt.boxplot(Length)
+plt.xticks([])
+plt.title('Boxplot of Length')
+# the second subplot 
+plt.subplot(132) # - 1 row, 3 column, as 2nd plot              
+plt.boxplot(Height)
+plt.xticks([])
+plt.title('Boxplot of Height')
+# the third subplot 
+plt.subplot(133)
+plt.boxplot(Ring) # - 1 row, 3 column, as 3rd plot 
+plt.xticks([])
+plt.title('Boxplot of Ring')
+
+
+# Plot multiple in different layout ???
+# plots
+plt.subplot2grid((3,3), (0,0), colspan=3)
+plt.text(0.4, 0.5, 'Row: 0; Col: 0, 1, 2')
+
+plt.subplot2grid((3,3), (1,0), colspan=2)
+plt.text(0.4, 0.5, 'Row: 1; Col: 0, 1')
+
+plt.subplot2grid((3,3), (1, 2), rowspan=2)
+plt.text(0.2, 0.5, 'Row: 1, 2; Col:2')
+
+plt.subplot2grid((3,3), (2, 0))
+plt.text(0.2, 0.5, 'Row: 2; Col: 0')
+
+plt.subplot2grid((3,3), (2, 1))
+plt.text(0.2, 0.5, 'Row: 2; Col: 1')
+
+
+
+# save img
+plt.savefig('pic/matplot.png')
+
+
+
+
+
+
+
+
+
+
+
+# Scipy 
+"""
+SciPy is a collection of mathematical algorithms and convenience functions for python, 
+whcih makes Python become a data-processing 
+and system-prototyping environment rivaling systems such as MATLAB.
+"""
+
+# scipy.stats
+
+import scipy
+from scipy import stats
+scipy.info(stats) # menu
+
+
+# - stats.itemfreq: count frequency of a var
+ringsFre = stats.itemfreq(var[])
+ringsFre
+"""
+array([[  1,   1],
+       [  2,   1],
+       [  3,  15],
+       [  4,  57],
+       [  5, 115],
+       [  6, 259],
+       [  7, 391],
+       [  8, 568],
+       [  9, 689],
+       [ 10, 634],
+       [ 11, 487],
+       [ 12, 267],
+       [ 13, 203],
+       [ 14, 126],
+       [ 15, 103],
+       [ 16,  67],
+       [ 17,  58],
+       [ 18,  42],
+       [ 19,  32],
+       [ 20,  26],
+       [ 21,  14],
+       [ 22,   6],
+       [ 23,   9],
+       [ 24,   2],
+       [ 25,   1],
+       [ 26,   1],
+       [ 27,   2],
+       [ 29,   1]])
+"""
+
+
+# -- stats.describe:  return some basic descriptive statistics including: size, min/max, mean, variance, skewness and kurtosis.
+names = ["size", "min/max", "mean", "variance", "skewness", "kurtosis"]
+zip(names, stats.describe(var[]))
+
+
+
+# -- normal distribution vars
+print stats.norm.__doc__ # all options
+rvs(loc=0, scale=1, size=1)
+stats.norm.rvs(10, 5) # normal distribution  N(10,5)
+
+pdf(x, loc=0, scale=1)
+stats.norm.pdf(0) # pdf is short for probability density function
+
+cdf(x, loc=0, scale=1)
+stats.norm.cdf(3) - stats.norm.cdf(-3)  # The probability of  −3 ≤ x ≤ 3 if x ∈ N(0,1)  
+
+# ex. normal dist plot
+mu = 0
+sigma = 1
+x = np.arange(mu-5, mu+5, 0.1)
+y = stats.norm.pdf(x, mu, sigma)
+plt.rcParams['figure.figsize'] = 8, 6
+plt.plot(x, y)
+
+theta = np.linspace(-3, 3, 100) 
+r = stats.norm.pdf(theta)
+theta = np.concatenate([[-3], theta, [3]])
+r = np.concatenate([[0], r, [0]])                      
+
+plt.fill(theta, r, alpha = 0.3)
+plt.title('Normal: $\mu$=%.2f, $\sigma^2=%.2f$'%(mu, sigma))
+plt.text(-1.9, 0.05, '$p(-3 < x < 3)=%.4f$'%(1 - 2*stats.norm.cdf(-3)), size = 15)
+plt.xlabel('x')
+plt.ylabel('Probability density')
+plt.show()
+
+
+
+
+
+# Poisson Distribution
+stats.poisson.pmf(4, 2) 
+# equivalent to stats.poisson.cdf(4, 2) - stats.poisson.cdf(3, 2) 
+# p(x <= 4) - p(x <= 3) = p(x=4)
+lam = 2
+sequence = np.arange(0, 10)
+plt.bar(sequence, stats.poisson.pmf(sequence, lam), alpha=0.3)
+plt.title('Poisson distribution: $\lambda=%s$'%lam)
+plt.xlabel('x')
+plt.show()
+
+
+
+
+# Binomial Distribution
+stats.binom.pmf(2, 10, 0.5) 
+n = 10
+p = 0.5
+sequence = np.arange(0, n+1)
+plt.bar(sequence, stats.binom.pmf(sequence, n, p), alpha=0.3)
+plt.title('Binomial distribution: $n=%s, p=%.2f$'%(n, p))
+plt.xlabel('x')
+plt.xlim(0, n+1)
+plt.show()
+
+
+
+
+
+
+# Hypothesis Testing
+"""
+Steps of Hypothesis testing:
+- Propose a null hypothesis.
+- Run an experiment and get a result.
+- Calculate the probability of the occured result and a more extremely result occur.
+- If the probability is small then a pre-defined threshold, reject the null hypothesis.
+
+
+In manufacturing industry, people usually sample a center number of products to test the production yield.
+Suppose that the production yield should be at least 99%. We sample 1000 products, and 5 of them are rejects.
+Are this batch of products qualified?
+Null Hypothesis:  H0:p<=0.99H0:p<=0.99 .
+pp  is the probability of qualified product.
+The number of rejects follows a binomial distribution  B(1000,0.99).
+"""
+pValue = 1 - stats.binom.cdf(994, 1000, 0.99) # p(n >= 995)
+pValue < 0.05
+False # Reject
+
+
+
+
+# one-sample t-test
+x = np.random.normal(loc = 10, scale = 10, size=100)
+# equivalent to x = stats.norm.rvs(loc=10, scale=10, size=100)
+stats.ttest_1samp(x, 15) # Is the mean of x equal to 15? Say the null hypothesis is  x¯=15.
+" (-16.71046557615076, 4.8063284931973768e-58) " # see second less than 0.05 reject
+
+# Two sample t test
+stats.ttest_ind(x, y) 
+
+
+
+# Analysis of Variance (ANOVA)
+"""" What if we have more than two categories?
+Analysis of Variance is a way of treating these kind of cases."""
+
+# ex. plot three continous vars
+plt.rcParams['figure.figsize'] = 12, 9
+plt.subplot2grid((2, 3), (0, 0), colspan=3)
+plt.boxplot([Mheight, Fheight, Iheight])
+plt.ylim(0, 0.3)
+plt.xticks([1, 2, 3], ('M', 'F', 'I'), fontsize = 15)
+
+plt.subplot2grid((2, 3), (1, 0))
+plt.hist(Mheight, color='blue', alpha=0.5)
+plt.xlabel('M')
+plt.ylim(0, 1200)
+
+plt.subplot2grid((2, 3), (1, 1))
+plt.hist(Fheight, color='red', alpha = 0.5)
+plt.xlabel('F')
+plt.ylim(0, 1200)
+
+plt.subplot2grid((2, 3), (1, 2))
+plt.hist(Iheight, color='pink', alpha = 0.5)
+plt.xlabel('I')
+plt.ylim(0, 1200)
+
+
+stats.f_oneway(Mheight, Fheight, Iheight) # Anova
+
+
+
+
+
+# Data manipulation in Pandas
+import pandas as pd
+
+# Reading Data
+pd.read_csv('data/foo.csv') # read comma-separated text files
+pd.read_table('data/foo.txt') # read table-separated text files
+pd.read_csv('data/foo.txt', sep = '\t') # Or define sep
+
+# separated by , or \t
+pd.read_csv('data/foo2.txt', sep = '\t|,') # multiple seps
+
+pd.read_csv('data/foo_noheader.csv', header=None) # headers?
+pd.read_csv('data/foo_noheader.csv', names=['a', 'b', 'c', 'd', 'message'], \
+                                     index_col=['1','2','3']) # Set headers, index manually
+
+pd.read_csv('data/foo_intro.csv', skiprows=range(6), header=True) # skip the first 6 rows
+
+# -- More arguments
+"""
+Argument    Description
+path    String indicating filesystem location, URL, or file-like object
+sep or delimiter    Character sequence or regular expression to use to split fields in each row
+header  Row number to use as column names. Defaults to 0 (first row), but should be None if there is no header row
+index_col   Column numbers or names to use as the row index in the result. Can be a single name/number or a list of them for a hierarchical index
+names   List of column names for result, combine with header=None
+skiprows    Number of rows at beginning of file to ignore or list of row numbers (starting from 0) to skip
+na_values   Sequence of values to replace with NA
+comment Character or characters to split comments off the end of lines
+parse_dates Attempt to parse data to datetime; False by default. If True, will attempt to parse all columns. Otherwise can specify a list of column numbers or name to parse. If element of list is tuple or list, will combine multiple columns together and parse to date (for example if date/time split across two columns)
+keep_date_col   If joining columns to parse date, drop the joined columns. Default True converters Dict containing column number of name mapping to functions. For example {'foo': f} would apply the function f to all values in the 'foo' column
+dayfirst    When parsing potentially ambiguous dates, treat as international format (e.g. 7/6/2012 -> June 7, 2012). Default False
+date_parser Function to use to parse dates
+nrows   Number of rows to read from beginning of file
+iterator    Return a TextParser object for reading file piecemeal chunksize For iteration, size of file chunks
+skip_footer Number of lines to ignore at end of file
+verbose Print various parser output information, like the number of missing values placed in non-numeric columns
+encoding    Text encoding for unicode. For example 'utf-8' for UTF-8 encoded text
+squeeze If the parsed data only contains one column return a Series
+thousands   Separator for thousands, e.g. ',' or '.'
+"""
+
+
+# Writing Data
+data.to_csv('data/tips.csv')
+# header: False
+# index: False
+# delimiter: \t
+tips.to_csv('data/tips2.csv', 
+            index=False, 
+            header=False,
+            sep = '\t')
+
+
+
+# Interacting with Databases: SQLite
+
+"""
+In many applications data rarely comes from text files. SQL-based relational databases (such as SQL Server, PostgreSQL, and MySQL) are in wide use.
+
+Python has a built-in sqlite3 driver, which can be used to connect to the in-memory SQLite database.
+SQLite is a software library that implements a self-contained, serverless, zero-configuration, transactional SQL database engine.
+SQLite is the most widely deployed SQL database engine in the world.
+"""
+
+import sqlite3
+con = sqlite3.connect(':memory:') 
+# ":memory:" to open a database connection to a database that \
+# resides in RAM instead of on disk. 
+type(con) # a connection object
+
+" Run a query to create a table named test "
+# define a query that create a table with four columns
+query = """
+CREATE TABLE test
+    (a VARCHAR(20), 
+     b VARCHAR(20),
+     c REAL,
+     d INTEGER);"""
+
+# execute the query
+con.execute(query)
+# Commit the current transaction.
+con.commit()
+
+"Insert a few rows of data"
+data = [('Atlanta', 'Georgia', 1.25, 6), \
+        ('Tallahassee', 'Florida', 2.6, 3), \
+        ('Sacramento', 'California', 1.7, 5)]
+stmt = "INSERT INTO test VALUES(?, ?, ?, ?)"
+# Repeatedly executes a SQL statement
+# replace ? with the elements in the list
+con.executemany(stmt, data)
+con.commit()
+
+
+" Read data from database "
+cursor = con.execute('select * from test')
+type(cursor)
+
+test = cursor.fetchall() 
+# Fetches all rows from the results
+# return a list
+test
+
+pd.DataFrame(test) # convert to DataFrame
+
+
+
+
+
+# Interacting with Databases: MySQL
+"""
+MySQL is another widely used database. I assume you already have MySQL installed.
+
+To connect MySQL, you should install a MySQL driver. The most used package to do so is MySQLdb.
+
+Window users: get a exe of MySQLdb
+Linux users: install the package (python-mysqldb). (Ubuntu users run sudo apt-get install python-mysqldb)
+Mac users: install MySQLdb here(it also works for Linux).
+"""
+
+import MySQLdb
+# setting: host, user, password, db
+mysql = MySQLdb.connect(host="localhost", # your host, usually localhost
+                        user="root",    # your username
+                        passwd="****", # your password
+                        db="mysql")   # the database
+
+# Firstly, create a Cursor object, which will let
+# you execute all the queries you need
+cur = mysql.cursor() 
+# run a query to show all the tables
+cur.execute('show tables;')
+# result
+cur.fetchall()
+
+
+# the first row in table data_meeting
+cur.execute('select * from data_meeting limit 1;')
+# result
+cur.fetchall()
+
+
+
+# Interacting with Databases with Pandas
+"""
+Pandas has a read_sql function in its pandas.io.sql module that simplifies the process. 
+Just pass the select statement and the connection object:
+"""
+
+## read from SQLite
+import pandas.io.sql as sql
+sql.read_sql('select * from test', con)
+
+## read from MySQL
+sql.read_sql('select * from data_meeting limit 5;', mysql)
+
+
+
+
+
+
+
+# Arithmetic operations in Pandas
+" One of the most important pandas features is the behavior of arithmetic between objects with different indexes. "
+
+s1 = pd.Series([1, 2, 3, 4], index=['a', 'b', 'c', 'd'])
+s2 = pd.Series([-1, -2, -3, -4, -5], index=['a', 'c', 'd', 'e', 'f'])
+print s1
+print s2
+
+"""
+a    1
+b    2
+c    3
+d    4
+dtype: int64
+a   -1
+c   -2
+d   -3
+e   -4
+f   -5
+dtype: int64
+"""
+
+
+s1 + s2 # add by index
+"""
+a     0
+b   NaN
+c     1
+d     1
+e   NaN
+f   NaN
+dtype: float64
+s1 and s2 were added by their common indices, it return NaN if the indices that don’t overlap.
+"""
+
+
+import numpy as np
+df1 = pd.DataFrame(np.arange(9).reshape((3, 3)), 
+                   columns=['a', 'b', 'c'],
+                   index=['one', 'two', 'three'])
+df2 = pd.DataFrame(np.arange(12).reshape((4, 3)), 
+                   columns=['b', 'c', 'd'],
+                   index=['zero', 'one', 'two', 'three'])
+print df1
+print df2
+"""
+       a  b  c
+one    0  1  2
+two    3  4  5
+three  6  7  8
+       b   c   d
+zero   0   1   2
+one    3   4   5
+two    6   7   8
+three  9  10  11
+"""
+
+df1 + df2
+#  returns a DataFrame whose index and columns are the unions of the ones in each DataFrame
+
+"""
+        a   b   c   d
+one     NaN 4   6   NaN
+three   NaN 16  18  NaN
+two     NaN 10  12  NaN
+zero    NaN NaN NaN NaN
+"""
+
+
+# Fill missing (NaN) values with this value. 
+# If both DataFrame locations are missing, the result will be missing
+df1.add(df2, fill_value=0)
+# a: one, two three are from df1
+# d: one, two three are from df2
+# zero: b, c, d are from df2
+# zero: a are missing both in df1 and df2
+
+"""
+        a   b   c   d
+one     0   4   6   5
+three   6   16  18  11
+two     3   10  12  8
+zero    NaN 0   1   2
+"""
+
+# more methods
+"""
+Method  Description
+add     Method for addition (+)
+sub     Method for subtraction (-)
+div     Method for division (/)
+mul     Method for multiplication (*)
+"""
+
+
+
+# Methods / Functions for DataFrame
+
+# drop
+df2 = df2.drop('d', axis=1) 
+print df2
+# drop column 'd'
+# axis = 1 means drop column
+
+df2 = df2.drop('zero', axis=0) 
+print df2
+# drop row 'zero'
+# axis = o means drop row
+
+print df1.drop('a', axis = 1) + df2
+# drop column 'a' and add  df2
+
+
+# apply
+" DataFrame’s apply method apply a function on 1D arrays to each column or row. "
+df1.apply(lambda x: x) # apply nothing
+
+df1.apply(lambda x: min(x), axis=0) 
+# minimum number in each column
+
+df1.apply(lambda x: min(x), axis = 1)
+# apply function to each row
+
+def f(x):
+    return pd.Series([x.max(), x.min()], index = ['max', 'min'])
+df1.apply(f)
+# apply function to each column
+# return the min and max
+
+
+
+# descriptive statistics
+
+df1.min(axis=0) # minimum in each column
+df1.min(axis=1) # minimum in each row
+
+"""
+Method  Description
+count   Number of non-NA values
+min, max    Compute minimum and maximum values
+argmin, argmax  Compute index locations (integers) at which minimum or maximum value obtained, respectively
+idxmin, idxmax  Compute index values at which minimum or maximum value obtained, respectively
+quantile    Compute sample quantile ranging from 0 to 1
+sum Sum of values
+mean    Mean of values
+median  Arithmetic median (50% quantile) of values
+mad Mean absolute deviation from mean value
+var Sample variance of values
+std Sample standard deviation of values
+skew    Sample skewness (3rd moment) of values
+kurt    Sample kurtosis (4th moment) of values
+"""
+
+df1.describe()
+"""
+        a   b   c
+count   3.0 3.0 3.0
+mean    3.0 4.0 5.0
+std     3.0 3.0 3.0
+min     0.0 1.0 2.0
+25%     1.5 2.5 3.5
+50%     3.0 4.0 5.0
+75%     4.5 5.5 6.5
+max     6.0 7.0 8.0
+"""
+
+
+print tips.head()
+# first 5 rows
+# same as tips[0:5] 
+print tips.tail()
+# last 5 rows
+
+tips[0:5] 
+
+print tips.head(3) 
+# first 3 rows
+# same as tips[0:3] 
+
+
+print tips['tip'] # When a value was passed, it will be treated as the column name.
+
+# Create Dataframe
+df3 = pd.DataFrame({'one': range(3),
+                    'two': range(3, 6),
+                    'three': range(6, 9)},
+                   index = ['one', 'two', 'three'])
+print df3
+"""
+       one  three  two
+one      0      6    3
+two      1      7    4
+three    2      8    5
+"""
+
+"""
+The .loc method provides a purely label(index/columns) based indexing.
+This methods only allows you do selection from a DataFrame by its index and columns.
+"""
+df3['one':'three'] # rows of indices from 'one' to 'three'
+df3.loc['one', ['one', 'three']]
+# index: 'one'
+# columns: 'one' or 'three'
+# return a Series
+
+# index: from 'one' to the last row
+# columns: from 'three' to the last column
+df3.loc['one':, 'three':]
+
+"""
+The .iloc method provides a purely position based indexing.
+"""
+# first row, first three columns
+# return a Series
+row1 = df3.iloc[0, :3]
+
+# first row, first three columns
+# return a DataFrame
+row1 = df3.iloc[0:1, :3]
+print type(row1)
+row1
+
+
+
+
+# boolean indexing
+| # or 
+& # and
+~ # not
+series.isin([1,2,3,4]) # if the value of a series in the list?
+s = pd.Series(np.arange(5))
+print s
+print s.isin([2, 4, 6])
+
+tbl[tbl.color == 'blue'] # rows where color == 'blue'
+
+tbl[(tbl.color == 'blue') & (tbl.value.isin([1, 4]))] 
+# rows where color == 'blue' and value in [1, 4]
+
+tbl[(tbl.color == 'blue') & ~(tbl.value.isin([1, 4]))] 
+# rows where color == 'blue' and value not in [1, 4]
+
+tbl[(tbl.color == 'blue') | (tbl.value.isin([2, 6]))] 
+# rows where color == 'blue' or value in [2, 6]
+
+# loc, iloc
+tbl.loc[tbl.value >=5, 'color'] # the color where value >= 5
+# tbl.iloc[tbl.value >=5, 1] does not work
+tbl.iloc[(tbl.value >=5).values, ]
+
+# Here, tbl.value >= 5 return a Series, which is not supported in the iloc method.
+print tbl.value >=5
+print (tbl.value >= 5).values
+"""
+0    False
+1    False
+2    False
+3    False
+4     True
+Name: value, dtype: bool
+[False False False False  True]
+"""
+
+
+
+# Sorting
+"""
+- axis = 0: sort by index(default)
+- axis = 1: sort by column names
+- by = 'name': sort rows by the value of column 'name'
+- ascending: sort in ascending order(default)
+"""
+
+tbl.sort_index(axis=0) # sort by index [0, 1, 2, 3, 4]
+
+
+tbl.sort_index(axis=1) 
+# sort by column names
+
+tbl.sort_index(by='var') # sort by 'var'
+
+
+tbl.sort_index(by='var', ascending=False) 
+# sort by 'var' in descending order
+
+tbl.sort_index(by=['color', 'value'], ascending=False) 
+# sort by 'color' and then 'value' in descending order
+
+tbl.sort_index(by=['color', 'value'], ascending=[False, True]) 
+# sort by 'color'(descending) and then 'value'(ascending)
+
+
+
+# Group and aggregation
+
+"""
+Categorizing a data set and applying a function to each group is often a critical component of a data analysis workflow.
+
+A DataFrame can be grouped on its rows (axis=0) or its columns (axis=1).
+After grouped, apply a function to each group, produce a new value(sum, for example).
+At last, the results of all those steps are combined into a final result.
+"""
+
+
+group = df.groupby(df.key1)
+group.mean()
+type(group) # generate a DataFrameGroupBy object
+
+group2 = df.groupby([df.key1, df.key2])
+group2.mean()
+
+" It also works for lists, tuples and arrays. "
+years = [2005, 2005, 2006, 2005, 2006]
+df.groupby(years).mean()
+# group by array
+df.groupby(np.array(years)).mean()  
+# group by tuple
+df.groupby((2005, 2005, 2006, 2005, 2006)).mean()
+
+
+
+" The GroupBy object supports iteration, generating a sequence of 2-tuples containing the group name along with the chunk of data. "
+for key, value in group:
+    print 'Group:', key
+    print 30 * '-'
+    print value, '\n'
+"""
+Group: a
+------------------------------
+      data1     data2 key1 key2
+0 -1.735067  0.406057    a  one
+1 -1.020162  0.223686    a  two
+4 -0.286692  0.611796    a  one 
+
+Group: b
+------------------------------
+      data1     data2 key1 key2
+2  0.878318  0.116686    b  one
+3 -0.525571 -1.045727    b  two 
+"""
+
+
+for (key1, key2), value in df.groupby([df.key1, df.key2]):
+    print 'Group:', key1, '&', key2
+    print 30 * '-'
+    print value, '\n'
+"""
+Group: a & one
+------------------------------
+      data1     data2 key1 key2
+0 -1.735067  0.406057    a  one
+4 -0.286692  0.611796    a  one 
+
+Group: a & two
+------------------------------
+      data1     data2 key1 key2
+1 -1.020162  0.223686    a  two 
+
+Group: b & one
+------------------------------
+      data1     data2 key1 key2
+2  0.878318  0.116686    b  one 
+
+Group: b & two
+------------------------------
+      data1     data2 key1 key2
+3 -0.525571 -1.045727    b  two 
+"""
+
+list(df.groupby('key1')) # Convert a Groupby object to list.
+dict(list(df.groupby('key1'))) # Convert a Groupby object to dictionary.
+
+df.groupby(['key1', 'key2']).mean()
+
+
+# The Groupby object also support column indexing.
+data1Mean =  df.groupby(['key1', 'key2'])[['data1']].mean()
+# double [] result into a DataFrame
+print type(data1Mean)
+print data1Mean
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
