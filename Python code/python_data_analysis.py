@@ -1,11 +1,126 @@
 # Python - data analysis - Basic
 
+# ------------------------------ Install Python
+# [1] Set up 
+# anaconda python
+Google: anaconda python
+-> Download "anaconda"
+-> 2.7 version
+-> choose installer
+# IPython notebook
+anaconda promte
+-> conda update conda # update conda
+-> conda update ipython ipython-notebook ipython-qtconsole # update ipython
+-> ipython notebook # open notebook
+# install packages in python
+anaconda promte
+-> conda install *packages # will take care all dependencies
 
 
 
 
 
-# ------------------------------ Python Basic Class 1
+
+
+
+
+
+
+
+
+
+
+
+
+# ------------------------------ I/O programming in Python
+# print sub
+print "%s is %d is %r" % ('mark', 12, "\nmark")
+" mark is 12 is \nmark" 
+
+print "I" + "S"
+"IS"
+
+
+# User input
+tire_degree = int(raw_input("\aHow tired you are? "))*100
+Do_you = raw_input("\aYou want to save and quit? ")
+Again = raw_input("\aAre you sure? ")
+print "You are %s times tired. \n%s is whether you want to quit. \nWhen I ask you sure? You said \"%s\"." % (tire_degree, Do_you, Again)
+
+promt = ">> "
+print "Do you feel bad today?"
+feel = raw_input(promt)
+
+
+
+
+
+# From command line - argv
+command line: python python.py 1st 2nd ...
+from sys import argv
+
+scrpit, a, b, c = argv
+
+print "scrpit is:", scrpit
+print "a is:", a
+print "b is:", b
+print "c is:", c
+
+
+
+
+
+# Define function in file.py then import it in python to use
+def add(a, b, c):
+    print "adding %d, %d, and %d together:" % (a, b, c)
+    return a + b + c
+def super_add(a, b, c, d):
+    print "adding %d, %d, and %d together:" % (a, b, c)
+    print "Then, divided by %d." % d
+    return (a + b + c) / d
+$python
+>>> import filename
+>>> filename.add(10, 20, 30)
+>>> filename.super_add(10, 20, 30, 5)
+or
+>>> from filename import *
+>>> add(10, 20, 30)
+>>> super_add(10, 20, 30, 5)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# ------------------------------ Python Data Analysis Basic 
 # package:
 import Numpy as Np # Numpy, short for Numerical Python, is the foundational package for scientific computing in Python
 
@@ -92,7 +207,7 @@ print 1 != 1
 print True and True
 print True or  False
 print not True
-
+print True or (False and True)
 
 
 # Strings
@@ -2528,6 +2643,381 @@ print data1Mean
 
 
 
+# Grouping with Dict and Series¶
+
+print people # dataframe
+"""
+               a         b         c         d         e
+Joe    -1.857129  0.119589  0.971842 -1.640040  0.723110
+Steve   1.843463 -0.200584 -0.001003 -0.167259  0.933656
+Wes    -1.671633 -1.282425  0.670216 -0.159577  0.326869
+Jim    -0.256390 -1.463713  0.006516  1.179782 -0.276399
+Travis -1.503408  0.590367  0.984099 -0.314719  1.414260
+"""
+
+mapping = {'a': 'red', 'b': 'red', 'c': 'blue', 
+           'd': 'blue', 'e': 'red'}
+people.groupby(mapping, axis=1).mean()
+# group by the values of mapping
+# axis = 1: group by columns
+
+"""
+        blue        red
+Joe     -0.334099   -0.338143
+Steve   -0.084131   0.858845
+Wes     0.255319    -0.875730
+Jim     0.593149    -0.665501
+Travis  0.334690    0.167073
+"""
+
+# in default, it's group by rows
+mapping = {'Joe': 'red', 'Steve': 'red', 'Wes': 'blue', 'Travis': 'blue', 'Jim': 'red'}
+people.groupby(mapping).mean()
+
+"""
+        a           b           c           d           e
+blue    -1.587520   -0.346029   0.827157    -0.237148   0.870564
+red     -0.090019   -0.514903   0.325785    -0.209172   0.460122
+"""
+
+# the same functionality holds for Series
+mapSeries = pd.Series(mapping)
+people.groupby(mapSeries).mean()
+
+"""
+        a           b           c           d           e
+blue    -1.587520   -0.346029   0.827157    -0.237148   0.870564
+red     -0.090019   -0.514903   0.325785    -0.209172   0.460122
+"""
+
+# Aggregation
+# There is a collection of functions for Groupby object.
+Function    Description
+size        Number of factors
+count       Number of non-NA values in the group
+sum         Sum of non-NA values
+mean        Mean of non-NA values
+median      Arithmetic median of non-NA values
+std, var    Unbiased (n - 1 denominator) standard deviation and variance
+min, max    Minimum and maximum of non-NA values
+prod        Product of non-NA values
+first, last First and last non-NA values
+
+print tips
+"""
+   total_bill   tip     sex smoker  day    time  size
+0       16.99  1.01  Female     No  Sun  Dinner     2
+1       10.34  1.66    Male     No  Sun  Dinner     3
+2       21.01  3.50    Male     No  Sun  Dinner     3
+3       23.68  3.31    Male     No  Sun  Dinner     2
+4       24.59  3.61  Female     No  Sun  Dinner     4
+"""
+
+tips.groupby('sex').size()
+
+tips.groupby('sex').count()
+# count will counts for all the columns
+
+tips.groupby('sex')['tip'].mean()
+
+tips.groupby('sex')['tip'].max()
+
+# the same
+# sort and return the first one
+tips = tips.sort_index(by = ['tip'], ascending = False)
+tips.groupby('sex').first() 
+tips.groupby('sex').head()
+# - we can also use 'apply' fun in grouping
+def stat(x):
+    return pd.Series({'count': len(x), 'sum': np.sum(x), # - define function first
+                      'min': np.min(x), 'max': np.max(x),
+                      'mean': np.mean(x), 'std': np.std(x)})
+tips.groupby('sex')['tip'].apply(stat) # apply fun 
+
+# - // same as above with .agg()
+# multiple functions at once
+# just give a list of functions
+tips.groupby('sex')['tip'].agg(['count', 'sum', 'min', 'max', 'mean', 'std'])
+# simpler than tips.groupby('sex')['tip'].apply(stat)
+# in which you should define a function at first
+"""
+        count       sum min max mean    std
+sex                     
+Female  87  246.51  1   6.5 2.833448    1.159495
+Male    157 485.07  1   10.0    3.089618    1.489102
+"""
+tips.groupby('sex')['tip'].agg(['count', 'sum', 'min', 'max', 'mean', \
+                                ('StandardDivation', 'std')])
+# replace the name 'std' with 'StandardDivation'
+"""
+    count   sum min max mean    StandardDivation
+sex                     
+Female  87  246.51  1   6.5 2.833448    1.159495
+Male    157 485.07  1   10.0    3.089618    1.489102
+"""
+
+
+# >> To implement different functions on different columns, you need to pass a dictionary.
+colFun = {'tip': ['mean', 'std', 'max'],
+          'total_bill': ['mean'],
+          'size': ['sum', 'mean']}
+tips.groupby('sex').agg(colFun)
+"""
+        total_bill  tip                             size
+        mean        mean        std         max     sum mean
+sex                     
+Female  18.056897   2.833448    1.159495    6.5     214 2.459770
+Male    20.744076   3.089618    1.489102    10.0    413 2.630573
+"""
+# ** In default, after aggregation the group keys will come back as index.
+#    Set as_index = False to convert the keys to columns.
+tips.groupby('sex', as_index=False).agg(colFun)
+
+
+# The transform method applies a function to each group, then places the results in the appropriate locations.
+tips['mean>3.1'] = tips.groupby(['sex', 'smoker'])['tip'].transform(lambda x: np.mean(x) >= 3.1)
+# add a column 'mean>3.1'
+# sex(Male),smoker(No) --> 1(True)
+# others ----------------> 0(False)
+print tips[['sex', 'smoker', 'tip', 'mean>3.1']].head(10)
+"""
+        sex smoker    tip  mean>3.1
+170    Male    Yes  10.00         0
+212    Male     No   9.00         1
+23     Male     No   7.58         1
+59     Male     No   6.73         1
+141    Male     No   6.70         1
+214  Female    Yes   6.50         0
+183    Male    Yes   6.50         0
+47     Male     No   6.00         1
+239    Male     No   5.92         1
+88     Male     No   5.85         1
+"""
+
+# drop the column
+tips = tips.drop('mean>3.1', axis = 1)
+
+
+
+
+
+
+# >> Pivot Tables and Cross-Tabulation
+"""
+Function    Description
+values      Column name or names to aggregate. By default aggregates all numeric columns
+index       Column names or other group keys to group on the rows of the resulting pivot table
+columns     Column names or other group keys to group on the columns of the resulting pivot table
+aggfunc     Aggregation function or list of functions; 'mean' by default. Can be any function valid in a groupby context
+fill_value  Replace missing values in result table
+margins Add row/column subtotals and grand total, False by default
+"""
+
+print tips
+"""
+   total_bill   tip     sex smoker  day    time  size
+0       16.99  1.01  Female     No  Sun  Dinner     2
+1       10.34  1.66    Male     No  Sun  Dinner     3
+2       21.01  3.50    Male     No  Sun  Dinner     3
+3       23.68  3.31    Male     No  Sun  Dinner     2
+4       24.59  3.61  Female     No  Sun  Dinner     4
+"""
+
+tips.pivot_table(index=['sex', 'smoker']) 
+#  By default aggregates all numeric columns
+"""
+               size        tip         total_bill
+sex    smoker          
+Female  No     2.592593    2.773519    18.105185
+        Yes    2.242424    2.931515    17.977879
+Male    No     2.711340    3.113402    19.791237
+        Yes    2.500000    3.051167    22.284500
+"""
+
+
+tips.pivot_table(index=['sex', 'smoker'], columns='day', values='tip',  margins=True)
+"""
+        day     Fri    Sat    Sun    Thur    All
+sex     smoker                  
+Female  No  3.125000    2.724615    3.329286    2.459600    2.773519
+        Yes 2.682857    2.868667    3.500000    2.990000    2.931515
+Male    No  2.500000    3.256563    3.115349    2.941500    3.113402
+        Yes 2.741250    2.879259    3.521333    3.058000    3.051167
+All         2.734737    2.993103    3.255132    2.771452    2.998279
+"""
+
+
+
+tips.pivot_table(index=['sex', 'smoker'], 
+                 columns='day', values='tip',
+                 aggfunc = 'describe')
+"""
+            day     Fri         Sat         Sun         Thur
+sex     smoker                  
+Female  No  count   2.000000    13.000000   14.000000   25.000000
+            mean    3.125000    2.724615    3.329286    2.459600
+            std     0.176777    0.961904    1.282356    1.078369
+            min     3.000000    1.000000    1.010000    1.250000
+            25%     3.062500    2.230000    2.602500    1.680000
+            50%     3.125000    2.750000    3.500000    2.000000
+            75%     3.187500    3.000000    3.937500    2.920000
+            max     3.250000    4.670000    5.200000    5.170000
+        Yes count   7.000000    15.000000   4.000000    7.000000
+            mean    2.682857    2.868667    3.500000    2.990000
+            std     1.058013    1.461378    0.408248    1.204049
+            min     1.000000    1.000000    3.000000    2.000000
+            25%     2.250000    2.000000    3.375000    2.005000
+            50%     2.500000    2.500000    3.500000    2.500000
+            75%     3.240000    3.310000    3.625000    3.710000
+            max     4.300000    6.500000    4.000000    5.000000
+Male    No  count   2.000000    32.000000   43.000000   20.000000
+            mean    2.500000    3.256563    3.115349    2.941500
+            std     1.414214    1.839749    1.216401    1.485623
+            min     1.500000    1.250000    1.320000    1.440000
+            25%     2.000000    2.000000    2.000000    2.000000
+            50%     2.500000    2.860000    3.000000    2.405000
+            75%     3.000000    3.640000    3.815000    3.550000
+            max     3.500000    9.000000    6.000000    6.700000
+        Yes count   8.000000    27.000000   15.000000   10.000000
+            mean    2.741250    2.879259    3.521333    3.058000
+            std     1.166808    1.744338    1.417432    1.111573
+            min     1.500000    1.000000    1.500000    2.000000
+            25%     1.835000    1.990000    2.500000    2.005000
+            50%     2.600000    3.000000    3.500000    2.780000
+            75%     3.250000    3.185000    4.000000    4.000000
+            max     4.730000    10.000000   6.500000    5.000000
+"""
+
+
+
+# Cross-Tabulations: Crosstab
+# A cross-tabulation (or crosstab for short) is a special case of a pivot table that computes group frequencies.
+# It can be computed by the function pandas.crosstab function.
+pd.crosstab(tips.sex, tips.smoker)
+"""
+smoker  No  Yes
+sex     
+Female  54  33
+Male    97  60
+"""
+# equivalent
+tips.pivot_table(index='sex', columns='smoker', values= 'tip', aggfunc='count')
+"""
+smoker  No  Yes
+sex     
+Female  54  33
+Male    97  60
+"""
+# equivalent
+tips.groupby(['sex', 'smoker']).size()
+"""
+smoker  No  Yes
+sex     
+Female  54  33
+Male    97  60
+"""
+# The function crosstab also has arguments rows, cols, and aggfunc, etc. Run help(pd.crosstab) to see the document.
+
+
+
+# >> Combine & Merge
+"""
+Data contained in pandas objects can be combined together in a number of built-in ways:
+
+pandas.concat glues or stacks together objects along an axis.
+pandas.merge connects rows in DataFrame objects based on one or more keys. 
+This will be familiar to users of SQL or other relational databases, as it implements database join operations.
+"""
+
+# concat
+print people
+"""
+               a         b         c         d         e
+Joe    -1.857129  0.119589  0.971842 -1.640040  0.723110
+Steve   1.843463 -0.200584 -0.001003 -0.167259  0.933656
+Wes    -1.671633 -1.282425  0.670216 -0.159577  0.326869
+Jim    -0.256390 -1.463713  0.006516  1.179782 -0.276399
+Travis -1.503408  0.590367  0.984099 -0.314719  1.414260
+"""
+
+people2 = pd.DataFrame({'John': np.random.randn(5)},
+                        index = ['a', 'b', 'c', 'd', 'e']) # create a new data for concatenate
+print people2
+print people2.T
+"""
+       John
+a  0.761151
+b  1.198944
+c  0.574395
+d -0.832043
+e  1.449887
+"""
+
+"""
+             a         b         c         d         e
+John  0.761151  1.198944  0.574395 -0.832043  1.449887
+"""
+
+## Concatenate people and people2 together by rows
+peoples = pd.concat([people, people2.T], axis = 0)
+print peoples
+"""
+               a         b         c         d         e
+Joe    -1.857129  0.119589  0.971842 -1.640040  0.723110
+Steve   1.843463 -0.200584 -0.001003 -0.167259  0.933656
+Wes    -1.671633 -1.282425  0.670216 -0.159577  0.326869
+Jim    -0.256390 -1.463713  0.006516  1.179782 -0.276399
+Travis -1.503408  0.590367  0.984099 -0.314719  1.414260
+John    0.761151  1.198944  0.574395 -0.832043  1.449887 > vy raw default 0
+"""
+
+
+
+fg = pd.DataFrame(np.random.randn(6, 2), 
+                   index = peoples.index,
+                   columns = ['f', 'g']) # create another data for joining by column
+print fg
+"""
+               f         g
+Joe    -0.821135  0.240469
+Steve   1.357890  0.397905
+Wes    -0.422386  0.921984
+Jim    -0.192974  0.701869
+Travis -0.352909  0.250238
+John   -0.996313  0.562728
+"""
+
+
+## Concatenate peoples and fg together by columns
+peoples = pd.concat([peoples, fg], axis = 1)
+print peoples
+
+"""
+               a         b         c         d         e         f         g
+Joe    -1.857129  0.119589  0.971842 -1.640040  0.723110 -0.821135  0.240469
+Steve   1.843463 -0.200584 -0.001003 -0.167259  0.933656  1.357890  0.397905
+Wes    -1.671633 -1.282425  0.670216 -0.159577  0.326869 -0.422386  0.921984
+Jim    -0.256390 -1.463713  0.006516  1.179782 -0.276399 -0.192974  0.701869
+Travis -1.503408  0.590367  0.984099 -0.314719  1.414260 -0.352909  0.250238
+John    0.761151  1.198944  0.574395 -0.832043  1.449887 -0.996313  0.562728
+"""
+
+
+
+# Merge
+# merge merge DataFrame objects by performing a database-style join operation by columns or indexes.
+
+"""
+Basiclly, there are four kinds of merges:
+left: use only keys from left frame (SQL: left outer join)
+right: use only keys from right frame (SQL: right outer join)
+outer: use union of keys from both frames (SQL: full outer join)
+inner: use intersection of keys from both frames (SQL: inner join)
+"""
+
+pd.merge(data1, data2, how='outer', # 'inner', 'left', 'right'
+               left_on='surname', right_on='name')
+help(pd.merge) # more information
 
 
 
@@ -2549,6 +3039,28 @@ print data1Mean
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# --------------------------------------------- Python Widgets (Interactive Dashboard)
+" http://blog.dominodatalab.com/interactive-dashboards-in-jupyter/ "
+
+# - start 
+from ipywidgets import widgets
 
 
 

@@ -76,6 +76,13 @@
 
 
 
+## --------------------------- Hack Terminal ---------------------------- ##
+# [1] edit the welcome message of terminal
+$ sudo pico /etc/motd # password is required
+" edit nano "
+" CTRL-X "
+
+# [2] 
 
 
 

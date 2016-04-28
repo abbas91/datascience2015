@@ -582,7 +582,7 @@ sudo apt-get install r-base-dev
 # install "shiny" package / Install any packages needed in app in here
 sudo su –root
 R -e 'install.packages("shiny", repos="http://cran.rstudio.com/")'
-sudo su - -c "R -e \"install.packages('shiny', repos='http://cran.rstudio.com/')\"" #Other option
+sudo su - -c "R -e \"install.packages('shiny', dependencies=TRUE, repos='http://cran.rstudio.com/')\"" #Other option
 # or
 R
 install.packages("shiny")
