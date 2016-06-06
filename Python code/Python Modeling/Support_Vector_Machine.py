@@ -1,4 +1,5 @@
-# Linear Regression
+# Support Vector Machine
+
 
 # load lib {numpy, sklearn}
 from sklearn import datasets
@@ -20,19 +21,12 @@ sc.fit(X_train) # fit the object with data to get meansure
 X_train_std = sc.transform(X_train) # scale data
 X_test_std = sc.transform(X_test) # scale data
 
+# fitting the model
+from sklearn.svm import SVC
+svm = SVC(kernel='linear', C=1.0, random_state=0) # linear kernel SVM / 'C' torlent to misclassification
+svm = SVC(kernel='rbf', C=10.0, random_state=0, gamma=0.10) # Radius kernel SVM / 'C' torlent to misclassification / gamma: large over fit, small under fit
 
-
-
-# Fitting Model
-from sklearn.linear_model import LogisticRegression
-lr = LogisticRegression(C=1000.0, random_state=0) # C {penality parameter}
-lr.fit(X_train_std, y_train)
-
-lr.predict_proba(X_test_std[0,:]) # P() of predict on one sample
-" array([[ 0.000, 0.063, 0.937 ]]) " # three classes p()s
-
-
-
+svm.fit(X_train_std, y_train)
 
 
 
@@ -44,24 +38,7 @@ lr.predict_proba(X_test_std[0,:]) # P() of predict on one sample
 
 # SGD implementation 
 from sklearn.linear_model import SGDClassifier
-svm = SGDClassifier(loss='log') # ??
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+svm = SGDClassifier(loss='hinge') # ??
 
 
 

@@ -1,4 +1,4 @@
-# Linear Regression
+# - Perceptron Model - #
 
 # load lib {numpy, sklearn}
 from sklearn import datasets
@@ -20,20 +20,20 @@ sc.fit(X_train) # fit the object with data to get meansure
 X_train_std = sc.transform(X_train) # scale data
 X_test_std = sc.transform(X_test) # scale data
 
+# fitting the model
+from sklearn.linear_model import Perceptron
+ppn = Perceptron(n_iter=40, eta0=0.1, random_state=0) # define model object
+ppn.fit(X_train_std, y_train) # fit the object with data
 
+# Predict on test with object
+y_pred = ppn.predict(X_test_std)
+print('Misclassification: %d' % (y_test != y_pred).sum())
 
+# Can load more metrics from sklearn
+from sklearn.metrics import accuracy_score
+print('Accuraycy: %.2f' % accuracy_score(y_test, y_pred))
 
-# Fitting Model
-from sklearn.linear_model import LogisticRegression
-lr = LogisticRegression(C=1000.0, random_state=0) # C {penality parameter}
-lr.fit(X_train_std, y_train)
-
-lr.predict_proba(X_test_std[0,:]) # P() of predict on one sample
-" array([[ 0.000, 0.063, 0.937 ]]) " # three classes p()s
-
-
-
-
+# plot decision boundaries - P53-54
 
 
 
@@ -44,27 +44,7 @@ lr.predict_proba(X_test_std[0,:]) # P() of predict on one sample
 
 # SGD implementation 
 from sklearn.linear_model import SGDClassifier
-svm = SGDClassifier(loss='log') # ??
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+svm = SGDClassifier(loss='perceptron') # ??
 
 
 
