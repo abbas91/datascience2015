@@ -69,9 +69,31 @@ validIndex <- createDataPartition(data2$Y, p = .75,
 Data.Valid <- data[validIndex,]
 Data.Test  <- data[-validIndex,]
 
-# -- Learning Curve Building [Optional]
 
-learning.curve.plot(Data.Train, Data.Valid, Y, k)
+
+
+# -- Learning Curve Building [Optional]
+# plot learning curve
+fitControl <- trainControl(## 10-fold CV
+                           method = "repeatedcv",
+                           number = 10,
+                           ## repeated ten times
+                           repeats = 10) 
+
+set.seed(29510)
+glm_data <- learing_curve_dat(dat = Data.Train_valid, 
+                              outcome = "first_complete_y",
+                              test_prop = 2/8, 
+                              ## `train` arguments:
+                              method = "glm",
+                              family = binomial,
+                              metric = "Kappa",
+                              trControl = fitControl)
+
+
+ggplot(glm_data, aes(x = Training_Size, y = Kappa, color = Data)) + 
+  geom_smooth(method = loess, span = .8) + 
+  theme_bw()
 
 
 
