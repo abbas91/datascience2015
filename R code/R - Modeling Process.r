@@ -95,19 +95,33 @@ for(i in 1:10) seeds[[i]]<- sample.int(n=1000, 3) #(3 is the number of tuning pa
 seeds[[11]]<-sample.int(1000, 1)#for the last model
 
  #control list
- myControl <- trainControl(method='cv', seeds=seeds, index=createFolds(iris$Species))
+fitControl <- trainControl(## 10-fold CV
+                           method = "repeatedcv",
+                           number = 10,
+                           ## repeated ten times
+                           repeats = 10) 
 
- #run model in parallel
+ #run model in parallel - plot learning curve
  cl <- makeCluster(detectCores())
  registerDoParallel(cl)
  getDoParWorkers() # Check number of clusters registered
 
- model1 <- train(Species~., iris, method='rf', trControl=myControl)
- model2 <- train(Species~., iris, method='rf', trControl=myControl)
+
+set.seed(29510)
+glm_data <- learing_curve_dat(dat = Data.Train_valid, 
+                              outcome = "first_complete_y",
+                              test_prop = 2/8, 
+                              ## `train` arguments:
+                              method = "glm",
+                              family = binomial,
+                              metric = "Kappa",
+                              trControl = fitControl)
 
  stopCluster(cl)
 
-
+ggplot(glm_data, aes(x = Training_Size, y = Kappa, color = Data)) + 
+  geom_smooth(method = loess, span = .8) + 
+  theme_bw()
 
 
 
@@ -152,6 +166,8 @@ whichTwoPct <- tolerance(gbmFit2$results, metric = "ROC",
                          tol = 2, maximize = TRUE) # 2% less than best model (ordering the models from simplest to complex)
 cat("best model within 2 pct of best:\n")
 gbmFit2$results[whichTwoPct,1:6] # get performance result of it / Select best version from all versions
+
+
 
 
 

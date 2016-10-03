@@ -23,7 +23,7 @@ X_test_std = sc.transform(X_test) # scale data
 
 
 
-# fitting the model
+# KNN Classifier
 from sklearn.neighbors import KNeighborsClassifier
 knn = KNeighborsClassifier(n_neighbors=5, p=2, metric='minkowski') # p = 1 {manhatten Dist} : p = 2 {Euclidean} 
 knn.fit(X_train_std, y_train)

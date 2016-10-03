@@ -41,6 +41,7 @@ print "I" + "S"
 "IS"
 
 
+
 # User input
 tire_degree = int(raw_input("\aHow tired you are? "))*100
 Do_you = raw_input("\aYou want to save and quit? ")
@@ -288,7 +289,7 @@ elif div2 and not div3:
     print "x can be divided by 2, but can not by 3."
 elif not div2 and div3: 
     print "x can be divided by 3, but can not by 2."
-else:
+else: 
     print "x can not be divided by 2 or 3."
 
 
@@ -1618,7 +1619,7 @@ m
 rand(d0, d1, ..., dn) # Random values in a given shape from [0, 1] uniformly.
 randn(d0, d1, ..., dn) # Return a sample (or samples) from the “standard normal” distribution.
 randint(low[, high, size]) # Return random integers from low (inclusive) to high (exclusive).
-random_integers(low[, high, size]) # Return random integers between low and high, inclusive.
+random_integers(low, high, size) # Return random integers between low and high, inclusive.
 random_sample([size]) # Return random floats in the half-open interval [0.0, 1.0).
 random([size]) # Return random floats in the half-open interval [0.0, 1.0).
 ranf([size]) # Return random floats in the half-open interval [0.0, 1.0).
@@ -2306,13 +2307,13 @@ print df1
 print df2
 """
        a  b  c
-one    0  1  2
+one    0  1  3
 two    3  4  5
 three  6  7  8
        b   c   d
 zero   0   1   2
 one    3   4   5
-two    6   7   8
+two    6   7   5
 three  9  10  11
 """
 

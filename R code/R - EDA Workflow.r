@@ -25,7 +25,10 @@
 ##     - quick visualize missing status
        install.packages("VIM")
        library(VIM)
-       aggr(data)
+       mice_plot <- aggr(Data, col=c('navyblue','yellow'),
+                  numbers=TRUE, sortVars=TRUE,
+                  labels=colnames(Data), cex.axis=.7,
+                  gap=3, ylab=c("Missing data","Pattern"))
 #
 ## [2] General Data loaded check
        head(view1,#)

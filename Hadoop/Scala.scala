@@ -63,7 +63,7 @@ scala> def max(x: Int = 87, y:Int): Int = {
 }
 
 
-/* If statement */
+/* If statement */ 
 scala> if (x>y) x else y
 
 
@@ -130,7 +130,7 @@ greetString(0) = "Hello"
 greetString(1) = ", "
 greetString(2) = "World!\n"
 
-for (1 <- 0 to 10)
+for (i <- 0 to 10)
   printIn(greetStrings(i))
 
 /* New way */

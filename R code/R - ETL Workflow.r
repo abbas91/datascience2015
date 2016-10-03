@@ -171,6 +171,8 @@
        view1$var1 = view1$var_new %in% c("xxx", "xx", "xxxx") ## If yes TRUE else FALSE (Logical var)
        view1$High = factor(view1$High, levels = c("Yes", "No"), labels = c("High", "Low")) ##Code Char factor with lebal
        view1 = gsub("regex...", replacement, var) ##Apply Regular Expressions on dataset
+       Data[,i] <- with(Data, ifelse(Data[,i] == 'NA', NA, Data[,i])) # vectorized fast apply function to a vector
+       as.POSIXlt(data) # - Convert string to Date
 ##    <2> Roll - metrics
        install.packages("zoo")
        library(zoo)
@@ -258,6 +260,13 @@
                                         encoded.final = encoded * noise
                                         encoded.final = round(encoded.final, digit = 3)
                                         } 
+##        (2) Categorical <- Numeric (dummy)
+              example1 <- as.data.frame(imp_knn_cut[,1])
+				names(example1) <- "city_name"
+				for(level in unique(example1$city_name)){
+				  example1[paste("city_name", level, sep = "_")] <- ifelse(example1$city_name == level, 1, 0)
+				}
+				example1 <- example1[,2:ncol(example1)]
 ##    <3> Tranform to different distribution
 ##       (1) Box-cox Transform
              install.packages("caret") ##--To linear
@@ -367,7 +376,8 @@
 ##    (8) Use "VIM" packages kNN to impute missing value
        install.packages("VIM")
        library(VIM)
-       data.knn = kNN(data)	   
+       data.knn = kNN(data, variable = colnames(data[,1:7]), k = 3) # use all data to impute 1:7 columns
+       data.knn <- data.knn[,1:7] # extra meta columns need to be removed
 #
 ...
 ## ----------------------{Output}
