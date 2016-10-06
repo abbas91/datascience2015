@@ -17,6 +17,16 @@ The objective of this modeling project
 install.packages("caret")
 library(caret)
 
+# - launch list of libraries
+install.packages("needs")
+library(needs)
+## 
+## Load `package:needs` in an interactive session to set auto-load flag
+needs(dplyr, tidyr, stringr, lubridate, readr, ggplot2, MASS, pander, formattable, viridis)
+
+
+
+
 # >>> Step2 - Loading Data in
 
 [R - ETL Workflow] > [Input Data File]

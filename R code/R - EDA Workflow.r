@@ -266,11 +266,25 @@ multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
 #
 ...
 
+# Plot 2 var and color code by 3rd var
+library(ggplot2)
+
+ggplot(small_train, aes(x, y )) +
+  geom_point(aes(color = place_id)) + 
+  theme_minimal() +
+  theme(legend.position = "none") +
+  ggtitle("Check-ins colored by place_id")
 
 
 
+# 3D plot
+install.packages("lazyeval")
+install.packages("plotly")
+library(lazyeval)
+library(plotly)
 
-
+plot_ly(data = data, x = ~x, y = ~y, z = ~z, color = ~d,
+        type = "scatter3d", mode = "markers", marker=list(size= 5)) %>% layout(title = "xxxxxxxxx")
 
 
 
