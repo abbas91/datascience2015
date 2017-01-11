@@ -1,6 +1,6 @@
 Data Science Note
 
-Programming
+Programming Language
 ===============================
 1.Python code 
 2.R code
@@ -10,8 +10,8 @@ Programming
 
 
 
-Algorithms
+Data Science Process
 ===============================
-1.Machine Learning Algorithm
-2.Statistical Test Research
-3.Time series
+1.Algorithms
+2.DEA and ETL
+3.Data_Science_Process.txt

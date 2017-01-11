@@ -1,0 +1,61 @@
+#####################################
+######  Mathematical Learning:  #####
+#####################################
+>1 Frequentist Statistics & Data Analysis [x]
+
+>2 Bayesian Statistics & Data Analysis [x]
+
+>3 Linear Algebra basic & advance [x]
+
+>4 Calculus 1 and 2 []
+
+>4 Numeric Optimization [] 
+
+>5 Time series analysis []
+
+>6 Multivariate Data Analysis []
+
+>7 Statistical Learning Book (All) [x]
+
+>8 Social Network Analysis []
+
+>9 Game Theory []
+
+
+
+
+
+####################################
+######  Programming Learning:  #####
+####################################
+>1 Python Data Analysis [x]
+
+>2 Python Modeling []
+
+>3 R Data Analysis [xxx]
+
+>4 R Modeling [xx]
+
+>5 Linux terminal [x] 
+
+>6 AWS ecosystem [x] 
+
+>7 Hadoop Structure (HDFS - MR) []
+
+>8 HIVE []
+
+>9 PIG []
+
+>10 SQL [xxx]
+
+>11 SPARK (Pyspark, Rspark, Scala) []
+
+>12 Scala Data Analysis []
+
+>13 Scala Modeling []
+
+>14 D3.Js []
+
+
+
+
