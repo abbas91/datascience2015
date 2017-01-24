@@ -1,61 +1,78 @@
-#####################################
-######  Mathematical Learning:  #####
-#####################################
->1 Frequentist Statistics & Data Analysis [x]
-
->2 Bayesian Statistics & Data Analysis [x]
-
->3 Linear Algebra basic & advance [x]
-
->4 Calculus 1 and 2 []
-
->4 Numeric Optimization [] 
-
->5 Time series analysis []
-
->6 Multivariate Data Analysis []
-
->7 Statistical Learning Book (All) [x]
-
->8 Social Network Analysis []
-
->9 Game Theory []
+###########################################
+#                                         #
+# Machine Learning Model Diagnose Process #
+#                                         #
+###########################################
 
 
+algorithm architecture, model parameters, choice of features
+
+# - Supervised Methods
+    * Trade-off between 'variance - bias'
 
 
+>> Mis-match test - train performance?
 
-####################################
-######  Programming Learning:  #####
-####################################
->1 Python Data Analysis [x]
+    * Split the data into 'train','validation', and 'test' (Choose dev and test sets from the same distribution if possible)
+      The train + validation data distribution affects the model's focus on prediction
 
->2 Python Modeling []
+    * The old heuristic of a 70%/30% train/test split does not apply for problems where you
+      have a lot of data; the dev and test sets can be much less than 30% of the data.
 
->3 R Data Analysis [xxx]
+    * Some old ML models' performance will 'flat-out' even with the increasing data set
 
->4 R Modeling [xx]
+    * If Model performs well in train/validation but poor in test:
+               If train,validation data different from test data -> skewed data (Same dist for all) less clear
+               If train,validation data the same as test data -> Model overfits on the train,validation data (More data, less fit para) more clear
 
->5 Linux terminal [x] 
+    * For different dist 'trai, validation, test', 
+               If goal is research learning algorthim trained on one but generalized good on another -> Research
+               If goal is to improve performance on specific ML application -> choose same dists for all
 
->6 AWS ecosystem [x] 
+>> How large dataset need to be?
 
->7 Hadoop Structure (HDFS - MR) []
+    * The validation set should be large enough to detect differences between algorithms that you are
+      trying out. For example, if classifier A has an accuracy of 90.0% and classifier B has an
+      accuracy of 90.1%, then a dev set of 100 examples would not be able to detect this 0.1%
+      difference. Compared to other machine learning problems Iíve seen, a 100 example dev set is
+      small. Dev sets with sizes from 1,000 to 10,000 examples are common.
 
->8 HIVE []
+    * Your test set should be big enough to give you a confident estimate of the final performance of your system.
+      One popular heuristic had been to use 30% of your data. for your test set. This works well when you have a modest number of examplesósay 100 to
+      10,000 examples.With big data,there is no need to have excessively large dev/test beyond what is needed to
+      evaluate the performance of your algorithms.
 
->9 PIG []
 
->10 SQL [xxx]
+>> Establish a single-number evaluation metrics to optimize - F1, Kappa, 
+   Plus Run times (Efficiency) -> set acceptible run times first then choose best performance model
 
->11 SPARK (Pyspark, Rspark, Scala) []
-
->12 Scala Data Analysis []
-
->13 Scala Modeling []
-
->14 D3.Js []
+   * Choose a single-number evaluation metric for your team to optimize. If thereíre multiple
+     goals that you care about, consider combining them into a single formula (such as
+     averaging multiple error metrics) or defining satisficing and optimizing metrics.
 
 
 
+>>> Model test iteration circle (train, validation sets & single metric ready)
+
+    1. Start off with some idea on how to build the system.
+    2. Implement the idea in code.
+    3. Carry out an experiment which tells me how well the idea worked. (Usually my first few
+       ideas donít work!) Based on these learnings, go back to generate more ideas, and keep on
+       iterating.
+
+
+
+>>> When to change dev/test sets and metrics?
+
+    * If you later realize that your initial dev/test set or metric missed the mark, by all means
+      change them quickly.If you ever find that the dev/test sets
+      or metric are no longer pointing your team in the right direction, itís not a big deal! Just
+      change them and make sure your team knows about the new direction.
+
+    * There are three main possible causes of the dev set/metric incorrectly rating classifier A
+      higher:
+
+      1. The actual distribution you need to do well on is different from the dev/test sets.
+      2. You have overfit to the dev set.
+      3. The metric is measuring something other than what the project needs to optimize.
 
