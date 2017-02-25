@@ -4,13 +4,25 @@
 #                              #
 ################################
 
+> CARET 
+
+
+
+
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>                              >
+>                              >
+>          C A R E T           >
+>                              >
+>                              >
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 # Objective
 """
 The objective of this modeling project
 """
-
-
-
 
 
 # >>> Step1 - Loading Packages
@@ -104,8 +116,6 @@ glm_data <- learing_curve_dat(dat = Data.Train_valid,
 ggplot(glm_data, aes(x = Training_Size, y = Kappa, color = Data)) + 
   geom_smooth(method = loess, span = .8) + 
   theme_bw()
-
-
 
 
 
@@ -312,6 +322,17 @@ summary(difValues)
 
 
 
+
+
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>                              >
+>                              >
+>          ?????????           >
+>                              >
+>                              >
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
 

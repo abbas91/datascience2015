@@ -1,2 +1,0 @@
-# Python - data analysis - Basic
-
