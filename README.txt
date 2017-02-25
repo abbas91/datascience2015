@@ -12,6 +12,6 @@ Programming Language
 
 Data Science Process
 ===============================
-1.Algorithms
-2.DEA and ETL
-3.Data_Science_Process.txt
+1.Data Science
+2.Quantitative Research
+
