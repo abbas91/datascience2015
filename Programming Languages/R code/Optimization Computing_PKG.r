@@ -1,4 +1,67 @@
-# <<<<<<<<<<<<<<<<<<<<<<<<<Parallel Computation in R>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+############################################
+#                                          #
+#                                          #
+#            Optimization in R             #
+#                                          #
+#                                          #
+############################################
+
+> System Information
+
+> Parallel Computation
+
+> Optimization Methods
+
+>
+
+
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>                                     >
+>                                     >
+>        System Information           >
+>                                     >
+>                                     >
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+"""
+A call of gc causes a garbage collection to take place. This will also take place automatically without user intervention, and the primary purpose of calling gc is for the report on memory usage.
+
+However, it can be useful to call gc after a large object has been removed, as this may prompt R to return memory to the operating system.
+
+R allocates space for vectors in multiples of 8 bytes: hence the report of 'Vcells', a relict of an earlier allocator (that used a vector heap).
+
+When gcinfo(TRUE) is in force, messages are sent to the message connection at each garbage collection of the form
+"""
+> gc()
+
+gc() #- do it now
+gcinfo(TRUE) #-- in the future, show when R does it
+x <- integer(100000); for(i in 1:18) x <- c(x, i)
+gcinfo(verbose = FALSE) #-- don't show it anymore
+
+gc(TRUE)
+
+gc(reset = TRUE)
+
+
+
+
+
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>                                     >
+>                                     >
+>        Parallel Computation         >
+>                                     >
+>                                     >
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+>>>>> doParallel >>>>>>>
+
 
 # [1] Package ---- "doParallel"
 ### Installation of package with all dependent packages
@@ -30,6 +93,22 @@ stopCluster(cl)
 
 
 
+# [2] 'plyr' package >>> 'doParallel'
+install.package("plyr")
+library(plyr)
+# a-metrix / d-data.frame / l-list
+# xxply(data, .(var1, var2), fun=myfun, .parallel=T)
+aaply
+adply
+alply
+
+daply
+ddply
+dlply
+
+laply
+ldply
+llply
 
 
 
@@ -43,6 +122,7 @@ stopCluster(cl)
 
 
 
+>>>>> doSNOW >>>>>>>
 
 
 # [2] Package ---- "doSNOW" * used with "foreach"
@@ -81,62 +161,6 @@ stopCluster(cluster)
 # insert serial backend, otherwise error in repetetive tasks
 registerDoSEQ()
 # END
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# [3] Package ---- "parallel" 
-# Library parallel() is a native R library, no CRAN required
-library(parallel)
-
-# detect true cores requires parallel()
-nCores <- detectCores(logical = FALSE)
-# detect threads
-nThreads <- detectCores(logical = TRUE)
-# detect threads
-cat("CPU with",nCores,"cores and",nThreads,"threads detected.\n")
-
-# automatically creates socketCluster under WIN, fork not allowed
-# maximum number of cluster nodes is 128
-cl <- makeCluster(nThreads); cl;
-# insert parallel calculations here
-
-# -------------------------------- #
-#            Function              #
-# -------------------------------- #
-
-# stop the cluster and remove parallel instances
-stopCluster(cl)
-# END
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -184,22 +208,6 @@ results = foreach(n = 1:100, .combine = c) %dopar% {
 
 
 
-# [2] 'plyr' package >>> 'doParallel'
-install.package("plyr")
-library(plyr)
-# a-metrix / d-data.frame / l-list
-# xxply(data, .(var1, var2), fun=myfun, .parallel=T)
-aaply
-adply
-alply
-
-daply
-ddply
-dlply
-
-laply
-ldply
-llply
 
 
 
@@ -208,7 +216,64 @@ llply
 
 
 
-# <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Optimization function in Model>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+
+>>>>>> parallel >>>>>>>>>
+
+# [3] Package ---- "parallel" 
+# Library parallel() is a native R library, no CRAN required
+library(parallel)
+
+# detect true cores requires parallel()
+nCores <- detectCores(logical = FALSE)
+# detect threads
+nThreads <- detectCores(logical = TRUE)
+# detect threads
+cat("CPU with",nCores,"cores and",nThreads,"threads detected.\n")
+
+# automatically creates socketCluster under WIN, fork not allowed
+# maximum number of cluster nodes is 128
+cl <- makeCluster(nThreads); cl;
+# insert parallel calculations here
+
+# -------------------------------- #
+#            Function              #
+# -------------------------------- #
+
+# stop the cluster and remove parallel instances
+stopCluster(cl)
+# END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>                                     >
+>                                     >
+>        Optimization Methods         >
+>                                     >
+>                                     >
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+# <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< in Model>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 # &&&&&&&&&&&&&&&&&& Blind Search
 """ Full blind search assumes the exhaustion of all alternatives, any previous search does not 
@@ -272,10 +337,6 @@ dfsearch <- function (l=1, b=1, domain, FUN, type="min", D=length(domain), x=rep
 
 
 
-
-
-
-
 # [Grid search]
 """ Reduce the space of solutions by implementing a regular hyper dimensional search with a 
 given step size. Grid search is particularly used for hyperparameter optimization of machine learning algorithms, 
@@ -303,12 +364,36 @@ Disadvantage - more easily stuck by local minium
 
 
 
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>                                     >
+>                                     >
+>         Big Memory Projects         >
+>                                     >
+>                                     >
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
 
+> bigmemory
+
+
+> biganalytics
 
 
 
+> bigtabulate
+
+
+
+> synchronicity
+
+
+
+> bigalgebra
+
+
+
+install.packages("bigmemory", repos="http://R-Forge.R-project.org")
 
 
 
