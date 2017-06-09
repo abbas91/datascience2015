@@ -597,9 +597,7 @@ class People(object):
         self.Id = Id
         self.Age = age
         
-    def __str__(self): # This __str__ method will be called when the object needs a string to print.
-        return "My name is %s, I'm %s years old. My Id number is %s." %(self.Name, self.Age, self.Id)
-
+    f
     def addAge(self): # a function of adding 1 to the original when it is called
         self.Age = self.Age + 1
     
