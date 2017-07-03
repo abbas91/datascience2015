@@ -296,6 +296,14 @@ while <condition>:
 for x in <sequence>:
     do()
 
+# -- Flow control
+break
+
+pass
+
+continue
+
+
 
 
 # -- example:
@@ -1375,7 +1383,7 @@ np.arange(10, dtype=np.float)
 np.arange(2, 10) # start from 2
 "array([2, 3, 4, 5, 6, 7, 8, 9])"
 
-np.arange(1, 10, 0.3) # start from 1 and increment by 0.5, end with a number less than 10.
+np.arange(1, 10, 0.3) # start from 1 and increment by 0.3, end with a number less than 10.
 """
 array([ 1. ,  1.3,  1.6,  1.9,  2.2,  2.5,  2.8,  3.1,  3.4,  3.7,  4. ,
         4.3,  4.6,  4.9,  5.2,  5.5,  5.8,  6.1,  6.4,  6.7,  7. ,  7.3,
@@ -1596,7 +1604,7 @@ random_sample([size]) # Return random floats in the half-open interval [0.0, 1.0
 random([size]) # Return random floats in the half-open interval [0.0, 1.0).
 ranf([size]) # Return random floats in the half-open interval [0.0, 1.0).
 sample([size]) # Return random floats in the half-open interval [0.0, 1.0).
-choice(a[, size, replace, p]) # Generates a random sample from a given 1-D array
+choice(a, size, replace, p]) # Generates a random sample from a given 1-D array
 
 from numpy import random
 random.rand(2, 3)
