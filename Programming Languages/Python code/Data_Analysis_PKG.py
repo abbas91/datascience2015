@@ -303,6 +303,11 @@ pass
 
 continue
 
+# -- enumerate // give index next to value
+my_list = ['apple', 'banana', 'grapes', 'pear']
+for c, value in enumerate(my_list,1):
+
+    print(c, value)
 
 
 
@@ -2301,6 +2306,24 @@ def f(x):
 df1.apply(f)
 # apply function to each column
 # return the min and max
+
+
+
+# Map
+" DataFrame's map method apply a function on each element of a Series. "
+
+df1['var1'].map(lambda x: 10 + x)
+# add 10 to each element in the series
+
+
+
+# ApplyMap
+" DataFrame's ApplyMap method apply a function to each element of a dataframe "
+
+func = lambda x: x+2
+df1.applymap(func) # add 2 to each element in the df
+
+
 
 
 
