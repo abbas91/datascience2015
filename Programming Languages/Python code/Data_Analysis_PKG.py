@@ -2068,6 +2068,7 @@ tips.to_csv('data/tips2.csv',
             sep = '\t')
 
 
+data.to_csv('data/tips.csv', header=True, index=False, encoding='utf-8') # If string encoded in Unicode
 
 # Interacting with Databases: SQLite
 
