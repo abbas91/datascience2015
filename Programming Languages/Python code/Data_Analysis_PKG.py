@@ -1457,6 +1457,21 @@ np.concatenate([a, b])
 
 
 
+" Stack by row / column "
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+np.vstack((a,b)).astype(np.float32) # By row
+np.hstack((a,b)).astype(np.float32) # By column
+
+
+
+
+
+
+
+
+
+
 
 
 """
@@ -1610,6 +1625,8 @@ random([size]) # Return random floats in the half-open interval [0.0, 1.0).
 ranf([size]) # Return random floats in the half-open interval [0.0, 1.0).
 sample([size]) # Return random floats in the half-open interval [0.0, 1.0).
 choice(a, size, replace, p]) # Generates a random sample from a given 1-D array
+random.multivariate_normal([mean1, mean2], [[cov1,cov1],[cov2,cov2]], number_observ) # Generate normal multivariate dist
+
 
 from numpy import random
 random.rand(2, 3)
