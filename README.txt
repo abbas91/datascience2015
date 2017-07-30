@@ -32,7 +32,7 @@ Data Science Process
      * Learning Note
      * Predict Algorithm
   - DEA / ETL
-  - Model_Evaluation_Metrics
+  - Evaluation
   - Data Science Strategy
 
 2.Quantitative Research
