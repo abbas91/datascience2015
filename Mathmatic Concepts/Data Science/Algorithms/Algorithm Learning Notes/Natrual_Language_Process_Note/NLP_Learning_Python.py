@@ -1747,11 +1747,11 @@ def func_m2():
 # ----------------------- #
 
 
-# ------- M-master.py -------- #
+# ------- M-main.py -------- #
 from M1 import func_m1
 from M2 import func_m2
 
-def func_master():
+def func_main():
 
 	func_m1()....
 	func_m2()....

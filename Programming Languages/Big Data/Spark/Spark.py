@@ -154,7 +154,7 @@ you do so by creating a SparkConf object to configure your application, and then
 """
 # Pyspark
 from pyspark import SparkConf, SparkContext
-conf = SparkConf().setMaster("local").setAppName("My App") # Create conf object - a cluster URL / your app name
+conf = SparkConf().setMain("local").setAppName("My App") # Create conf object - a cluster URL / your app name
 sc = SparkContext(conf = conf) # build a SparkContext for it
 
 # Scala
@@ -162,7 +162,7 @@ import org.apache.spark.SparkConf
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkContext._
 
-val conf = new SparkConf().setMaster("local").setAppName("My App") # Create conf object - a cluster URL / your app name
+val conf = new SparkConf().setMain("local").setAppName("My App") # Create conf object - a cluster URL / your app name
 val sc = new SparkContext(conf) # build a SparkContext for it
 
 # can use the sc to build RDDs
@@ -772,7 +772,7 @@ input = sc.textFile("s3n://bucket1/holden/repo/.../test.md")
 " Spark and HDFS can be collocated on the same machines, take advantage of this data locallity "
 " to avoid overhead. "
 
-input = sc.textFile("hdfs://master:port/path/.../test.md")
+input = sc.textFile("hdfs://main:port/path/.../test.md")
 
 
 
@@ -1072,7 +1072,7 @@ $bin/spark-submit [options] <app jar | python file> [app options]
 
 
 $bin/spark-submit my_script.py # submit locally
-$bin/spark-submit --master spark://host:7077 --executor-memory 10g my_script.py # submit cluster mode
+$bin/spark-submit --main spark://host:7077 --executor-memory 10g my_script.py # submit cluster mode
 # detail about the options - P121-122
 " Two categories - scheduling information [amount of resource,etc] | runtime dependencies [libraries, etc]"
 
@@ -1120,16 +1120,16 @@ pip install <package name>
 " SSH-Key Gen and copy to all workers "
 " sbin/start-all.sh " / " sbin/stop-all.sh "
 # --- Other system 
-" bin/spark-class org.apache.spark.deploy.master.Master " 
-" bin/spark-class org.apache.spark.deploy.worker.Worker spark://masternode:7077 "
+" bin/spark-class org.apache.spark.deploy.main.Main " 
+" bin/spark-class org.apache.spark.deploy.worker.Worker spark://mainnode:7077 "
 
 # --- submit application
-spark-submit --master spark://masternode:7077 your_app
+spark-submit --main spark://mainnode:7077 your_app
 # --- Web UI
-http://masternode:8080 # check if cluster is running
+http://mainnode:8080 # check if cluster is running
 # --- launch interactive shell
-spark-shell --master spark://masternode:7070
-pyspark --master spark://masternode:7077 
+spark-shell --main spark://mainnode:7070
+pyspark --main spark://mainnode:7077 
 
 # two deploy modes
 spark-submit app # runs only on the machine you execute the app --- client mode
@@ -1187,7 +1187,7 @@ spark-submit --deploy-mode cluster app # launch within a standalone cluster as a
 # Create a application using a SparkConf in Python
 conf = new SparkConf() # this instance contains key/value pairs of configuration that user would like to override
 conf.set("spark.app.name", "My Spark App") # call 'set' to add configuration values
-conf.set("spark.master", "local[4]")
+conf.set("spark.main", "local[4]")
 conf.set("spark.ui.port", "36000") # override the default port
 
 # Create a SparkContext with this configuration
@@ -1197,7 +1197,7 @@ sc = SparkContext(conf)
 # Setting configuration values at runtime using flags
 $ bin/spark-submit \
   --class com.example.MyApp \
-  --master local[4] \
+  --main local[4] \
   --name "My Spark App" \
   --conf spark.ui.port=36000 \
   myapp.jar
@@ -1210,7 +1210,7 @@ $ bin/spark-submit \
 
 cat my-config.conf
 ### Contents ###
-spark.master local[4]
+spark.main local[4]
 spark.app.name "my Spark App"
 spark.ui.port 36000
 
@@ -1329,8 +1329,8 @@ counts.collect() # Second time, only 1 stage required
 --2. " Driver and Executor Logs " 
 # Logs contains more details of events such as internal warning or detailed execution of the code
 " The exact location of Spark's logfiles depends on the deployment mode: "
-[1] "Standalone Mode: directly display in master's web UI and also find it in the 'work/' directory of each worker machine "
-[2] "Mesos Mode: directly display in Mesos's web UI and also find it in the 'work/' directory of each Mesos slave node " 
+[1] "Standalone Mode: directly display in main's web UI and also find it in the 'work/' directory of each worker machine "
+[2] "Mesos Mode: directly display in Mesos's web UI and also find it in the 'work/' directory of each Mesos subordinate node " 
 [3] "YARN Mode: Use YARN's log collection tool -- 'yarn logs -applicationId <app ID>' * Work only if the applicationhas fully finished."
     "For viewing a running application, use resourceManager UI to the node page, browse to particular node, from there a particular container." # - P 154
 
@@ -1654,7 +1654,7 @@ df.registerTempTable("df_peope")
 " Spark SQL also privodes JDBC connectivity - JDBC server runs on a standalone driver program which can be shared by multiple users "
 " Requires Spark built with Hive support "
 # Launch JDBC server
-./sbin/start-thriftserver.sh --master sparkMaster # In Spark dir / default listen on localhost:10000
+./sbin/start-thriftserver.sh --main sparkMain # In Spark dir / default listen on localhost:10000
 # Change configures - P 177
 (HIVE_SERVER2_THRIFT_PORT)
 (HIVE_SERVER2_THRIFT_BIND_HOST)
@@ -2158,7 +2158,7 @@ val ssc = StreamingContext.getOrCreate(checkpointDir, createStreamingContext)
 
 " In order to restart when driver crush, you need to use tool like 'monit' and restart it - specify your environment "
 # e.g. in standalone mode using '--supervise' flag to monitor 
-./bin/spark-submit --deploy-mode cluster --supervise --master spark://... App.jar 
+./bin/spark-submit --deploy-mode cluster --supervise --main spark://... App.jar 
 
 ** "Want Spark cluster manager: standalone to be fault-tolerance - Using ZooKeeper P - 210"
 

@@ -1747,7 +1747,7 @@ $> spark-submit ["options"] <python file> ["app arguments"]
 
  - ['options'] # The parameters pass to spark-submit
 
- --master: " local, spark://host:port:, mesos://host:post:, yarn "
+ --main: " local, spark://host:port:, mesos://host:post:, yarn "
 
  --deploy-mode: " client, cluster "
 
@@ -1941,7 +1941,7 @@ export PYSPARK_DRIVER_PYTHON=jupyter
 
 >>> Submitting  a jobs
 $ ./lanuch_spark_submit.sh \
-  --master local[4] \
+  --main local[4] \
   --py-file AdditionalCode/dist/PySparkUtilities-0.1.dev0-py3.5.egg \
   calculatingGeoDistance.py
 
